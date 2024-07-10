@@ -1,0 +1,42 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="cidadeForm">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="estadoId"
+        name="estadoId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="estadoIdService"
+        [p-label]="this.literals.fields.form['estadoId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="codigoIbge"
+        name="codigoIbge"
+        p-clean
+        [p-label]="this.literals.fields.form['codigoIbge']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="nomeCidade"
+        name="nomeCidade"
+        p-clean
+        [p-label]="this.literals.fields.form['nomeCidade']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+        p-required
+      > </po-input>
+    </div>
+
+  </form>
+</po-page-default>

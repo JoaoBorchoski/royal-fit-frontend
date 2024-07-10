@@ -1,0 +1,107 @@
+.container {
+  width: 100%;
+  display: flex;
+
+  .avatar {
+    height: 150px;
+    margin: 32px;
+    position: relative;
+    width: 150px;
+  
+    .image {
+      border: 2px solid var(--primary-color);
+      border-radius: 50%;
+      height: 100%;
+      width: 100%;
+  
+      img {
+        border-radius: 50%;
+        height: 146px;
+        object-fit: cover;
+        width: 146px;
+      }
+
+      .icon {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          color: var(--primary-color);
+        }
+      }
+    }
+  
+    label {
+      background-color: #096d86;
+      border: none;
+      border-radius: 50%;
+      color: #fbfbfb;
+      height: 40px;
+      width: 40px;
+  
+      position: absolute;
+      right: 0;
+      bottom: 0;
+  
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      cursor: pointer;
+      transition: 0.2s;
+  
+      &:hover {
+        filter: brightness(0.9);
+      }
+  
+      input {
+        display: none;
+      }
+    }
+  }
+
+  .detail-container {
+    margin: 32px;
+
+    .active-two-factor {
+      color: var(--primary-color-light);
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(0.9);
+      }
+    }
+
+    .disable-two-factor {
+      color: rgb(136, 0, 0);
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(0.9);
+      }
+    }
+  }
+}
+
+.tfa-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .po-input-bold {
+    width: 380px;
+    align-self: center;
+  }
+}
+
+.margin-top {
+  margin-top: 32px;
+}
+
+.margin-title {
+  margin: 16px 0;
+}

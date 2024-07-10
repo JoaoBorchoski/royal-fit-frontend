@@ -1,0 +1,343 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --border-width-md: 1px;
+  --primary-color: #0C9ABE;
+  --secondary-color: #0C9ABE;
+  --side-menu-background: #2c3739;
+  --side-menu-filter-background: rgba(0,0,0,.3);
+  --side-menu-border: rgba(74,92,96,.45);
+  --side-menu-font-color: #0C9ABE;
+  --side-menu-font-color-selected: #0C9ABE;
+
+  button:focus {
+    outline-color: var(--outline-color-focused);
+    outline-width: 1px;
+    outline-style: solid;
+    outline-offset: 1px;
+  }
+
+  @media (max-width: 539px) {
+    .po-page-background-wrap .po-page-login-panel-content {
+      padding: 0;
+    }
+    .po-page-blocked-user-link .po-page-blocked-user-contact-text {
+      font-family: NunitoSans-Bold, sans-serif;
+      font-size: 14px;
+      line-height: 24px;
+    }
+    .po-page-blocked-user-image {
+      margin-bottom: 8px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .po-page-background-wrap .po-page-login-panel-content {
+      padding: 0;
+    }
+    .po-page-background-wrap .po-page-background-hide-logo {
+      display: block;
+    }
+    .po-page-blocked-user-image {
+      width: 248px;
+    }
+    .po-page-blocked-user-reason-content {
+      display: block;
+    }
+  }
+
+  .po-menu {
+    background-color: var(--side-menu-background);
+    border: solid 1px var(--side-menu-border);
+  }
+
+  .po-menu-filter {
+    background-color: var(--side-menu-filter-background);
+  }
+
+  .po-menu-filter-icon {
+    color: var(--side-menu-font-color)
+  }
+
+  .po-menu-footer
+  .po-menu-collapse-button-icon {
+    color: var(--side-menu-font-color)
+  }
+
+  .po-menu-item-grouper-up,
+  .po-menu-item-grouper-up:hover,
+  .po-menu-sub-items {
+    background-color: var(--side-menu-background-selected);
+  }
+
+  .po-menu-item-grouper-up,
+  .po-menu-item-grouper-up:hover,
+  .po-menu-item-no-data {
+    color: var(--side-menu-font-color-selected);
+  }
+
+  .po-menu-collapse-button,
+  .po-menu-item,
+  .po-menu-item-no-data {
+    color: var(--side-menu-font-color);
+  }
+
+  .po-page-login-panel-content {
+    margin-bottom: 60px;
+    padding: 0;
+
+    .po-row {
+      .po-offset-md-3 {
+        margin-left: 0;
+      }
+
+      .po-md-6 {
+        width: 100%;
+      }
+    }
+
+    po-divider {
+      display: none;
+    }
+
+    .po-page-change-password-buttons {
+      margin-top: 30px;
+    }
+  }
+
+  .po-table-remove-show-more {
+    .po-button {
+      display: none;
+    }
+    .po-table-footer-show-more {
+      display: none;
+    }
+    .po-table-container {
+      border: 1px solid #b6bdbf;
+      border-radius: 1px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .po-page-background-wrap .po-page-login-panel {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  .po-page-background-wrap .po-page-login-panel {
+    display: table-cell;
+    height: auto;
+    width: 50%;
+  }
+
+  .po-page-login-panel {
+    display: table-cell;
+    height: 100%;
+    margin: 0 auto;
+    padding-bottom: 24px;
+    padding-top: 24px;
+    position: relative;
+    vertical-align: middle;
+    width: 50%;
+  }
+
+  .po-page-change-password-tips {
+    display: none;
+  }
+
+  .po-page-blocked-user-header {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 32px;
+    color: #29b6c5;
+
+    .po-font-text {
+      display: none;
+    }
+  }
+
+  .po-accordion-item-header-button:focus:before {
+    border: none;
+  }
+  
+  .po-accordion-item-header-button {
+    padding: 8px 8px 8px 16px;
+  }
+
+  .po-page-content {
+    scrollbar-gutter: stable both-edges;
+  }
+
+  .po-button {
+    padding: 0 16px;
+  }
+
+  button[p-kind=primary] {
+    color: #fff;
+    font-family: 'NunitoSans-Bold', sans-serif;
+    border: 1px solid var(--primary-color);
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
+  }
+
+  button[p-kind=primary]:disabled {
+    color: var(--color-disabled);
+    background-color: var(--background-color-disabled);
+    border: 1px solid var(--color-disabled);
+  }
+
+  button[p-kind=secondary] {
+    color: var(--primary-color);
+    font-family: 'NunitoSans-Bold';
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
+  }
+
+  button[p-kind=secondary]:disabled {
+    color: var(--color-disabled);
+    background-color: var(--background-color-disabled);
+    border: 1px solid var(--color-disabled);
+  }
+
+  button[p-kind=primary]:hover {
+    filter: brightness(75%);
+    transition: .2s;
+  }
+
+  @media (max-width: 1366px) {
+    .po-button {
+      font-family: 'NunitoSans-Bold', sans-serif;
+      font-size: 14px;
+      padding: 0 8px;
+      line-height: 1rem;
+      margin: 4px 2px 0 0;
+
+      button {
+        height: 32px !important;
+      }
+    }
+
+    .po-page-filter-content {
+      .po-input {
+        height: 32px;
+        margin-top: 12px;
+      }
+
+      .po-field-icon {
+        font-size: 16px;
+        margin-top: 12px;
+      }
+    }
+  }
+
+  .no-padding {
+    padding: 0px;
+  }
+
+  .po-required {
+    .po-field-title::after {
+      content: "*";
+      margin-left: 5px;
+      color: red;
+    }
+  }
+
+  .po-button {
+    padding: 0 16px;
+  }
+
+  button[p-kind=primary] {
+    color: #fff;
+    font-family: 'NunitoSans-Bold', sans-serif;
+    border: 1px solid var(--primary-color);
+    background-color: var(--primary-color);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
+  }
+
+  button[p-kind=primary]:disabled {
+    color: var(--color-disabled);
+    background-color: var(--background-color-disabled);
+    border: 1px solid var(--color-disabled);
+  }
+
+  button[p-kind=secondary] {
+    color: var(--primary-color);
+    font-family: 'NunitoSans-Bold';
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
+  }
+
+  button[p-kind=secondary]:disabled {
+    color: var(--color-disabled);
+    background-color: var(--background-color-disabled);
+    border: 1px solid var(--color-disabled);
+  }
+
+  button[p-kind=primary]:hover {
+    filter: brightness(75%);
+    transition: .2s;
+  }
+
+  @media (max-width: 1366px) {
+    .po-button {
+      font-family: 'NunitoSans-Bold', sans-serif;
+      font-size: 14px;
+      padding: 0 8px;
+      line-height: 1rem;
+      margin: 4px 2px 0 0;
+
+      button {
+        height: 32px !important;
+      }
+    }
+
+    .po-page-filter-content {
+      .po-input {
+        height: 32px;
+        margin-top: 12px;
+      }
+
+      .po-field-icon {
+        font-size: 16px;
+        margin-top: 12px;
+      }
+    }
+
+    .po-dropdown-button {
+      font-family: 'NunitoSans-Bold', sans-serif;
+      font-size: 14px;
+      height: 38.5px;
+      padding: 6px 38px 8px 16px;
+    }
+  }
+
+  .no-padding {
+    padding: 0px;
+  }
+
+  .po-button-full-width {
+    .po-button {
+      width: 100%;
+    }
+  }
+
+  .po-chart-header {
+    display: flex;
+    justify-content: center;
+
+    .po-chart-title {
+      font-weight: bold;
+    }
+  }
+
+  .po-loading-table {
+    .po-overlay-absolute {
+      height: calc(100% - 70px);
+      background-color: rgb(211, 210, 210);
+    }
+  }
+
+  .sv-root-modern .sv-btn--navigation {
+    background-color: var(--primary-color);
+  }
+}

@@ -1,0 +1,80 @@
+<po-modal
+  #poModal
+  p-click-out
+  [p-title]="modalTitle"
+  [p-primary-action]="primaryAction"
+  [p-secondary-action]="secondaryAction"
+>
+  <app-saved-filter
+    #savedFilter
+    [expression]="filterForm.value.expression"
+    [filterTable]="filterTable"
+    (applyFilter)="loadExpression($event)"
+  > </app-saved-filter>
+
+  <div class="po-sm-12"><po-divider> </po-divider></div>
+
+  <form [formGroup]="filterForm">
+    <po-select
+      class="po-sm-12 po-lg-4 po-required"
+      (p-change)="selectField($event)"
+      [p-label]="literals.filterField"
+      [p-options]="itemsSelect"
+      p-required
+      formControlName="field"
+    > </po-select>
+    
+    <po-select
+      class="po-sm-12 po-lg-4 po-required"
+      [p-options]="operatorsSelect"
+      [p-label]="literals.filterOperator"
+      p-required
+      formControlName="operator"
+    > </po-select>
+
+    <po-input
+      class="po-sm-12 po-lg-4"
+      [class.po-required]="selectedField?.type != 'boolean'"
+      [p-disabled]="selectedField?.type == 'boolean'"
+      [p-label]="literals.filterValue"
+      [p-required]="selectedField?.type != 'boolean'"
+      formControlName="value"
+    > </po-input>
+
+    <div class="po-sm-12 buttons">
+      <div class="operator-buttons">
+        <div
+          *ngFor="let operatorButton of operatorButtons"
+          (click)="operatorButton.action()"
+          class="operator-button"
+        >
+          <p class="po-button-label">{{ operatorButton.label }}</p>
+        </div>
+      </div>
+
+      <div>
+        <po-button
+          (p-click)="clearExpression()"
+          [p-label]="literals.filterClear"
+          p-small
+        > </po-button>
+
+        <po-button
+          (p-click)="addExpression()"
+          p-kind="primary"
+          [p-label]="literals.filterAdd"
+          p-small
+        > </po-button>
+      </div>
+    </div>
+
+    <div class="po-sm-12"><po-divider> </po-divider></div>
+
+    <po-textarea
+      class="po-sm-12"
+      [p-label]="literals.filterExpression"
+      p-readonly
+      formControlName="expression"
+    > </po-textarea>
+  </form>
+</po-modal>

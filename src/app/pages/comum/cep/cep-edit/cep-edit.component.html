@@ -1,0 +1,66 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="cepForm">
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="codigoCep"
+        name="codigoCep"
+        p-clean
+        [p-label]="this.literals.fields.form['codigoCep']"
+        p-maxlength="8"
+        [p-readonly]="readonly"
+        p-required
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="logradouro"
+        name="logradouro"
+        p-clean
+        [p-label]="this.literals.fields.form['logradouro']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="bairro"
+        name="bairro"
+        p-clean
+        [p-label]="this.literals.fields.form['bairro']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="estadoId"
+        name="estadoId"
+        (p-change)="estadoIdChange($event)"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="estadoIdService"
+        [p-label]="this.literals.fields.form['estadoId']"
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="cidadeId"
+        name="cidadeId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="cidadeIdService"
+        [p-label]="this.literals.fields.form['cidadeId']"
+      > </po-combo>
+    </div>
+
+  </form>
+</po-page-default>

@@ -1,0 +1,29 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="userProfileForm">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="userId"
+        name="userId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="userIdService"
+        [p-label]="this.literals.fields['userId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="profileId"
+        name="profileId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="profileIdService"
+        [p-label]="this.literals.fields['profileId']"
+        p-required
+      > </po-combo>
+    </div>
+  </form>
+</po-page-default>

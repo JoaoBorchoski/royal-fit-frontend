@@ -1,0 +1,87 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="menuOptionForm">
+    <div class="po-sm-12 po-md-12 po-lg-8 po-xl-8 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="moduleId"
+        name="moduleId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="moduleIdService"
+        [p-label]="this.literals.fields['moduleId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-4 po-xl-4 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="sequence"
+        name="sequence"
+        p-clean
+        [p-label]="this.literals.fields['sequence']"
+        p-maxlength="6"
+        [p-readonly]="readonly"
+        p-required
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="label"
+        name="label"
+        p-clean
+        [p-label]="this.literals.fields['label']"
+        p-maxlength="255"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="route"
+        name="route"
+        p-clean
+        [p-label]="this.literals.fields['route']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="icon"
+        name="icon"
+        p-clean
+        [p-label]="this.literals.fields['icon']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="key"
+        name="key"
+        p-clean
+        [p-label]="this.literals.fields['key']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-6 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-checkbox
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
+        formControlName="disabled"
+        name="disabled"
+        [p-disabled]="readonly"
+        [p-label]="this.literals.fields['disabled']"
+      > </po-checkbox>
+    </div>
+  </form>
+</po-page-default>

@@ -1,0 +1,15 @@
+.no-data-body {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .margin-bottom {
+    margin-bottom: 16px;
+  }
+
+  .primary-color {
+    color: var(--primary-color);
+  }
+}

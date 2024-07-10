@@ -1,0 +1,17 @@
+<div class="po-wrapper">
+  <po-toolbar
+    p-title="royalfit"
+    [p-actions]="actions"
+    [p-actions-icon]="user.avatar ? template : 'fa-solid fa-user'"
+  ></po-toolbar>
+
+  <po-menu [p-menus]="menus" p-filter="true" p-toggle></po-menu>
+
+  <router-outlet></router-outlet>
+</div>
+
+<ng-template #template>
+  <div class="image">
+    <img [src]="user.avatar"/>
+  </div>
+</ng-template>

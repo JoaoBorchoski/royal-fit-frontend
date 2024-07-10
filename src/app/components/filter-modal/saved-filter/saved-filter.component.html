@@ -1,0 +1,43 @@
+<div class="po-sm-12">
+  <po-select
+    [p-label]="literals.filterSavedFilters"
+    [p-options]="savedFilters"
+    [(ngModel)]="selectedFilter"
+  > </po-select>
+</div>
+
+<div class="po-sm-12 filter-buttons">
+  <po-button
+    (p-click)="excludeFilter()"
+    p-danger
+    [p-label]="literals.filterExcludeSavedFilter"
+    p-small
+  > </po-button>
+
+  <div class="new-filter" *ngIf="isInputNewFilterOpened">
+    <input
+      [(ngModel)]="newFilterName"
+      class="new-filter-input"
+      [placeholder]="literals.filterSaveFilterName"
+      type="text"
+    >
+
+    <div class="check-icon-container" (click)="saveFilter()">
+      <span class="fa-solid fa-check"></span>
+    </div>
+  </div>
+
+  <po-button
+    *ngIf="!isInputNewFilterOpened"
+    (p-click)="changeInputNewFilterStatus()"
+    [p-label]="literals.filterSaveNew"
+    p-small
+  > </po-button>
+
+  <po-button
+    (p-click)="loadFilter()"
+    p-kind="primary"
+    [p-label]="literals.filterApply"
+    p-small
+  > </po-button>
+</div>

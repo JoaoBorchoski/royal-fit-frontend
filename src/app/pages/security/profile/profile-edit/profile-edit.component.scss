@@ -1,0 +1,50 @@
+.checkbox-header {
+  display: flex;
+  margin-top: 37px;
+  align-items: flex-end;
+}
+
+.columns-align {
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width:720px) {
+  .columns-title {
+    font-size: 12px;
+    color: #0c9ac2;
+  }
+
+  .row-title {
+    font-size: 12px;
+  }
+}
+
+@media (min-width:721px) and (max-width:960px) {
+  .columns-title {
+    font-size: 16px;
+    color: #0c9ac2;
+  }
+
+  .row-title {
+    font-size: 16px;
+  }
+}
+
+@media (min-width:961px) {
+  .columns-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #0c9ac2;
+  }
+
+  .row-title {
+    font-size: 16px;
+  }
+}

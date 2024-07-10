@@ -1,0 +1,138 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="pedidoForm">
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="sequencial"
+        name="sequencial"
+        p-clean
+        [p-label]="this.literals.fields.form['sequencial']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+        p-required
+      > </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        formControlName="clienteId"
+        name="clienteId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="clienteIdService"
+        [p-label]="this.literals.fields.form['clienteId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-datepicker
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="data"
+        name="data"
+        p-clean
+        [p-label]="this.literals.fields.form['data']"
+        [p-readonly]="readonly"
+        p-required
+      > </po-datepicker>
+    </div>
+
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="hora"
+        name="hora"
+        p-clean
+        [p-label]="this.literals.fields.form['hora']"
+        p-maxlength="5"
+        [p-readonly]="readonly"
+        p-required
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="valorTotal"
+        name="valorTotal"
+        p-clean
+        [p-label]="this.literals.fields.form['valorTotal']"
+        p-maxlength="30"
+        [p-readonly]="readonly"
+      > </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="desconto"
+        name="desconto"
+        p-clean
+        [p-label]="this.literals.fields.form['desconto']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+      > </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        formControlName="funcionarioId"
+        name="funcionarioId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="funcionarioIdService"
+        [p-label]="this.literals.fields.form['funcionarioId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        formControlName="meioPagamentoId"
+        name="meioPagamentoId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="meioPagamentoIdService"
+        [p-label]="this.literals.fields.form['meioPagamentoId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        formControlName="statusPagamentoId"
+        name="statusPagamentoId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="statusPagamentoIdService"
+        [p-label]="this.literals.fields.form['statusPagamentoId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-checkbox
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
+        formControlName="isPagamentoPosterior"
+        name="isPagamentoPosterior"
+        [p-disabled]="readonly"
+        [p-label]="this.literals.fields.form['isPagamentoPosterior']"
+      > </po-checkbox>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-checkbox
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
+        formControlName="desabilitado"
+        name="desabilitado"
+        [p-disabled]="readonly"
+        [p-label]="this.literals.fields.form['desabilitado']"
+      > </po-checkbox>
+    </div>
+
+  </form>
+</po-page-default>

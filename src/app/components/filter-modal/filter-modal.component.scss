@@ -1,0 +1,31 @@
+.buttons {
+  display: flex;
+  justify-content: space-between;
+
+  .operator-buttons {
+    display: flex;
+    gap: 2px;
+
+    .operator-button {
+      width: 50px;
+      height: 32px;
+      background-color: #fff;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+      user-select: none;
+  
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+    }
+
+    .operator-button:hover {
+      filter: brightness(0.8);
+    }
+
+  }
+
+}

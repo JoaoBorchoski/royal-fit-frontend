@@ -1,0 +1,138 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="userForm">
+    <po-divider
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      [p-label]="this.literals.fields['general']"
+    > </po-divider>
+
+    <po-input
+      class="po-sm-12 po-md-6 po-lg-4 po-xl-4 po-required"
+      formControlName="name"
+      name="name"
+      p-auto-focus
+      p-clean
+      [p-label]="this.literals.fields['name']"
+      p-maxlength="60"
+      [p-readonly]="readonly"
+      p-required
+    > </po-input>
+
+    <po-combo
+      class="po-sm-12 po-md-6 po-lg-4 po-xl-4 po-required"
+      formControlName="userGroupId"
+      name="userGroupId"
+      [p-disabled]="readonly"
+      [p-filter-service]="serviceApiUserGroup"
+      [p-label]="this.literals.fields['userGroupId']"
+      [p-options]="userGroupList"
+      p-required
+    > </po-combo>    
+
+    <po-email
+      class="po-sm-12 po-md-6 po-lg-4 po-xl-4 po-required"
+      formControlName="login"
+      name="login"
+      p-clean
+      [p-label]="this.literals.fields['login']"
+      p-maxlength="100"
+      p-no-autocomplete
+      [p-readonly]="readonly"
+      p-required
+    > </po-email>
+
+    <po-password
+      class="po-sm-12 po-md-6 po-lg-4 po-xl-4 po-required"
+      formControlName="password"
+      name="password"
+      p-clean
+      [p-disabled]="readonly"
+      p-hide-password-peek
+      [p-label]="this.literals.fields['password']"
+      p-maxlength="48"
+      p-no-autocomplete
+      p-required
+    > </po-password>
+
+    <po-checkbox
+      class="po-sm-12 po-md-6 po-lg-6 po-xl-6 checkbox-header"
+      formControlName="disabled"
+      name="disabled"
+      [p-disabled]="readonly"
+      [p-label]="this.literals.fields['disabled']"
+    > </po-checkbox>
+
+    <po-divider
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      [p-label]="this.literals.fields['security']"
+    > </po-divider>
+
+    <po-checkbox
+      class="po-sm-12 po-md-6 po-lg-12 po-xl-12"
+      formControlName="mustChangePasswordNextLogon"
+      name="mustChangePasswordNextLogon"
+      [p-disabled]="readonly"
+      [p-label]="this.literals.fields['mustChangePasswordNextLogon']"
+    > </po-checkbox>
+
+    <po-checkbox
+      *ngIf="!isTfaActive"
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      formControlName="mustActiveTwoFactorAuthentication"
+      name="mustActiveTwoFactorAuthentication"
+      [p-disabled]="readonly"
+      [p-label]="this.literals.fields['mustActiveTwoFactorAuthentication']"
+    > </po-checkbox>
+
+
+    <po-checkbox
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      formControlName="isBlocked"
+      name="isBlocked"
+      [p-disabled]="readonly"
+      [p-label]="this.literals.fields['isBlocked']"
+    > </po-checkbox>
+
+    <po-select
+      *ngIf="userForm.value.isBlocked"
+      class="po-sm-6 po-md-6 po-lg-6 po-xl-6"
+      formControlName="blockReasonId"
+      name="blockReasonId"
+      [p-disabled]="readonly"
+      [p-label]="this.literals.fields['blockReasonId']"
+      [p-options]="blockReasonList"
+    > </po-select>
+
+    <po-divider
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      [p-label]="this.literals.fields['twoFactorAuthentication']"
+      *ngIf="isTfaActive"
+    > </po-divider>
+
+    <p
+      class="po-font-text-large-bold disable-two-factor po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      (click)="twoFactorAuthenticationDisable()"
+      *ngIf="isTfaActive"
+    >{{ this.literals.fields['disableTwoFactorAuthentication'] }}</p>
+
+    <po-divider
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      [p-label]="this.literals.fields['properties']"
+    > </po-divider>
+
+    <po-checkbox
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      formControlName="isAdmin"
+      name="isAdmin"
+      [p-disabled]="readonly"
+      [p-label]="this.literals.fields['isAdmin']"
+    > </po-checkbox>
+
+    <po-checkbox
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+      formControlName="isSuperUser"
+      name="isSuperUser"
+      [p-disabled]="readonly"
+      [p-label]="this.literals.fields['isSuperUser']"
+    > </po-checkbox>
+  </form>
+</po-page-default>

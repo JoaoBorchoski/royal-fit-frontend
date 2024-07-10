@@ -1,0 +1,25 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="moduleForm">
+    <div class="po-sm-12 po-md-12 po-lg-10 po-xl-10 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="name"
+        name="name"
+        p-clean
+        [p-label]="this.literals.fields['name']"
+        [p-readonly]="readonly"
+        p-required
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-2 po-xl-2 no-padding">
+      <po-checkbox
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
+        formControlName="disabled"
+        name="disabled"
+        [p-disabled]="readonly"
+        [p-label]="this.literals.fields['disabled']"
+      > </po-checkbox>
+    </div>
+  </form>
+</po-page-default>

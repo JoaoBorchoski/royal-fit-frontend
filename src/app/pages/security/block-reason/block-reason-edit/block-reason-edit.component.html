@@ -1,0 +1,61 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="blockReasonForm">
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="code"
+        name="code"
+        p-clean
+        [p-label]="this.literals.fields['code']"
+        p-maxlength="3"
+        [p-readonly]="readonly"
+        p-required
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="description"
+        name="description"
+        p-clean
+        [p-label]="this.literals.fields['description']"
+        p-maxlength="60"
+        [p-readonly]="readonly"
+        p-required
+      > </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="instructionsToSolve"
+        name="instructionsToSolve"
+        p-clean
+        [p-label]="this.literals.fields['instructionsToSolve']"
+        p-maxlength="255"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+
+    <div class="po-sm-6 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-checkbox
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
+        formControlName="isSolvedByPasswordReset"
+        name="isSolvedByPasswordReset"
+        [p-disabled]="readonly"
+        [p-label]="this.literals.fields['isSolvedByPasswordReset']"
+      > </po-checkbox>
+    </div>
+
+    <div class="po-sm-6 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-checkbox
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
+        formControlName="disabled"
+        name="disabled"
+        [p-disabled]="readonly"
+        [p-label]="this.literals.fields['disabled']"
+      > </po-checkbox>
+    </div>
+  </form>
+</po-page-default>

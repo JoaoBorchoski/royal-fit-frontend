@@ -1,0 +1,52 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="pagamentoForm">
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        formControlName="clienteId"
+        name="clienteId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="clienteIdService"
+        [p-label]="this.literals.fields.form['clienteId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="valorPago"
+        name="valorPago"
+        p-clean
+        [p-label]="this.literals.fields.form['valorPago']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+      > </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        formControlName="meioPagamentoId"
+        name="meioPagamentoId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="meioPagamentoIdService"
+        [p-label]="this.literals.fields.form['meioPagamentoId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-checkbox
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
+        formControlName="desabilitado"
+        name="desabilitado"
+        [p-disabled]="readonly"
+        [p-label]="this.literals.fields.form['desabilitado']"
+      > </po-checkbox>
+    </div>
+
+  </form>
+</po-page-default>

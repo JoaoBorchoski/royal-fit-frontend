@@ -1,0 +1,28 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="navigationForm">
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="userId"
+        name="userId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="userIdService"
+        [p-label]="this.literals.fields['userId']"
+        p-required
+      > </po-combo>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="route"
+        name="route"
+        p-clean
+        [p-label]="this.literals.fields['route']"
+        p-maxlength="255"
+        [p-readonly]="readonly"
+      > </po-input>
+    </div>
+  </form>
+</po-page-default>

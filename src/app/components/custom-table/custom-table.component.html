@@ -1,0 +1,58 @@
+<po-page-list
+  *ngIf="initialLoading == false"
+  [p-actions]="pageActions"
+  [p-filter]="filterSettings"
+  [p-literals]="listLiterals"
+  [p-title]="pageTitle"
+>
+  <div *ngIf="filterItems" class="filter-header">
+    <po-select
+      class="filters"
+      [(ngModel)]="filterSelected"
+      (p-change)="changeFilter($event)"
+      [p-options]="filterModal.savedFilter.savedFilters"
+      [p-label]="literals.filtersSelect"
+    > </po-select>
+
+    <div *ngIf="filterExpression" class="disclaimer">
+      <div class="disclaimer-text">
+        <span class="po-font-text-large-bold">{{ literals.advancedFilterApplied }}</span>
+      </div>
+
+      <span class="fa-solid fa-xmark" (click)="removeFilterExpression()"></span>
+    </div>
+  </div>
+
+  <div class="po-table-remove-show-more">
+    <po-table
+      #table
+      *ngIf="items.length > 0"
+      [p-actions]="tableActions"
+      p-actions-right
+      (p-change-visible-columns)="changeVisibleColumns()"
+      [p-columns]="fields"
+      p-container
+      [p-height]="listHeight"
+      p-infinite-scroll
+      p-infinite-scroll-distance="90"
+      [p-items]="items"
+      [p-loading]="loading"
+      (p-restore-column-manager)="restoreColumn()"
+      p-selectable
+      (p-show-more)="showMoreItems()"
+    > </po-table>
+  </div>
+  
+  <app-no-data *ngIf="items.length == 0"> </app-no-data>
+</po-page-list>
+
+<po-page-default class="po-loading-table">
+  <po-loading-overlay *ngIf="initialLoading == true" [p-text]="this.literals.loadingData"> </po-loading-overlay>
+</po-page-default>
+
+<app-filter-modal
+  #filterModal
+  [filterItems]="filterItems"
+  [filterTable]="route"
+  (submitFilter)="submitFilter($event)"
+> </app-filter-modal>

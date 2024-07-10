@@ -1,0 +1,167 @@
+<po-page-default p-title="Perfil">
+  <po-container class="po-sm-12 po-md-12 po-lg-8 po-xl-8">
+    <div class="container">
+      <div class="avatar">
+        <div class="image">
+          <img [src]="user.user.avatar" *ngIf="user.user.avatar"/>
+
+          <div class="icon" *ngIf="!user.user.avatar">
+            <span class="fa-solid fa-user fa-5x"> </span>
+          </div>
+        </div>
+
+        <label htmlFor="avatar" class="fa-solid fa-camera">
+          <input type="file" id="avatar" (change)="uploadAvatar($event)"/>
+        </label>
+      </div>
+
+      <div class="detail-container">
+        <p class="po-font-text-large"><span class="po-font-text-large-bold">Nome: </span>{{user.user.name}}</p>
+        <p class="po-font-text-large"><span class="po-font-text-large-bold">E-Mail: </span>{{user.user.login}}</p>
+
+        <p class="po-font-text-large-bold active-two-factor" (click)="twoFactorModalOpen()" *ngIf="!isActiveTFA">Ativar autenticação de dois fatores</p>
+        <p class="po-font-text-large-bold disable-two-factor" (click)="twoFactorAuthenticationDisable()" *ngIf="isActiveTFA">Desativar autenticação de dois fatores</p>
+      </div>
+    </div>
+  </po-container>
+
+  <po-container class="po-sm-12 po-md-12 po-lg-8 po-xl-8 margin-top" *ngIf="canChangeEmail">
+      <p class="po-font-subtitle margin-title po-sm-12 po-md-12 po-lg-12 po-xl-12">Configurações do envio de E-Mail</p>
+
+      <form [formGroup]="emailProps">
+        <po-input
+          class="po-sm-12 po-md-12 po-lg-4 po-xl-4 po-required"
+          formControlName="service"
+          name="service"
+          p-label="Serviço"
+          p-required
+        > </po-input>
+
+        <po-input
+          class="po-sm-12 po-md-12 po-lg-4 po-xl-4 po-required"
+          formControlName="smtpHost"
+          name="smtpHost"
+          p-label="STMP HOST"
+          p-required
+        > </po-input>
+
+        <po-number
+          class="po-sm-12 po-md-12 po-lg-4 po-xl-4 po-required"
+          formControlName="smtpPort"
+          name="smtpPort"
+          p-label="STMP PORT"
+          p-required
+        > </po-number>
+
+        <po-email
+          class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+          formControlName="smtpUser"
+          name="smtpUser"
+          p-label="STMP USER"
+          p-no-autocomplete
+          p-required
+        > </po-email>
+
+        <po-password
+          class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+          formControlName="smtpPass"
+          name="smtpPass"
+          p-hide-password-peek
+          p-label="STMP PASS"
+          p-no-autocomplete
+          p-required
+        > </po-password>
+
+        <po-button
+          class="po-sm-6 po-md-6 po-lg-3 po-xl-3"
+          (p-click)="updateEmail()"
+          p-icon="fa-solid fa-wrench"
+          p-label="Atualizar"
+        > </po-button>
+      </form>
+  </po-container>
+</po-page-default>
+
+<po-modal
+  #twoFactorModal
+  p-hide-close
+  p-title="Autenticador"
+  [p-primary-action]="active"
+  [p-secondary-action]="close"
+>
+  <div *ngIf="tfa">
+    <div *ngIf="!tfa.secret">
+      <span *ngIf="!!tfa.tempSecret" class="tfa-modal-body">
+        <p class="po-font-text-large po-mt-4 po-mb-4">Escaneie o código QR ou insira a chave secreta no Google Authenticator</p>
+
+        <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
+
+        <p class="po-font-text-large po-mt-4 po-mb-4">Chave secreta - {{tfa.tempSecret}}</p>
+
+        <form [formGroup]="tfaForm">
+          <div class="po-input-bold">
+            <po-input
+              #input0
+              class="po-sm-2 po-md-2 po-lg-2 po-xl-2"
+              formControlName="code0"
+              name="code0"
+              (p-change-model)="modelChange('0')"
+              p-mask="9"
+              p-required
+            > </po-input>
+
+            <po-input
+              #input1
+              class="po-sm-2 po-md-2 po-lg-2 po-xl-2"
+              formControlName="code1"
+              name="code1"
+              (p-change-model)="modelChange('1')"
+              p-mask="9"
+              p-required
+            > </po-input>
+
+            <po-input
+              #input2
+              class="po-sm-2 po-md-2 po-lg-2 po-xl-2"
+              formControlName="code2"
+              name="code2"
+              (p-change-model)="modelChange('2')"
+              p-mask="9"
+              p-required
+            > </po-input>
+
+            <po-input
+              #input3
+              class="po-sm-2 po-md-2 po-lg-2 po-xl-2"
+              formControlName="code3"
+              name="code3"
+              (p-change-model)="modelChange('3')"
+              p-mask="9"
+              p-required
+            > </po-input>
+
+            <po-input
+              #input4
+              class="po-sm-2 po-md-2 po-lg-2 po-xl-2"
+              formControlName="code4"
+              name="code4"
+              (p-change-model)="modelChange('4')"
+              p-mask="9"
+              p-required
+            > </po-input>
+
+            <po-input
+              #input5
+              class="po-sm-2 po-md-2 po-lg-2 po-xl-2"
+              formControlName="code5"
+              name="code5"
+              (p-change-model)="modelChange('5')"
+              p-mask="9"
+              p-required
+            > </po-input>
+          </div>
+        </form>
+      </span>
+    </div>
+  </div>
+</po-modal>

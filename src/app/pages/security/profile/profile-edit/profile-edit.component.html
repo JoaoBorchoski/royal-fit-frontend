@@ -1,0 +1,106 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="checkoutForm">
+    <po-combo
+      class="po-sm-12 po-md-12 po-lg-12 po-xl-5 po-required"
+      name="userGroupId"
+      [p-label]="this.literals.fields['userGroupName']"
+      [p-options]="userGroupsList"
+      [p-filter-service]="serviceApiUserGroup"
+      formControlName="userGroupId"
+    ></po-combo>
+
+    <po-input class="po-sm-10 po-md-10 po-lg-10 po-xl-5 po-required" [p-label]="this.literals.fields['name']" formControlName="name"></po-input>
+
+    <div class="po-sm-2 po-md-2 po-lg-2 po-xl-2 checkbox-header">
+      <po-checkbox [p-label]="this.literals.fields['disabled']" formControlName="disabled"></po-checkbox>
+    </div>
+
+    <po-container p-no-border p-no-shadow>
+      <po-accordion formArrayName="menuOptions">
+        <po-accordion-item
+          *ngFor="let menuOption of menuOptions.controls; let index1 = index"
+          [p-label]="this.literals.fields['module'] + ': ' + menuOption.value.menuOptionName"
+        >
+          <div [formGroupName]="index1">
+            <po-container p-no-border p-no-padding p-no-shadow p-height="25">
+              <h4 class="po-sm-6 columns-title">{{ this.literals.fields['menuOption'] }}</h4>
+
+              <h4 class="po-sm-1 columns-align columns-title">{{ this.literals.fields['all'] }}</h4>
+
+              <h4 class="po-sm-1 columns-align columns-title">{{ this.literals.fields['create'] }}</h4>
+
+              <h4 class="po-sm-1 columns-align columns-title">{{ this.literals.fields['view'] }}</h4>
+
+              <h4 class="po-sm-1 columns-align columns-title">{{ this.literals.fields['update'] }}</h4>
+
+              <h4 class="po-sm-1 columns-align columns-title">{{ this.literals.fields['remove'] }}</h4>
+
+              <h4 class="po-sm-1 columns-align columns-title">{{ this.literals.fields['disabled'] }}</h4>
+            </po-container>
+
+            <po-divider></po-divider>
+
+            <div formArrayName="data">
+              <div
+                *ngFor="
+                  let menuItem of menuOption.controls.data.controls;
+                  let index2 = index
+                "
+              >
+                <div [formGroupName]="index2">
+                  <po-container p-no-border p-no-padding p-no-shadow>
+                    <h4 class="po-sm-6 row-title">
+                      {{ menuItem.value.menuOptionName }}
+                    </h4>
+
+                    <div class="po-sm-1 center">
+                      <po-checkbox
+                        name="todos"
+                        formControlName="permitAll"
+                      ></po-checkbox>
+                    </div>
+
+                    <div class="po-sm-1 center">
+                      <po-checkbox
+                        name="inclui"
+                        formControlName="permitCreate"
+                      ></po-checkbox>
+                    </div>
+
+                    <div class="po-sm-1 center">
+                      <po-checkbox
+                        name="exibe"
+                        formControlName="permitRestore"
+                      ></po-checkbox>
+                    </div>
+
+                    <div class="po-sm-1 center">
+                      <po-checkbox
+                        name="altera"
+                        formControlName="permitUpdate"
+                      ></po-checkbox>
+                    </div>
+
+                    <div class="po-sm-1 center">
+                      <po-checkbox
+                        name="exclui"
+                        formControlName="permitDelete"
+                      ></po-checkbox>
+                    </div>
+
+                    <div class="po-sm-1 center">
+                      <po-checkbox
+                        name="inativo"
+                        formControlName="disabled"
+                      ></po-checkbox>
+                    </div>
+                  </po-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </po-accordion-item>
+      </po-accordion>
+    </po-container>
+  </form>
+</po-page-default>
