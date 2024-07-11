@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core"
 import { map } from "rxjs/operators"
-import { LanguagesService } from 'src/app/services/languages.service'
+import { LanguagesService } from "src/app/services/languages.service"
+import { PoTableColumn } from "@po-ui/ng-components"
 
 @Component({
   selector: "/garrafao-list",
@@ -11,7 +12,7 @@ export class GarrafaoListComponent implements OnInit {
 
   public initialFields = []
 
-  constructor(private languagesService: LanguagesService) { }
+  constructor(private languagesService: LanguagesService) {}
 
   ngOnInit() {
     this.getLiterals()
@@ -19,15 +20,15 @@ export class GarrafaoListComponent implements OnInit {
 
   getLiterals() {
     this.languagesService
-      .getLiterals({ type: 'list', module: 'cadastros', options: 'garrafao'})
-      .pipe(map(res => this.literals = res))
+      .getLiterals({ type: "list", module: "cadastros", options: "garrafao" })
+      .pipe(map((res) => (this.literals = res)))
       .subscribe({
-        next: () => this.initialFields = [
-          { property: "id", key: true, visible: false },
-          { property: 'clienteNome', label: this.literals.fields.list['clienteNome'] },
-          { property: 'quantidade', label: this.literals.fields.list['quantidade'], type: 'number' }
-        ]
+        next: () =>
+          (this.initialFields = [
+            { property: "id", key: true, visible: false },
+            { property: "clienteNome", label: this.literals.fields.list["clienteNome"] },
+            { property: "quantidade", label: this.literals.fields.list["quantidade"], type: "number" },
+          ]),
       })
   }
-
 }

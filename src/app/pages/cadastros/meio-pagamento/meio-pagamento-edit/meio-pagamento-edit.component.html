@@ -1,8 +1,8 @@
 <po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
   <form [formGroup]="meioPagamentoForm">
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
-        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
         formControlName="nome"
         name="nome"
         p-clean
@@ -10,7 +10,8 @@
         p-maxlength="45"
         [p-readonly]="readonly"
         p-required
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
@@ -22,7 +23,8 @@
         [p-label]="this.literals.fields.form['descricao']"
         p-maxlength="250"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
@@ -32,8 +34,8 @@
         name="desabilitado"
         [p-disabled]="readonly"
         [p-label]="this.literals.fields.form['desabilitado']"
-      > </po-checkbox>
+      >
+      </po-checkbox>
     </div>
-
   </form>
 </po-page-default>

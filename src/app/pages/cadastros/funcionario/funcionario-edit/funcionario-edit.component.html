@@ -1,8 +1,8 @@
 <po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
   <form [formGroup]="funcionarioForm">
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
-        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
         formControlName="nome"
         name="nome"
         p-clean
@@ -10,31 +10,37 @@
         p-maxlength="45"
         [p-readonly]="readonly"
         p-required
-      > </po-input>
+      >
+      </po-input>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="cpf"
         name="cpf"
         p-clean
+        p-required
         [p-label]="this.literals.fields.form['cpf']"
-        p-maxlength="14"
+        p-maxlength="18"
+        p-mask="999.999.999-99"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="email"
         name="email"
         p-clean
+        p-required
         [p-label]="this.literals.fields.form['email']"
         p-maxlength="200"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -46,7 +52,8 @@
         [p-label]="this.literals.fields.form['cargo']"
         p-maxlength="200"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -55,10 +62,13 @@
         formControlName="cep"
         name="cep"
         p-clean
+        p-mask="99999-999"
+        (p-change)="onCepChange($event)"
         [p-label]="this.literals.fields.form['cep']"
         p-maxlength="10"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -71,7 +81,8 @@
         [p-disabled]="readonly"
         [p-filter-service]="estadoIdService"
         [p-label]="this.literals.fields.form['estadoId']"
-      > </po-combo>
+      >
+      </po-combo>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -83,7 +94,8 @@
         [p-disabled]="readonly"
         [p-filter-service]="cidadeIdService"
         [p-label]="this.literals.fields.form['cidadeId']"
-      > </po-combo>
+      >
+      </po-combo>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -95,7 +107,8 @@
         [p-label]="this.literals.fields.form['bairro']"
         p-maxlength="60"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -107,7 +120,8 @@
         [p-label]="this.literals.fields.form['endereco']"
         p-maxlength="255"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -119,7 +133,8 @@
         [p-label]="this.literals.fields.form['numero']"
         p-maxlength="10"
         [p-readonly]="readonly"
-      > </po-number>
+      >
+      </po-number>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -131,19 +146,23 @@
         [p-label]="this.literals.fields.form['complemento']"
         p-maxlength="60"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="telefone"
         name="telefone"
         p-clean
+        p-required
         [p-label]="this.literals.fields.form['telefone']"
-        p-maxlength="13"
+        p-maxlength="20"
+        p-mask="(99) 99999-9999"
         [p-readonly]="readonly"
-      > </po-input>
+      >
+      </po-input>
     </div>
 
     <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
@@ -153,8 +172,8 @@
         name="desabilitado"
         [p-disabled]="readonly"
         [p-label]="this.literals.fields.form['desabilitado']"
-      > </po-checkbox>
+      >
+      </po-checkbox>
     </div>
-
   </form>
 </po-page-default>

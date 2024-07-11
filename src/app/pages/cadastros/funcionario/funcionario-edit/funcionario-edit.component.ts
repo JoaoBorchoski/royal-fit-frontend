@@ -1,12 +1,31 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient } from "@angular/common/http"
 import { Component, OnDestroy, OnInit } from "@angular/core"
-import { ActivatedRoute, Router } from '@angular/router'
-import { PoDynamicFormField, PoPageAction, PoNotificationService, PoNotification } from '@po-ui/ng-components'
-import { FormBuilder } from '@angular/forms'
-import { Subscription } from 'rxjs'
+import { ActivatedRoute, Router } from "@angular/router"
+import { PoDynamicFormField, PoPageAction, PoNotificationService, PoNotification, PoComboOption } from "@po-ui/ng-components"
+import { FormBuilder } from "@angular/forms"
+import { Subscription } from "rxjs"
 import { environment } from "src/environments/environment"
 import { RestService } from "src/app/services/rest.service"
-import { LanguagesService } from 'src/app/services/languages.service'
+import { LanguagesService } from "src/app/services/languages.service"
+
+interface IResponseCorreiosAPI {
+  bairro: string
+  cep: string
+  complemento: string
+  ddd: string
+  erro?: string
+  gia: string
+  ibge: string
+  cidadeNomeCidade: string
+  logradouro: string
+  siafi: string
+  estadoUf: string
+}
+
+interface INameCidadeSelectResponse {
+  estadoId: string
+  cidadeId: string
+}
 
 @Component({
   selector: "app-funcionario-edit",
@@ -16,31 +35,39 @@ import { LanguagesService } from 'src/app/services/languages.service'
 export class FuncionarioEditComponent implements OnInit, OnDestroy {
   public id: string
   public readonly = false
-  public estadoId = ''
+  public estadoId = ""
   public result: any
   public literals: any = {}
 
   funcionarioForm = this.formBuilder.group({
-    nome: '',
-    cpf: '',
-    email: '',
-    cargo: '',
-    cep: '',
+    nome: "",
+    cpf: "",
+    email: "",
+    cargo: "",
+    cep: "",
     estadoId: null,
     cidadeId: null,
-    bairro: '',
-    endereco: '',
+    bairro: "",
+    endereco: "",
     numero: 0,
-    complemento: '',
-    telefone: '',
+    complemento: "",
+    telefone: "",
     desabilitado: false,
   })
+
+  public cepErrorNotification: PoNotification = {
+    message: "CEP inválido",
+    duration: environment.poNotificationDuration,
+  }
 
   public readonly serviceApi = `${environment.baseUrl}/funcionarios`
   public estadoIdService = `${environment.baseUrl}/estados/select`
   public cidadeIdService = `${environment.baseUrl}/cidades/select`
 
   subscriptions = new Subscription()
+
+  public cidadesList: Array<PoComboOption> = []
+  public estadosList: Array<PoComboOption> = []
 
   public readonly pageActions: Array<PoPageAction> = []
 
@@ -52,7 +79,7 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private poNotification: PoNotificationService,
     private languagesService: LanguagesService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getLiterals()
@@ -71,48 +98,45 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
   }
 
   getLiterals() {
-    this.languagesService.getLiterals({ type: 'edit', module: 'cadastros', options: 'funcionario'})
-      .subscribe({
-        next: res => this.literals = res
-      })
+    this.languagesService.getLiterals({ type: "edit", module: "cadastros", options: "funcionario" }).subscribe({
+      next: (res) => (this.literals = res),
+    })
   }
 
   getPageType(route: string): string {
     switch (route) {
-      case 'new':
-        return 'new'
-      case 'new/:id':
-        return 'new'
-      case 'edit':
-        return 'edit'
-      case 'edit/:id':
-        return 'edit'
-      case 'view/:id':
-        return 'view'
+      case "new":
+        return "new"
+      case "new/:id":
+        return "new"
+      case "edit":
+        return "edit"
+      case "edit/:id":
+        return "edit"
+      case "view/:id":
+        return "view"
     }
   }
 
   pageButtonsBuilder(pageType: string): null {
-    if (pageType === 'view') {
+    if (pageType === "view") {
       this.readonly = true
 
-      this.pageActions.push(
-        {
-          label: this.literals.return,
-          action: this.goBack.bind(this),
-        }
-      )
+      this.pageActions.push({
+        label: this.literals.return,
+        action: this.goBack.bind(this),
+      })
       return
     }
 
     this.pageActions.push(
       {
         label: this.literals.save,
-        action: () => this.save(this.funcionarioForm.value)
+        action: () => this.save(this.funcionarioForm.value),
       },
       {
         label: this.literals.saveAndNew,
-        action: () => this.save(this.funcionarioForm.value, true)
+        action: () => this.save(this.funcionarioForm.value, true),
       },
       {
         label: this.literals.cancel,
@@ -124,29 +148,27 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
   }
 
   getFuncionario(id: string) {
-    this.restService
-      .get(`/funcionarios/${id}`)
-      .subscribe({
-        next: (result) => {
-          this.estadoId = result.estadoId
-          this.funcionarioForm.patchValue({
-            nome: result.nome,
-            cpf: result.cpf,
-            email: result.email,
-            cargo: result.cargo,
-            cep: result.cep,
-            estadoId: result.estadoId,
-            cidadeId: result.cidadeId,
-            bairro: result.bairro,
-            endereco: result.endereco,
-            numero: result.numero,
-            complemento: result.complemento,
-            telefone: result.telefone,
-            desabilitado: result.desabilitado,
-          })
-        },
-        error: (error) => console.log(error)
-      })
+    this.restService.get(`/funcionarios/${id}`).subscribe({
+      next: (result) => {
+        this.estadoId = result.estadoId
+        this.funcionarioForm.patchValue({
+          nome: result.nome,
+          cpf: result.cpf,
+          email: result.email,
+          cargo: result.cargo,
+          cep: result.cep,
+          estadoId: result.estadoId,
+          cidadeId: result.cidadeId,
+          bairro: result.bairro,
+          endereco: result.endereco,
+          numero: result.numero,
+          complemento: result.complemento,
+          telefone: result.telefone,
+          desabilitado: result.desabilitado,
+        })
+      },
+      error: (error) => console.log(error),
+    })
   }
 
   estadoIdChange(event: string) {
@@ -155,54 +177,50 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
 
   save(data, willCreateAnother?: boolean) {
     if (this.funcionarioForm.valid) {
-      if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === 'edit') {
+      if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
         this.subscriptions.add(
-          this.restService
-            .put(`/funcionarios/${this.id}`, data)
-            .subscribe({
-              next: () => {
-                this.poNotification.success({
-                  message: this.literals.saveSuccess,
-                  duration: environment.poNotificationDuration
-                })
+          this.restService.put(`/funcionarios/${this.id}`, data).subscribe({
+            next: () => {
+              this.poNotification.success({
+                message: this.literals.saveSuccess,
+                duration: environment.poNotificationDuration,
+              })
 
-                if (willCreateAnother) {
-                  this.funcionarioForm.reset()
-                  this.router.navigate(["funcionarios/new"])
-                } else {
-                  this.router.navigate(["funcionarios"])
-                }
-              },
-              error: (error) => console.log(error),
-            })
+              if (willCreateAnother) {
+                this.funcionarioForm.reset()
+                this.router.navigate(["funcionarios/new"])
+              } else {
+                this.router.navigate(["funcionarios"])
+              }
+            },
+            error: (error) => console.log(error),
+          })
         )
       } else {
         this.subscriptions.add(
-          this.restService
-            .post("/funcionarios", data)
-            .subscribe({
-              next: () => {
-                this.poNotification.success({
-                  message: this.literals.saveSuccess,
-                  duration: environment.poNotificationDuration
-                })
+          this.restService.post("/funcionarios", data).subscribe({
+            next: () => {
+              this.poNotification.success({
+                message: this.literals.saveSuccess,
+                duration: environment.poNotificationDuration,
+              })
 
-                if (willCreateAnother) {
-                  this.funcionarioForm.reset()
-                  this.router.navigate(["funcionarios/new"])
-                } else {
-                  this.router.navigate(["funcionarios"])
-                }
-              },
-              error: (error) => console.log(error),
-            })
+              if (willCreateAnother) {
+                this.funcionarioForm.reset()
+                this.router.navigate(["funcionarios/new"])
+              } else {
+                this.router.navigate(["funcionarios"])
+              }
+            },
+            error: (error) => console.log(error),
+          })
         )
       }
     } else {
       this.markAsDirty()
       this.poNotification.warning({
         message: this.literals.formError,
-        duration: environment.poNotificationDuration
+        duration: environment.poNotificationDuration,
       })
     }
   }
@@ -213,5 +231,53 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
 
   goBack() {
     this.router.navigate(["funcionarios"])
+  }
+
+  onCepChange(event: string) {
+    // this.loading = true
+    const cep = event.replace("-", "")
+
+    if (cep.length === 8) {
+      this.subscriptions.add(
+        this.httpClient
+          .get(`${environment.baseUrl}/ceps/by-cep/${cep}`)
+          // .pipe(finalize(() => (this.loading = false)))
+          .subscribe({
+            next: (response: IResponseCorreiosAPI) => {
+              if (response) {
+                this.funcionarioForm.patchValue({
+                  endereco: response.logradouro,
+                  bairro: response.bairro,
+                })
+
+                this.subscriptions.add(
+                  this.httpClient.get(`${environment.baseUrl}/cidades/select-name?name=${response.cidadeNomeCidade}`).subscribe({
+                    next: (ids: INameCidadeSelectResponse) => {
+                      this.cidadesList = [{ value: ids.cidadeId, label: response.cidadeNomeCidade }]
+                      this.funcionarioForm.patchValue({
+                        cidadeId: ids.cidadeId,
+                        estadoId: ids.estadoId,
+                      })
+                    },
+                  })
+                )
+              } else {
+                this.poNotification.warning(this.cepErrorNotification)
+              }
+            },
+            error: () => {
+              this.poNotification.warning({
+                message: "Algo inesperado aconteceu!",
+                duration: environment.poNotificationDuration,
+              })
+            },
+          })
+      )
+    } else {
+      if (cep.length !== 0) {
+        this.poNotification.warning(this.cepErrorNotification)
+      }
+    }
+    // this.loading = false
   }
 }

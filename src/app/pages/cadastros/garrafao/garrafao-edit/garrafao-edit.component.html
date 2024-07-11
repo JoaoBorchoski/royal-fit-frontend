@@ -1,8 +1,8 @@
 <po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
   <form [formGroup]="garrafaoForm">
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-combo
-        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
         formControlName="clienteId"
         name="clienteId"
         p-clean
@@ -10,7 +10,8 @@
         [p-filter-service]="clienteIdService"
         [p-label]="this.literals.fields.form['clienteId']"
         p-required
-      > </po-combo>
+      >
+      </po-combo>
     </div>
 
     <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
@@ -22,7 +23,8 @@
         [p-label]="this.literals.fields.form['quantidade']"
         p-maxlength="10"
         [p-readonly]="readonly"
-      > </po-number>
+      >
+      </po-number>
     </div>
 
     <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
@@ -32,8 +34,8 @@
         name="desabilitado"
         [p-disabled]="readonly"
         [p-label]="this.literals.fields.form['desabilitado']"
-      > </po-checkbox>
+      >
+      </po-checkbox>
     </div>
-
   </form>
 </po-page-default>

@@ -12,7 +12,8 @@
       (p-change)="changeFilter($event)"
       [p-options]="filterModal.savedFilter.savedFilters"
       [p-label]="literals.filtersSelect"
-    > </po-select>
+    >
+    </po-select>
 
     <div *ngIf="filterExpression" class="disclaimer">
       <div class="disclaimer-text">
@@ -26,6 +27,7 @@
   <div class="po-table-remove-show-more">
     <po-table
       #table
+      [p-sort]="true"
       *ngIf="items.length > 0"
       [p-actions]="tableActions"
       p-actions-right
@@ -40,9 +42,10 @@
       (p-restore-column-manager)="restoreColumn()"
       p-selectable
       (p-show-more)="showMoreItems()"
-    > </po-table>
+    >
+    </po-table>
   </div>
-  
+
   <app-no-data *ngIf="items.length == 0"> </app-no-data>
 </po-page-list>
 
@@ -50,9 +53,5 @@
   <po-loading-overlay *ngIf="initialLoading == true" [p-text]="this.literals.loadingData"> </po-loading-overlay>
 </po-page-default>
 
-<app-filter-modal
-  #filterModal
-  [filterItems]="filterItems"
-  [filterTable]="route"
-  (submitFilter)="submitFilter($event)"
-> </app-filter-modal>
+<app-filter-modal #filterModal [filterItems]="filterItems" [filterTable]="route" (submitFilter)="submitFilter($event)">
+</app-filter-modal>
