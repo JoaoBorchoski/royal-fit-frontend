@@ -1,0 +1,49 @@
+.modal-container {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  padding: 20px 20px 20px 0;
+  height: 325px;
+
+  label {
+    display: inline-block;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    height: 2.75em;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #ffffff;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 1px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      background-color: var(--color-secondary-light-20);
+    }
+
+    input {
+      display: none;
+    }
+  }
+
+  .file-name {
+    display: flex;
+    text-align: center;
+
+    span {
+      font-size: 16px;
+      padding: 10px 15px;
+    }
+  }
+
+  .footer-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 20px;
+  }
+}

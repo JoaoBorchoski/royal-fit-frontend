@@ -73,12 +73,11 @@
       </po-input>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-combo
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="estadoId"
         name="estadoId"
-        p-required
         (p-change)="estadoIdChange($event)"
         p-clean
         [p-disabled]="readonly"
@@ -88,12 +87,11 @@
       </po-combo>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-combo
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="cidadeId"
         name="cidadeId"
-        p-required
         p-clean
         [p-disabled]="readonly"
         [p-filter-service]="cidadeIdService"
@@ -102,11 +100,10 @@
       </po-combo>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="bairro"
-        p-required
         name="bairro"
         p-clean
         [p-label]="this.literals.fields.form['bairro']"
@@ -116,12 +113,11 @@
       </po-input>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="endereco"
         name="endereco"
-        p-required
         p-clean
         [p-label]="this.literals.fields.form['endereco']"
         p-maxlength="255"
@@ -130,12 +126,11 @@
       </po-input>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-number
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="numero"
         name="numero"
-        p-required
         p-clean
         [p-label]="this.literals.fields.form['numero']"
         p-maxlength="10"

@@ -14,7 +14,7 @@
       </po-combo>
     </div>
 
-    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding po-required">
       <po-number
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="totalVendido"
@@ -23,6 +23,8 @@
         [p-label]="this.literals.fields.form['totalVendido']"
         p-maxlength="10"
         [p-readonly]="readonly"
+        p-required
+        (p-change)="onChangeTotalVendido($event)"
       >
       </po-number>
     </div>
@@ -35,7 +37,7 @@
         p-clean
         [p-label]="this.literals.fields.form['bonificacaoDisponivel']"
         p-maxlength="10"
-        [p-readonly]="readonly"
+        p-disabled="true"
       >
       </po-number>
     </div>

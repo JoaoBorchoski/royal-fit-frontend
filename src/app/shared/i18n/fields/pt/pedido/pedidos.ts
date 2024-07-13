@@ -1,6 +1,6 @@
 export const pedidosFields = {
   list: {
-    sequencial: "Numero",
+    sequencial: "Sequencial",
     clienteNome: "Cliente",
     clienteId: "Cliente",
     data: "Data",
@@ -18,5 +18,9 @@ export const pedidosFields = {
     statusPagamentoId: "Status Pagamento",
     isPagamentoPosterior: "Pagamento Posterior",
     desabilitado: "Desabilitado",
+    produtoId: "Produto",
+    pedidoId: "Pedido",
+    quantidade: "Quantidade",
+    valor: "Valor",
   },
 }

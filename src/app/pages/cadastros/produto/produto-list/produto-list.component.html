@@ -2,4 +2,23 @@
   [pageTitle]="this.literals.title"
   route="produtos"
   [initialFields]="initialFields"
-> </app-custom-table>
+  [customPageActions]="customPageActions"
+>
+  >
+</app-custom-table>
+
+<app-import-excel-modal
+  #modal
+  [open]="open"
+  [title]="literals.fields.list['importModalTitle']"
+  [selectFileName]="literals.fields.list['selectFile']"
+  [noFileSelected]="literals.fields.list['noFileSelected']"
+  [cancel]="literals.fields.list['cancel']"
+  [import]="literals.fields.list['import']"
+  [uploadRoute]="uploadRoute"
+  [downloadRoute]="downloadRoute"
+  [downloadExcelFileName]="downloadExcelFileName"
+  [download]="literals.fields.list['download']"
+  (import-success)="importSuccess()"
+>
+</app-import-excel-modal>

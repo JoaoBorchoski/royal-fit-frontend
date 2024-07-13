@@ -1,0 +1,33 @@
+<po-modal #modal p-click-out="false" [p-title]="title" p-size="xl">
+  <div class="modal-container">
+    <label class="po-button">
+      {{ selectFileName }}
+      <input #fileInput accept=".xlsx" (change)="selectFile($event)" id="file-input" type="file" />
+    </label>
+
+    <div class="file-name">
+      <span> {{ selectedFileName || noFileSelected }} </span>
+    </div>
+
+    <div class="footer-container">
+      <po-modal-footer>
+        <po-button (p-click)="downloadFile()" [p-label]="download"> </po-button>
+        <po-button (p-click)="closeModal()" [p-label]="cancel"> </po-button>
+        <po-button (p-click)="uploadFile(fileInput)" p-kind="primary" [p-label]="import"> </po-button>
+      </po-modal-footer>
+
+      <div *ngIf="viewProgressBar">
+        <po-progress
+          class="progress"
+          [p-value]="progressPercentage"
+          [p-text]="progressPercentage"
+          [p-status]="isError ? 'error' : ''"
+        ></po-progress>
+      </div>
+    </div>
+  </div>
+</po-modal>
+
+<div *ngIf="isLoading">
+  <po-loading-overlay [p-text]="literals.loadingData"> </po-loading-overlay>
+</div>

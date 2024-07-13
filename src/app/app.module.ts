@@ -4,17 +4,17 @@ import { BrowserModule } from "@angular/platform-browser"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { RouterModule } from "@angular/router"
 import { PoPageModule, PoI18nModule } from "@po-ui/ng-components"
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 
 import { DefaultComponent } from "./_layouts/default/default.component"
-import { CustomTableComponent } from './components/custom-table/custom-table.component';
-import { NoDataComponent } from './components/no-data/no-data.component'
-import { FilterModalComponent } from './components/filter-modal/filter-modal.component';
-import { SavedFilterComponent } from './components/filter-modal/saved-filter/saved-filter.component'
+import { CustomTableComponent } from "./components/custom-table/custom-table.component"
+import { NoDataComponent } from "./components/no-data/no-data.component"
+import { FilterModalComponent } from "./components/filter-modal/filter-modal.component"
+import { SavedFilterComponent } from "./components/filter-modal/saved-filter/saved-filter.component"
 import { AppRoutingModule } from "./app-routing.module"
 import { AppComponent } from "./app.component"
 import { HomeComponent } from "./pages/authentication/home/home.component"
-import { ProfileComponent } from './pages/authentication/profile/profile.component'
+import { ProfileComponent } from "./pages/authentication/profile/profile.component"
 import { LoginComponent } from "./pages/authentication/login/login.component"
 import { ResetPasswordComponent } from "./pages/authentication/reset-password/reset-password.component"
 import { BlockReasonEditComponent } from "./pages/security/block-reason/block-reason-edit/block-reason-edit.component"
@@ -71,10 +71,11 @@ import { PagamentoEditComponent } from "./pages/clientes/pagamento/pagamento-edi
 import { PagamentoListComponent } from "./pages/clientes/pagamento/pagamento-list/pagamento-list.component"
 import { TokenInterceptorService } from "./services/token-interceptor.service"
 import { ErrorInterceptorService } from "./services/error-interceptor.service"
-import { NotAuthorizedComponent } from './pages/security/not-authorized/not-authorized.component'
+import { NotAuthorizedComponent } from "./pages/security/not-authorized/not-authorized.component"
+import { ImportExcelModalComponent } from "./components/import-excel-modal-component/import-excel-modal-component"
 
 import { SharedModule } from "./shared/shared.module"
-import { i18nConfig } from './shared/i18n'
+import { i18nConfig } from "./shared/i18n"
 
 // PO-UI
 @NgModule({
@@ -141,7 +142,8 @@ import { i18nConfig } from './shared/i18n'
     DefaultComponent,
     HomeComponent,
     ProfileComponent,
-    NotAuthorizedComponent
+    NotAuthorizedComponent,
+    ImportExcelModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -152,7 +154,7 @@ import { i18nConfig } from './shared/i18n'
     PoPageModule,
     FormsModule,
     ReactiveFormsModule,
-    PoI18nModule.config(i18nConfig)
+    PoI18nModule.config(i18nConfig),
   ],
   providers: [
     {
