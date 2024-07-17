@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 
-import { PedidoItemListComponent } from "./pedido-item-list.component"
+import { EstoqueEditComponent } from "./estoque-edit.component"
 
-describe("PedidoItemListComponent", () => {
-  let component: PedidoItemListComponent
-  let fixture: ComponentFixture<PedidoItemListComponent>
+describe("PedidoItemEditComponent", () => {
+  let component: EstoqueEditComponent
+  let fixture: ComponentFixture<EstoqueEditComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PedidoItemListComponent],
+      declarations: [EstoqueEditComponent],
     }).compileComponents()
   })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PedidoItemListComponent)
+    fixture = TestBed.createComponent(EstoqueEditComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

@@ -1,5 +1,107 @@
-<app-custom-table
+<!-- <app-custom-table
   [pageTitle]="this.literals.title"
   route="relatorios-funcionarios"
   [initialFields]="initialFields"
-> </app-custom-table>
+> </app-custom-table> -->
+
+<po-page-default [p-title]="this.literals.title">
+  <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <po-divider p-label="Relatório Geral"></po-divider>
+  </div>
+
+  <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <form [formGroup]="relatorioGeralForm">
+      <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+        <po-datepicker
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="dataInicio"
+          name="dataInicio"
+          p-clean
+          [p-label]="this.literals.fields.list['dataInicio']"
+          p-required
+        >
+        </po-datepicker>
+      </div>
+
+      <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+        <po-datepicker
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="dataFim"
+          name="dataFim"
+          p-clean
+          [p-label]="this.literals.fields.list['dataFim']"
+          p-required
+        >
+        </po-datepicker>
+      </div>
+
+      <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding po-mt-4">
+        <po-button
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          p-label="Gerar Relatório"
+          p-type="primary"
+          (p-click)="gerarRelatorioGeral()"
+        >
+        </po-button>
+      </div>
+    </form>
+  </div>
+
+  <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <po-divider p-label="Relatório por Funcionário"></po-divider>
+  </div>
+  <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <form [formGroup]="relatorioFuncionarioForm">
+      <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+        <po-lookup
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="funcionarioId"
+          name="funcionarioId"
+          p-field-label="label"
+          p-field-value="value"
+          p-clean
+          (p-change)="onChangeFuncionario($event)"
+          [p-filter-service]="funcionarioIdService"
+          [p-columns]="columnsFuncionarios"
+          [p-label]="this.literals.fields.list['funcionarioNome']"
+          p-required
+        >
+        </po-lookup>
+      </div>
+
+      <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+        <po-datepicker
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="dataInicio"
+          name="dataInicio"
+          p-clean
+          [p-label]="this.literals.fields.list['dataInicio']"
+          p-required
+        >
+        </po-datepicker>
+      </div>
+
+      <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+        <po-datepicker
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="dataFim"
+          name="dataFim"
+          p-clean
+          [p-label]="this.literals.fields.list['dataFim']"
+          p-required
+        >
+        </po-datepicker>
+      </div>
+
+      <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding po-mt-4">
+        <po-button
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          p-label="Gerar Relatório"
+          p-type="primary"
+          (p-click)="gerarRelatorio()"
+        >
+        </po-button>
+      </div>
+    </form>
+  </div>
+</po-page-default>

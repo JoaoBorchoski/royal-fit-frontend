@@ -1,3 +1,7 @@
+<div>
+  <po-loading-overlay [hidden]="isHideLoading"></po-loading-overlay>
+</div>
+
 <app-custom-table
   [pageTitle]="this.literals.title"
   route="produtos"
@@ -19,6 +23,7 @@
   [downloadRoute]="downloadRoute"
   [downloadExcelFileName]="downloadExcelFileName"
   [download]="literals.fields.list['download']"
+  [isHideLoading]="isHideLoading"
   (import-success)="importSuccess()"
 >
 </app-import-excel-modal>

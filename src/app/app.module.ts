@@ -59,8 +59,8 @@ import { BonificacaoEditComponent } from "./pages/cadastros/bonificacao/bonifica
 import { BonificacaoListComponent } from "./pages/cadastros/bonificacao/bonificacao-list/bonificacao-list.component"
 import { PedidoEditComponent } from "./pages/pedido/pedido/pedido-edit/pedido-edit.component"
 import { PedidoListComponent } from "./pages/pedido/pedido/pedido-list/pedido-list.component"
-import { PedidoItemEditComponent } from "./pages/pedido/pedido-item/pedido-item-edit/pedido-item-edit.component"
-import { PedidoItemListComponent } from "./pages/pedido/pedido-item/pedido-item-list/pedido-item-list.component"
+import { EstoqueEditComponent } from "./pages/pedido/pedido-item/pedido-item-edit/estoque-edit.component"
+import { EstoqueListComponent } from "./pages/pedido/pedido-item/pedido-item-list/estoque-list.component"
 import { RelatorioClienteEditComponent } from "./pages/relatorios/relatorio-cliente/relatorio-cliente-edit/relatorio-cliente-edit.component"
 import { RelatorioClienteListComponent } from "./pages/relatorios/relatorio-cliente/relatorio-cliente-list/relatorio-cliente-list.component"
 import { RelatorioFuncionarioEditComponent } from "./pages/relatorios/relatorio-funcionario/relatorio-funcionario-edit/relatorio-funcionario-edit.component"
@@ -129,8 +129,8 @@ import { i18nConfig } from "./shared/i18n"
     BonificacaoListComponent,
     PedidoEditComponent,
     PedidoListComponent,
-    PedidoItemEditComponent,
-    PedidoItemListComponent,
+    EstoqueEditComponent,
+    EstoqueListComponent,
     RelatorioClienteEditComponent,
     RelatorioClienteListComponent,
     RelatorioFuncionarioEditComponent,

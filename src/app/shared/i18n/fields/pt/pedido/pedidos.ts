@@ -5,6 +5,12 @@ export const pedidosFields = {
     clienteId: "Cliente",
     data: "Data",
     valorTotal: "Valor Total",
+    import: "Importar",
+    importModalTitle: "Importar Pedidos",
+    selectFile: "Selecione um arquivo",
+    noFileSelected: "Nenhum arquivo selecionado",
+    cancel: "Cancelar",
+    download: "Baixar modelo",
   },
   form: {
     sequencial: "Numero",

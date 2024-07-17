@@ -7,10 +7,10 @@ import { LanguagesService } from "src/app/services/languages.service"
 import { environment } from "src/environments/environment"
 
 @Component({
-  selector: "/funcionario-list",
-  templateUrl: "./funcionario-list.component.html",
+  selector: "/estoque-list",
+  templateUrl: "./estoque-list.component.html",
 })
-export class FuncionarioListComponent implements OnInit {
+export class EstoqueListComponent implements OnInit {
   public literals: any = {}
   public initialFields = []
 
@@ -20,13 +20,10 @@ export class FuncionarioListComponent implements OnInit {
 
   public open = false
   public isHideLoading = true
-  public uploadRoute = `${environment.baseUrl}/funcionarios/import-excel`
+  public uploadRoute = `${environment.baseUrl}/estoques/import-excel`
   public dataInfos: any
-  public downloadRoute = "/funcionarios/export-excel"
-  public downloadExcelFileName = "funcionariosModelo"
-
-  // public downloadExcelErrorRoute = "/funcionarios/export-excel-errors"
-  // public downloadExcelErrorsFileName = "TabelaPrecoErrors"
+  public downloadRoute = "/estoques/export-excel"
+  public downloadExcelFileName = "estoquesModelo"
 
   readonly customPageActions = [
     {
@@ -47,16 +44,15 @@ export class FuncionarioListComponent implements OnInit {
 
   getLiterals() {
     this.languagesService
-      .getLiterals({ type: "list", module: "cadastros", options: "funcionario" })
+      .getLiterals({ type: "list", module: "pedido", options: "pedidoItem" })
       .pipe(map((res) => (this.literals = res)))
       .subscribe({
         next: () => (
           (this.customPageActions[0].pageAction.label = this.literals.fields.list["import"]),
           (this.initialFields = [
             { property: "id", key: true, visible: false },
-            { property: "nome", label: this.literals.fields.list["nome"] },
-            { property: "cpf", label: this.literals.fields.list["cpf"] },
-            { property: "cargo", label: this.literals.fields.list["cargo"] },
+            { property: "produtoNome", label: this.literals.fields.list["produto"] },
+            { property: "quantidade", label: this.literals.fields.list["quantidade"] },
           ])
         ),
       })

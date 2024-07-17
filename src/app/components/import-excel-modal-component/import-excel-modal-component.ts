@@ -31,6 +31,7 @@ export class ImportExcelModalComponent implements OnInit {
   @Input() downloadPDFFileName: string
   @Input() viewProgressBar: boolean = false
   @Input() dataInfos: any
+  @Input() isHideLoading: boolean
 
   @Output("import-success") importSuccess = new EventEmitter()
   @Output("result-itens") resultItens = new EventEmitter()
@@ -108,6 +109,7 @@ export class ImportExcelModalComponent implements OnInit {
   }
 
   public uploadFile(fileInput: HTMLInputElement): void {
+    this.isHideLoading = false
     if (!fileInput.files || fileInput.files.length === 0) {
       this.notificationService.error("Selecione o arquivo a ser importado.")
       return
@@ -134,6 +136,7 @@ export class ImportExcelModalComponent implements OnInit {
         )
         .subscribe(
           (response: any) => {
+            this.isHideLoading = true
             if (response && !response.data.warning) {
               this.resultItens.emit(response.data)
             }
@@ -156,10 +159,23 @@ export class ImportExcelModalComponent implements OnInit {
             this.closeModal()
           },
           (error) => {
-            this.notificationService.error({ message: "Erro ao importar o arquivo." })
-            this.isError = true
-
-            this.progressPercentage = "Erro"
+            console.log(error)
+            this.isHideLoading = true
+            if (this.uploadRoute == "http://localhost:3333/estoques/import-excel") {
+              this.notificationService.warning({
+                message: "Arquivo com produtos não cadastrados, verificar. ",
+                duration: environment.poNotificationDuration,
+              })
+              this.isError = true
+              this.progressPercentage = "Erro"
+            } else {
+              this.notificationService.warning({
+                message: "Erro ao importar o arquivo.",
+                duration: environment.poNotificationDuration,
+              })
+              this.isError = true
+              this.progressPercentage = "Erro"
+            }
           }
         )
     )

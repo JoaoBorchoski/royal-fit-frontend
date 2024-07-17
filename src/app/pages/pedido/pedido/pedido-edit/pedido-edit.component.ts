@@ -34,21 +34,26 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       property: "produto",
       label: "Produto",
       type: "string",
-      width: "33%",
+      width: "25%",
+    },
+    {
+      property: "quantidade",
+      label: "Quantidade",
+      width: "25%",
     },
     {
       property: "preco",
       label: "Preço Unitário",
       type: "currency",
       format: "BRL",
-      width: "33%",
+      width: "25%",
     },
     {
       property: "valor",
       label: "Valor",
       type: "currency",
       format: "BRL",
-      width: "33%",
+      width: "25%",
     },
   ]
 
@@ -193,6 +198,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       return {
         id: index,
         produto: item.produtoNome,
+        quantidade: item.quantidade,
         preco: item.preco,
         valor: item.valor,
       }
@@ -264,10 +270,19 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   addIten() {
     if (this.pedidoItemForm.valid) {
+      if (this.pedidoItens.some((item) => item.produtoId === this.pedidoItemForm.controls.produtoId.value)) {
+        this.poNotification.warning({
+          message: "Produto já adicionado",
+          duration: environment.poNotificationDuration,
+        })
+        return
+      }
+      console.log(this.pedidoItemForm.value)
       this.pedidoItens.push(this.pedidoItemForm.value)
       this.itensTable.push({
         id: this.itensTable.length,
         produto: this.produtoAtual.nome,
+        quantidade: this.pedidoItemForm.controls.quantidade.value,
         preco: this.produtoAtual.preco,
         valor: this.pedidoItemForm.controls.valor.value,
       })

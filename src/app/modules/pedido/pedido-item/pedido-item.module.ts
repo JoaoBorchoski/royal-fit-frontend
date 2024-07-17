@@ -1,43 +1,40 @@
-import { NgModule } from '@angular/core'
-import { RouterModule } from '@angular/router'
-import { PedidoItemListComponent } from 'src/app/pages/pedido/pedido-item/pedido-item-list/pedido-item-list.component'
-import { PedidoItemEditComponent } from 'src/app/pages/pedido/pedido-item/pedido-item-edit/pedido-item-edit.component'
-import { AuthGuard } from 'src/app/services/auth.guard'
+import { NgModule } from "@angular/core"
+import { RouterModule } from "@angular/router"
+import { EstoqueEditComponent } from "src/app/pages/pedido/pedido-item/pedido-item-edit/estoque-edit.component"
+import { EstoqueListComponent } from "src/app/pages/pedido/pedido-item/pedido-item-list/estoque-list.component"
+import { AuthGuard } from "src/app/services/auth.guard"
 
-const routesPedidoItem = [
+const routesEstoques = [
   {
     path: "",
-    component: PedidoItemListComponent,
+    component: EstoqueListComponent,
     canActivate: [AuthGuard],
   },
   {
     path: "new",
-    component: PedidoItemEditComponent,
+    component: EstoqueEditComponent,
     canActivate: [AuthGuard],
   },
   {
     path: "new/:id",
-    component: PedidoItemEditComponent,
+    component: EstoqueEditComponent,
     canActivate: [AuthGuard],
   },
   {
     path: "edit/:id",
-    component: PedidoItemEditComponent,
+    component: EstoqueEditComponent,
     canActivate: [AuthGuard],
   },
   {
     path: "view/:id",
-    component: PedidoItemEditComponent,
+    component: EstoqueEditComponent,
     canActivate: [AuthGuard],
   },
 ]
 
 @NgModule({
   declarations: [],
-  imports: [
-    [RouterModule.forChild(routesPedidoItem)]
-  ],
-  exports: [RouterModule]
+  imports: [[RouterModule.forChild(routesEstoques)]],
+  exports: [RouterModule],
 })
-
-export class PedidoItemModule { }
+export class EstoquesModule {}
