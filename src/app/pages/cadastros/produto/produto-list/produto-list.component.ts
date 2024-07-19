@@ -43,6 +43,7 @@ export class ProdutoListComponent implements OnInit {
   }
 
   getLiterals() {
+    const widthWindow = window.innerWidth
     this.languagesService
       .getLiterals({ type: "list", module: "cadastros", options: "produto" })
       .pipe(map((res) => (this.literals = res)))
@@ -51,9 +52,20 @@ export class ProdutoListComponent implements OnInit {
           (this.customPageActions[0].pageAction.label = this.literals.fields.list["import"]),
           (this.initialFields = [
             { property: "id", key: true, visible: false },
-            { property: "nome", label: this.literals.fields.list["nome"], width: "40%" },
-            { property: "descricao", label: this.literals.fields.list["descricao"], width: "40%" },
-            { property: "preco", label: this.literals.fields.list["preco"], type: "currency", format: "BRL", width: "20%" },
+            { property: "nome", label: this.literals.fields.list["nome"], width: widthWindow > 768 ? "40%" : "60%" },
+            {
+              property: "descricao",
+              label: this.literals.fields.list["descricao"],
+              width: widthWindow > 768 ? "40%" : "0%",
+              visible: widthWindow > 768,
+            },
+            {
+              property: "preco",
+              label: this.literals.fields.list["preco"],
+              type: "currency",
+              format: "BRL",
+              width: widthWindow > 768 ? "20%" : "40%",
+            },
           ])
         ),
       })

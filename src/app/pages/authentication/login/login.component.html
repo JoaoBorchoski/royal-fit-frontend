@@ -3,43 +3,28 @@
     <img src="../../../../assets/images/login-page-logo.png" class="logo" />
   </div>
 
-  <div class="po-page-content">
-    <po-page-login
-      (p-login-submit)="login($event)"
-      [p-recovery]="this.passwordRecovery.bind(this)"
-      p-hide-remember-user
-      (p-language-change)="changeLanguage($event)"
-      [p-languages]="poLanguages"
-    >
-    </po-page-login>
+  <div class="po-page-content" style="max-width: 95vw; max-height: 350px">
+    <po-page-login (p-login-submit)="login($event)" p-hide-remember-user> </po-page-login>
   </div>
 </div>
 
-<po-modal-password-recovery
-  #passwordRecoveryModal
-  (p-submit)="submitPasswordRecovery($event)"
-> </po-modal-password-recovery>
+<po-modal-password-recovery #passwordRecoveryModal (p-submit)="submitPasswordRecovery($event)"> </po-modal-password-recovery>
 
-<po-modal
-  class="primary-color"
-  #tfaModal
-  [p-primary-action]="entrar"
-  [p-secondary-action]="navigateAuthAppUrl"
->
+<po-modal class="primary-color" #tfaModal [p-primary-action]="entrar" [p-secondary-action]="navigateAuthAppUrl">
   <div class="tfa-modal-body">
     <p class="po-font-title po-mb-3">Autenticação em dois fatores</p>
 
     <div *ngIf="tfa" style="display: flex; flex-direction: column; align-items: center">
       <p class="po-font-text-large po-mt-4 po-mb-4">Escaneie o código QR ou insira a chave secreta no Google Authenticator</p>
 
-      <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
+      <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display: block; margin: auto" />
 
-      <p class="po-font-text-large po-mt-4 po-mb-4">Chave secreta - {{tfa.tempSecret}}</p>
+      <p class="po-font-text-large po-mt-4 po-mb-4">Chave secreta - {{ tfa.tempSecret }}</p>
     </div>
 
     <div *ngIf="!tfa">
       <p class="po-font-subtitle po-mb-3 po-mt-3">Abra seu app de autenticação e entre com o código abaixo</p>
-    </div>    
+    </div>
 
     <form [formGroup]="tfaForm">
       <div class="po-input-bold po-mt-3">
@@ -50,7 +35,8 @@
           name="code0"
           (p-change-model)="modelChange('0')"
           p-mask="9"
-        > </po-input>
+        >
+        </po-input>
 
         <po-input
           #input1
@@ -59,7 +45,8 @@
           name="code1"
           (p-change-model)="modelChange('1')"
           p-mask="9"
-        > </po-input>
+        >
+        </po-input>
 
         <po-input
           #input2
@@ -68,7 +55,8 @@
           name="code2"
           (p-change-model)="modelChange('2')"
           p-mask="9"
-        > </po-input>
+        >
+        </po-input>
 
         <po-input
           #input3
@@ -77,7 +65,8 @@
           name="code3"
           (p-change-model)="modelChange('3')"
           p-mask="9"
-        > </po-input>
+        >
+        </po-input>
 
         <po-input
           #input4
@@ -86,7 +75,8 @@
           name="code4"
           (p-change-model)="modelChange('4')"
           p-mask="9"
-        > </po-input>
+        >
+        </po-input>
 
         <po-input
           #input5
@@ -95,7 +85,8 @@
           name="code5"
           (p-change-model)="modelChange('5')"
           p-mask="9"
-        > </po-input>
+        >
+        </po-input>
       </div>
     </form>
   </div>

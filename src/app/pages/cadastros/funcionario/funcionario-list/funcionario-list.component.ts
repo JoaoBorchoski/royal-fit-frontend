@@ -46,6 +46,7 @@ export class FuncionarioListComponent implements OnInit {
   }
 
   getLiterals() {
+    const widthWindow = window.innerWidth
     this.languagesService
       .getLiterals({ type: "list", module: "cadastros", options: "funcionario" })
       .pipe(map((res) => (this.literals = res)))
@@ -56,7 +57,7 @@ export class FuncionarioListComponent implements OnInit {
             { property: "id", key: true, visible: false },
             { property: "nome", label: this.literals.fields.list["nome"] },
             { property: "cpf", label: this.literals.fields.list["cpf"] },
-            { property: "cargo", label: this.literals.fields.list["cargo"] },
+            { property: "cargo", label: this.literals.fields.list["cargo"], visible: widthWindow > 768 },
           ])
         ),
       })

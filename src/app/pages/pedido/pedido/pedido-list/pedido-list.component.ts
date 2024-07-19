@@ -43,6 +43,7 @@ export class PedidoListComponent implements OnInit {
   }
 
   getLiterals() {
+    const widthWindow = window.innerWidth
     this.languagesService
       .getLiterals({ type: "list", module: "pedido", options: "pedido" })
       .pipe(map((res) => (this.literals = res)))
@@ -51,7 +52,7 @@ export class PedidoListComponent implements OnInit {
           (this.customPageActions[0].pageAction.label = this.literals.fields.list["import"]),
           (this.initialFields = [
             { property: "id", key: true, visible: false },
-            { property: "sequencial", label: this.literals.fields.list["sequencial"] },
+            { property: "sequencial", label: this.literals.fields.list["sequencial"], visible: widthWindow > 768 },
             { property: "clienteNome", label: this.literals.fields.list["clienteNome"] },
             { property: "data", label: this.literals.fields.list["data"] },
             { property: "valorTotal", label: this.literals.fields.list["valorTotal"], type: "currency", format: "BRL" },

@@ -43,6 +43,7 @@ export class ClienteListComponent implements OnInit {
   }
 
   getLiterals() {
+    const widthWindow = window.innerWidth
     this.languagesService
       .getLiterals({ type: "list", module: "cadastros", options: "cliente" })
       .pipe(map((res) => (this.literals = res)))
@@ -53,7 +54,7 @@ export class ClienteListComponent implements OnInit {
             { property: "id", key: true, visible: false },
             { property: "nome", label: this.literals.fields.list["nome"] },
             { property: "cpfCnpj", label: this.literals.fields.list["cpfCnpj"] },
-            { property: "email", label: this.literals.fields.list["email"] },
+            { property: "email", label: this.literals.fields.list["email"], visible: widthWindow > 768 },
           ])
         ),
       })

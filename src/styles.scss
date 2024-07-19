@@ -1,13 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
   --border-width-md: 1px;
-  --primary-color: #0C9ABE;
-  --secondary-color: #0C9ABE;
+  --primary-color: #0c9abe;
+  --secondary-color: #0c9abe;
   --side-menu-background: #2c3739;
-  --side-menu-filter-background: rgba(0,0,0,.3);
-  --side-menu-border: rgba(74,92,96,.45);
-  --side-menu-font-color: #0C9ABE;
-  --side-menu-font-color-selected: #0C9ABE;
+  --side-menu-filter-background: rgba(0, 0, 0, 0.3);
+  --side-menu-border: rgba(74, 92, 96, 0.45);
+  --side-menu-font-color: #0c9abe;
+  --side-menu-font-color-selected: #0c9abe;
 
   button:focus {
     outline-color: var(--outline-color-focused);
@@ -55,12 +55,11 @@
   }
 
   .po-menu-filter-icon {
-    color: var(--side-menu-font-color)
+    color: var(--side-menu-font-color);
   }
 
-  .po-menu-footer
-  .po-menu-collapse-button-icon {
-    color: var(--side-menu-font-color)
+  .po-menu-footer .po-menu-collapse-button-icon {
+    color: var(--side-menu-font-color);
   }
 
   .po-menu-item-grouper-up,
@@ -156,10 +155,30 @@
     }
   }
 
+  .po-page-login-info-icon-container {
+    display: none;
+  }
+
+  .po-page-login-password-popover-container {
+    display: none;
+  }
+
+  .po-page-login-field-size {
+    width: 100%;
+  }
+
+  .po-page-background-footer-content {
+    display: none;
+  }
+
+  .logo-container {
+    margin-bottom: 0px !important;
+  }
+
   .po-accordion-item-header-button:focus:before {
     border: none;
   }
-  
+
   .po-accordion-item-header-button {
     padding: 8px 8px 8px 16px;
   }
@@ -172,41 +191,41 @@
     padding: 0 16px;
   }
 
-  button[p-kind=primary] {
+  button[p-kind="primary"] {
     color: #fff;
-    font-family: 'NunitoSans-Bold', sans-serif;
+    font-family: "NunitoSans-Bold", sans-serif;
     border: 1px solid var(--primary-color);
     background-color: var(--primary-color);
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
   }
 
-  button[p-kind=primary]:disabled {
+  button[p-kind="primary"]:disabled {
     color: var(--color-disabled);
     background-color: var(--background-color-disabled);
     border: 1px solid var(--color-disabled);
   }
 
-  button[p-kind=secondary] {
+  button[p-kind="secondary"] {
     color: var(--primary-color);
-    font-family: 'NunitoSans-Bold';
+    font-family: "NunitoSans-Bold";
     border: 1px solid var(--primary-color);
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
   }
 
-  button[p-kind=secondary]:disabled {
+  button[p-kind="secondary"]:disabled {
     color: var(--color-disabled);
     background-color: var(--background-color-disabled);
     border: 1px solid var(--color-disabled);
   }
 
-  button[p-kind=primary]:hover {
+  button[p-kind="primary"]:hover {
     filter: brightness(75%);
-    transition: .2s;
+    transition: 0.2s;
   }
 
   @media (max-width: 1366px) {
     .po-button {
-      font-family: 'NunitoSans-Bold', sans-serif;
+      font-family: "NunitoSans-Bold", sans-serif;
       font-size: 14px;
       padding: 0 8px;
       line-height: 1rem;
@@ -246,41 +265,41 @@
     padding: 0 16px;
   }
 
-  button[p-kind=primary] {
+  button[p-kind="primary"] {
     color: #fff;
-    font-family: 'NunitoSans-Bold', sans-serif;
+    font-family: "NunitoSans-Bold", sans-serif;
     border: 1px solid var(--primary-color);
     background-color: var(--primary-color);
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
   }
 
-  button[p-kind=primary]:disabled {
+  button[p-kind="primary"]:disabled {
     color: var(--color-disabled);
     background-color: var(--background-color-disabled);
     border: 1px solid var(--color-disabled);
   }
 
-  button[p-kind=secondary] {
+  button[p-kind="secondary"] {
     color: var(--primary-color);
-    font-family: 'NunitoSans-Bold';
+    font-family: "NunitoSans-Bold";
     border: 1px solid var(--primary-color);
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
   }
 
-  button[p-kind=secondary]:disabled {
+  button[p-kind="secondary"]:disabled {
     color: var(--color-disabled);
     background-color: var(--background-color-disabled);
     border: 1px solid var(--color-disabled);
   }
 
-  button[p-kind=primary]:hover {
+  button[p-kind="primary"]:hover {
     filter: brightness(75%);
-    transition: .2s;
+    transition: 0.2s;
   }
 
   @media (max-width: 1366px) {
     .po-button {
-      font-family: 'NunitoSans-Bold', sans-serif;
+      font-family: "NunitoSans-Bold", sans-serif;
       font-size: 14px;
       padding: 0 8px;
       line-height: 1rem;
@@ -304,7 +323,7 @@
     }
 
     .po-dropdown-button {
-      font-family: 'NunitoSans-Bold', sans-serif;
+      font-family: "NunitoSans-Bold", sans-serif;
       font-size: 14px;
       height: 38.5px;
       padding: 6px 38px 8px 16px;

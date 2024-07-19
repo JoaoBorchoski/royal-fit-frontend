@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  baseUrl: "http://localhost:3333",
-  poNotificationDuration: 4000
+  baseUrl: "https://apiroyalfit.joao-borchoski.com",
+  poNotificationDuration: 4000,
 }
