@@ -52,7 +52,7 @@ export class GarrafaoListComponent implements OnInit {
           (this.initialFields = [
             { property: "id", key: true, visible: false },
             { property: "clienteNome", label: this.literals.fields.list["clienteNome"] },
-            { property: "quantidade", label: this.literals.fields.list["quantidade"], type: "number" },
+            { property: "quantidade", label: this.literals.fields.list["quantidade"] },
           ])
         ),
       })

@@ -234,7 +234,7 @@ export const generalPt = {
     fields: relatoriosFuncionariosFields,
   },
   clientes_balanco: {
-    title: "Balanços Clientes",
+    title: "Balanço de Clientes",
     fields: balancosFields,
   },
   clientes_pagamento: {

@@ -76,6 +76,18 @@ export class ErrorInterceptorService implements HttpInterceptor {
                 duration: environment.poNotificationDuration,
               })
               break
+            case "Cliente não possui garrafão cadastrado":
+              this.poNotificationService.warning({
+                message: error.error.message,
+                duration: environment.poNotificationDuration,
+              })
+              break
+            case "Quantidade de garrafões insuficiente":
+              this.poNotificationService.warning({
+                message: error.error.message,
+                duration: environment.poNotificationDuration,
+              })
+              break
             default:
               this.poNotificationService.warning({
                 message: (error as any)?.data?.name ?? "Ocorreu um erro inesperado",

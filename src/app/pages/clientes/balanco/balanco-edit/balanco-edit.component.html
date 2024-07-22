@@ -1,39 +1,249 @@
 <po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
-  <form [formGroup]="balancoForm">
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-      <po-combo
-        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
-        formControlName="clienteId"
-        name="clienteId"
-        p-clean
-        [p-disabled]="readonly"
-        [p-filter-service]="clienteIdService"
-        [p-label]="this.literals.fields.form['clienteId']"
-        p-required
-      > </po-combo>
-    </div>
+  <style>
+    ::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: var(--primary-color);
+    }
+  </style>
+  <po-tabs>
+    <po-tab p-label="Balanço" p-active="true">
+      <form [formGroup]="balancoForm">
+        <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+          <po-combo
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="clienteId"
+            name="clienteId"
+            p-clean
+            p-disabled="true"
+            [p-filter-service]="clienteIdService"
+            [p-label]="this.literals.fields.form['clienteId']"
+            p-required
+          >
+          </po-combo>
+        </div>
 
-    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
-      <po-number
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
-        formControlName="saldoDevedor"
-        name="saldoDevedor"
-        p-clean
-        [p-label]="this.literals.fields.form['saldoDevedor']"
-        p-maxlength="10"
-        [p-readonly]="readonly"
-      > </po-number>
-    </div>
+        <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+          <po-decimal
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="saldoDevedor"
+            name="saldoDevedor"
+            p-clean
+            [p-label]="this.literals.fields.form['saldoDevedor']"
+            p-maxlength="10"
+            p-readonly="true"
+            p-decimal-maxlength="2"
+          >
+          </po-decimal>
+        </div>
 
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-      <po-checkbox
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
-        formControlName="desabilitado"
-        name="desabilitado"
-        [p-disabled]="readonly"
-        [p-label]="this.literals.fields.form['desabilitado']"
-      > </po-checkbox>
-    </div>
+        <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+          <po-number
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="bonificacaoDisponivel"
+            name="bonificacaoDisponivel"
+            p-clean
+            [p-label]="this.literals.fields.form['bonificacaoDisponivel']"
+            p-maxlength="10"
+            p-readonly="true"
+            p-decimal-maxlength="2"
+          >
+          </po-number>
+        </div>
 
-  </form>
+        <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+          <po-number
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="garrafoesDisponivel"
+            name="garrafoesDisponivel"
+            p-clean
+            [p-label]="this.literals.fields.form['garrafoesDisponivel']"
+            p-maxlength="10"
+            p-readonly="true"
+            p-decimal-maxlength="2"
+          >
+          </po-number>
+        </div>
+      </form>
+
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <po-divider p-label="Adicionar Pagamento"></po-divider>
+      </div>
+
+      <form [formGroup]="addPagamentoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+          <po-decimal
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="valor"
+            name="valor"
+            p-clean
+            [p-label]="this.literals.fields.form['valor']"
+            p-maxlength="10"
+            p-decimal-maxlength="2"
+          >
+          </po-decimal>
+        </div>
+
+        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+          <po-combo
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+            formControlName="meioPagamentoId"
+            name="meioPagamentoId"
+            p-clean
+            [p-disabled]="readonly"
+            [p-filter-service]="meioPagamentoIdService"
+            [p-label]="this.literals.fields.form['meioPagamentoId']"
+            p-required
+          >
+          </po-combo>
+        </div>
+
+        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+          <po-datepicker
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="data"
+            name="data"
+            p-clean
+            [p-label]="this.literals.fields.form['data']"
+            p-required
+          >
+          </po-datepicker>
+        </div>
+
+        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
+          <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Adicionar" (p-click)="addPagamento()"> </po-button>
+        </div>
+      </form>
+
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <po-divider p-label="Adicionar Garrafões"></po-divider>
+      </div>
+
+      <form [formGroup]="addGarrafaoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <div class="po-sm-12 po-md-12 po-lg-4 po-xl-4 no-padding">
+          <po-number
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="quantidade"
+            name="quantidade"
+            p-clean
+            [p-label]="this.literals.fields.form['quantidade']"
+            p-maxlength="10"
+          >
+          </po-number>
+        </div>
+
+        <div class="po-sm-12 po-md-12 po-lg-4 po-xl-4 no-padding po-mt-4">
+          <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Adicionar" (p-click)="addGarrafao()"> </po-button>
+        </div>
+      </form>
+
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <po-divider p-label="Retirada de Bonificação"></po-divider>
+      </div>
+
+      <form [formGroup]="addRetiradaBonificacaoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <div class="po-sm-12 po-md-12 po-lg-4 po-xl-4 no-padding">
+          <po-number
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="quantidade"
+            name="quantidade"
+            p-clean
+            [p-label]="this.literals.fields.form['quantidade']"
+            p-maxlength="10"
+          >
+          </po-number>
+        </div>
+
+        <div class="po-sm-12 po-md-12 po-lg-4 po-xl-4 no-padding po-mt-4">
+          <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Retirar" (p-click)="addRetiradaBonificacao()">
+          </po-button>
+        </div>
+      </form>
+    </po-tab>
+    <po-tab p-label="Pedidos">
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="max-height: 75vh; overflow-y: auto">
+        <po-table [p-items]="itensTable" [p-columns]="columnsTable" p-hide-columns-manager="true"> </po-table>
+      </div>
+    </po-tab>
+    <po-tab p-label="Relatórios">
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <po-divider p-label="Pedidos"></po-divider>
+      </div>
+
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <form [formGroup]="relatorioPedidoForm">
+          <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+            <po-datepicker
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+              formControlName="dataInicio"
+              name="dataInicio"
+              p-clean
+              [p-label]="this.literals.fields.form['dataInicio']"
+              p-required
+            >
+            </po-datepicker>
+          </div>
+
+          <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+            <po-datepicker
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+              formControlName="dataFim"
+              name="dataFim"
+              p-clean
+              [p-label]="this.literals.fields.form['dataFim']"
+              p-required
+            >
+            </po-datepicker>
+          </div>
+
+          <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding po-mt-4">
+            <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Gerar Relatório" (p-click)="gerarRelatorioPedido()">
+            </po-button>
+          </div>
+        </form>
+
+        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+          <po-divider p-label="Pagamentos"></po-divider>
+        </div>
+
+        <form [formGroup]="relatorioPagamentoForm">
+          <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+            <po-datepicker
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+              formControlName="dataInicio"
+              name="dataInicio"
+              p-clean
+              [p-label]="this.literals.fields.form['dataInicio']"
+              p-required
+            >
+            </po-datepicker>
+          </div>
+
+          <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
+            <po-datepicker
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+              formControlName="dataFim"
+              name="dataFim"
+              p-clean
+              [p-label]="this.literals.fields.form['dataFim']"
+              p-required
+            >
+            </po-datepicker>
+          </div>
+
+          <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding po-mt-4">
+            <po-button
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+              p-label="Gerar Relatório"
+              (p-click)="gerarRelatorioPagamento()"
+            >
+            </po-button>
+          </div>
+        </form>
+      </div>
+    </po-tab>
+  </po-tabs>
 </po-page-default>

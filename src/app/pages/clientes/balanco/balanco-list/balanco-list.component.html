@@ -1,5 +1,9 @@
 <app-custom-table
+  #customTable
   [pageTitle]="this.literals.title"
   route="balancos"
   [initialFields]="initialFields"
-> </app-custom-table>
+  [customPageActions]="customPageActions"
+  [removed-actions]="removedActions"
+>
+</app-custom-table>

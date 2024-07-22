@@ -1,16 +1,16 @@
-import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { HttpClient } from '@angular/common/http'
-import { PoDialogService, PoNotificationService, PoPageAction, PoPageFilter, PoTableComponent } from '@po-ui/ng-components'
-import { Subscription } from 'rxjs'
-import { finalize, map, tap } from 'rxjs/operators'
-import { FilterModalComponent } from 'src/app/components/filter-modal/filter-modal.component'
-import { ISavedFilter } from 'src/app/components/filter-modal/saved-filter/saved-filter.component'
-import { LanguagesService } from 'src/app/services/languages.service'
-import { AuthService } from 'src/app/services/auth.service'
-import { RestService } from 'src/app/services/rest.service'
-import { PermService } from 'src/app/services/perm.service'
-import { environment } from 'src/environments/environment'
+import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from "@angular/core"
+import { ActivatedRoute, Router } from "@angular/router"
+import { HttpClient } from "@angular/common/http"
+import { PoDialogService, PoNotificationService, PoPageAction, PoPageFilter, PoTableComponent } from "@po-ui/ng-components"
+import { Subscription } from "rxjs"
+import { finalize, map, tap } from "rxjs/operators"
+import { FilterModalComponent } from "src/app/components/filter-modal/filter-modal.component"
+import { ISavedFilter } from "src/app/components/filter-modal/saved-filter/saved-filter.component"
+import { LanguagesService } from "src/app/services/languages.service"
+import { AuthService } from "src/app/services/auth.service"
+import { RestService } from "src/app/services/rest.service"
+import { PermService } from "src/app/services/perm.service"
+import { environment } from "src/environments/environment"
 
 interface ICustomPageAction {
   pageAction: PoPageAction
@@ -34,10 +34,19 @@ interface IRoute {
   filter?: string
 }
 
+export interface IRemovedActions {
+  new?: boolean
+  edit?: boolean
+  copy?: boolean
+  view?: boolean
+  delete?: boolean
+  refresh?: boolean
+}
+
 @Component({
-  selector: 'app-custom-table',
-  templateUrl: './custom-table.component.html',
-  styleUrls: ['./custom-table.component.scss']
+  selector: "app-custom-table",
+  templateUrl: "./custom-table.component.html",
+  styleUrls: ["./custom-table.component.scss"],
 })
 export class CustomTableComponent implements OnInit, OnDestroy {
   @ViewChild(PoTableComponent) table: PoTableComponent
@@ -52,18 +61,18 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   public listHeight: number = 0
   private hasNext: boolean = false
   private page: number = 1
-  private filter: string = ''
+  private filter: string = ""
   public initialLoading: boolean = false
   public loading: boolean = false
   public filterSettings: PoPageFilter = {
     action: this.search.bind(this),
-    placeholder: '',
-    width: 4
+    placeholder: "",
+    width: 4,
   }
   public filterExpression: string
   public savedFilters: ISavedFilter[] = []
   public filterSelected: string
-  
+
   @Input() pageTitle: string
   @Input() route: string
   @Input() customRoute?: string
@@ -74,6 +83,14 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   @Input() customPageActions?: ICustomPageAction[]
   @Input() canSeeAllActions?: boolean = false
   @Input() filterItems?: string[]
+  @Input("removed-actions") removedActions?: IRemovedActions = {
+    new: false,
+    copy: false,
+    edit: false,
+    view: false,
+    delete: false,
+    refresh: false,
+  }
 
   private subscriptions = new Subscription()
 
@@ -87,22 +104,24 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     private restService: RestService,
     private languagesService: LanguagesService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getLiterals()
 
     this.permService
       .getPermissions(this.route + this.activatedRoute.snapshot.routeConfig.path)
-      .pipe(map(res => this.permissions = res))
+      .pipe(map((res) => (this.permissions = res)))
       .subscribe({
         next: () => {
-          const routerPreferences = this.authService.routeTablePreferences(this.route + this.activatedRoute.snapshot.routeConfig.path)
+          const routerPreferences = this.authService.routeTablePreferences(
+            this.route + this.activatedRoute.snapshot.routeConfig.path
+          )
           if (routerPreferences) this.fields = routerPreferences.preferences
           else this.restoreColumn()
 
           this.subscriptions.add(this.getData())
-        }
+        },
       })
   }
 
@@ -112,13 +131,13 @@ export class CustomTableComponent implements OnInit, OnDestroy {
 
   getLiterals() {
     this.languagesService
-      .getLiterals({ type: 'list' })
-      .pipe(map(res => this.literals = res))
+      .getLiterals({ type: "list" })
+      .pipe(map((res) => (this.literals = res)))
       .subscribe({
         next: () => {
           this.filterSettings.placeholder = this.literals.search
           this.listLiterals = { otherActions: this.literals.otherActions }
-        }
+        },
       })
   }
 
@@ -131,11 +150,11 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       search,
       page,
       pageSize,
-      filter
+      filter,
     }
 
     if (this.customParams) {
-      this.customParams.map(customParam => payload[customParam.param] = customParam.value)
+      this.customParams.map((customParam) => (payload[customParam.param] = customParam.value))
     }
 
     return payload
@@ -143,69 +162,137 @@ export class CustomTableComponent implements OnInit, OnDestroy {
 
   getData() {
     this.initialLoading = true
-    this.httpClient.post(this.getRoute(), this.getPayload({ page: 1, pageSize: 50 }))
-      .pipe(tap(() => this.initialLoading = false),
+    this.httpClient
+      .post(this.getRoute(), this.getPayload({ page: 1, pageSize: 50 }))
+      .pipe(
+        tap(() => (this.initialLoading = false)),
         finalize(() => {
           this.loading = false
           this.getActions()
           this.calculateListHeight()
-        }))
+        })
+      )
       .subscribe({
         next: (response: ListResponse) => {
           this.items = response.items
           this.hasNext = response.hasNext
         },
-        error: (error) => console.log(error)
+        error: (error) => console.log(error),
       })
   }
 
   getActions() {
     if (this.permissions.permitAll) {
-      this.pageActions = [
-        { label: this.literals.new, action: this.newItem.bind(this), icon: 'fa-solid fa-plus' },
-        { label: this.literals.edit, action: this.editItem.bind(this), disabled: this.singleItemIsSelected.bind(this), icon: 'fa-solid fa-pen' },
-        { label: this.literals.copy, action: this.copyItem.bind(this), disabled: this.singleItemIsSelected.bind(this), icon: 'fa-solid fa-copy' },
-        { label: this.literals.view, action: this.viewItem.bind(this), disabled: this.singleItemIsSelected.bind(this), icon: 'fa-solid fa-eye' },
-        { label: this.literals.delete, action: this.excludeItems.bind(this), disabled: this.multipleItemIsSelected.bind(this), icon: 'fa-solid fa-trash' },
-        { label: this.literals.refresh, action: this.updateItems.bind(this), icon: 'fa-solid fa-arrows-rotate' }
+      const newPageActions = [
+        this.removedActions.new ? null : { label: this.literals.new, action: this.newItem.bind(this), icon: "fa-solid fa-plus" },
+        this.removedActions.edit
+          ? null
+          : {
+              label: this.literals.edit,
+              action: this.editItem.bind(this),
+              disabled: this.singleItemIsSelected.bind(this),
+              icon: "fa-solid fa-pen",
+            },
+        this.removedActions.copy
+          ? null
+          : {
+              label: this.literals.copy,
+              action: this.copyItem.bind(this),
+              disabled: this.singleItemIsSelected.bind(this),
+              icon: "fa-solid fa-copy",
+            },
+        this.removedActions.view
+          ? null
+          : {
+              label: this.literals.view,
+              action: this.viewItem.bind(this),
+              disabled: this.singleItemIsSelected.bind(this),
+              icon: "fa-solid fa-eye",
+            },
+        this.removedActions.delete
+          ? null
+          : {
+              label: this.literals.delete,
+              action: this.excludeItems.bind(this),
+              disabled: this.multipleItemIsSelected.bind(this),
+              icon: "fa-solid fa-trash",
+            },
+        this.removedActions.refresh
+          ? null
+          : { label: this.literals.refresh, action: this.updateItems.bind(this), icon: "fa-solid fa-arrows-rotate" },
       ]
-      this.tableActions = [
-        { label: this.literals.edit, action: this.editItem.bind(this), icon: 'fa-solid fa-pen' },
-        { label: this.literals.copy, action: this.copyItem.bind(this), icon: 'fa-solid fa-copy' },
-        { label: this.literals.view, action: this.viewItem.bind(this), icon: 'fa-solid fa-eye' },
-        { label: this.literals.delete, action: this.excludeItem.bind(this), icon: 'fa-solid fa-trash' }
+      this.pageActions = newPageActions.filter((pageAction) => pageAction)
+      const newTableActions = [
+        this.removedActions.edit
+          ? null
+          : { label: this.literals.edit, action: this.editItem.bind(this), icon: "fa-solid fa-pen" },
+        this.removedActions.copy
+          ? null
+          : { label: this.literals.copy, action: this.copyItem.bind(this), icon: "fa-solid fa-copy" },
+        this.removedActions.view
+          ? null
+          : { label: this.literals.view, action: this.viewItem.bind(this), icon: "fa-solid fa-eye" },
+        this.removedActions.delete
+          ? null
+          : { label: this.literals.delete, action: this.excludeItem.bind(this), icon: "fa-solid fa-trash" },
       ]
+      this.tableActions = newTableActions.filter((tableAction) => tableAction)
     } else {
       const pageActions = []
+      this.tableActions = []
       if (this.permissions.permitCreate) {
-        pageActions.push({ label: this.literals.new, action: this.newItem.bind(this), icon: 'fa-solid fa-plus' })
-        pageActions.push({ label: this.literals.copy, action: this.copyItem.bind(this), icon: 'fa-solid fa-copy' })
+        if (!this.removedActions.new)
+          pageActions.push({ label: this.literals.new, action: this.newItem.bind(this), icon: "fa-solid fa-plus" })
+        if (!this.removedActions.copy)
+          pageActions.push({ label: this.literals.copy, action: this.copyItem.bind(this), icon: "fa-solid fa-copy" })
       }
 
       if (this.permissions.permitUpdate) {
-        pageActions.push({ label: this.literals.edit, action: this.editItem.bind(this), disabled: this.singleItemIsSelected.bind(this), icon: 'fa-solid fa-pen' })
-        this.tableActions.push({ label: this.literals.edit, action: this.editItem.bind(this), icon: 'fa-solid fa-pen' })
+        if (!this.removedActions.edit)
+          pageActions.push({
+            label: this.literals.edit,
+            action: this.editItem.bind(this),
+            disabled: this.singleItemIsSelected.bind(this),
+            icon: "fa-solid fa-pen",
+          })
+        if (!this.removedActions.edit)
+          this.tableActions.push({ label: this.literals.edit, action: this.editItem.bind(this), icon: "fa-solid fa-pen" })
       }
 
       if (this.permissions.permitRestore) {
-        pageActions.push({ label: this.literals.view, action: this.viewItem.bind(this), disabled: this.singleItemIsSelected.bind(this), icon: 'fa-solid fa-eye' })
-        this.tableActions.push({ label: this.literals.view, action: this.viewItem.bind(this), icon: 'fa-solid fa-eye' })
+        if (!this.removedActions.view)
+          pageActions.push({
+            label: this.literals.view,
+            action: this.viewItem.bind(this),
+            disabled: this.singleItemIsSelected.bind(this),
+            icon: "fa-solid fa-eye",
+          })
+        if (!this.removedActions.view)
+          this.tableActions.push({ label: this.literals.view, action: this.viewItem.bind(this), icon: "fa-solid fa-eye" })
       }
 
       if (this.permissions.permitDelete) {
-        pageActions.push({ label: this.literals.delete, action: this.excludeItems.bind(this), disabled: this.multipleItemIsSelected.bind(this), icon: 'fa-solid fa-trash' })
-        this.tableActions.push({ label: this.literals.delete, action: this.excludeItem.bind(this), icon: 'fa-solid fa-trash' })
+        if (!this.removedActions.delete)
+          pageActions.push({
+            label: this.literals.delete,
+            action: this.excludeItems.bind(this),
+            disabled: this.multipleItemIsSelected.bind(this),
+            icon: "fa-solid fa-trash",
+          })
+        if (!this.removedActions.delete)
+          this.tableActions.push({ label: this.literals.delete, action: this.excludeItem.bind(this), icon: "fa-solid fa-trash" })
       }
 
-      pageActions.push({ label: this.literals.refresh, action: this.updateItems.bind(this), icon: 'fa-solid fa-arrows-rotate' })
-      this.pageActions = pageActions
+      if (!this.removedActions.refresh)
+        pageActions.push({ label: this.literals.refresh, action: this.updateItems.bind(this), icon: "fa-solid fa-arrows-rotate" })
+      if (!this.removedActions.refresh) this.pageActions = pageActions.filter((pageAction) => pageAction)
     }
 
     this.getCustomActions()
     this.getAdvancedSearch()
   }
 
-  getCustomActions () {
+  getCustomActions() {
     if (this.customPageActions) {
       this.customPageActions.map(({ pageAction, index }) => {
         this.pageActions.splice(index, 0, pageAction)
@@ -217,7 +304,6 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     if (this.filterItems) this.filterSettings.advancedAction = this.openAdvancedSearchModal.bind(this)
   }
 
-
   // Funções básicas da tabela
 
   search(search?: string) {
@@ -227,13 +313,15 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.httpClient
         .post(this.getRoute(), this.getPayload({ page: 1, pageSize: this.pageSize, search, filter: this.filterExpression }))
-        .pipe(finalize(() => {
-          this.loading = false
-          this.calculateListHeight()
-        }))
+        .pipe(
+          finalize(() => {
+            this.loading = false
+            this.calculateListHeight()
+          })
+        )
         .subscribe({
-          next: (response: ListResponse) => this.items = response.items,
-          error: () => this.items = []
+          next: (response: ListResponse) => (this.items = response.items),
+          error: () => (this.items = []),
         })
     )
   }
@@ -244,7 +332,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
 
   getSelectedItemsKeys() {
     if (this.items.length > 0) {
-      const resources = this.items.filter(item => item.$selected)
+      const resources = this.items.filter((item) => item.$selected)
 
       if (resources.length === 0) {
         return
@@ -265,8 +353,8 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   clickDisclaimers(event) {
-    this.filter = ''
-    if (event.length === 0) this.search('')
+    this.filter = ""
+    if (event.length === 0) this.search("")
   }
 
   newItem() {
@@ -292,47 +380,47 @@ export class CustomTableComponent implements OnInit, OnDestroy {
     this.poDialogService.confirm({
       title: this.literals.confirmExcludeTitle,
       message: this.literals.confirmExcludeMessage,
-      confirm: this.removeItem.bind(this, item)
+      confirm: this.removeItem.bind(this, item),
     })
   }
 
   excludeItems() {
-    const ids = this.getSelectedItemsKeys().map(item => item.id)
+    const ids = this.getSelectedItemsKeys().map((item) => item.id)
 
     if (ids.length > 0) {
       this.poDialogService.confirm({
         title: this.literals.confirmMultiExcludeTitle,
         message: this.literals.confirmMultiExcludeMessage,
-        confirm: this.removeItems.bind(this, ids)
+        confirm: this.removeItems.bind(this, ids),
       })
     }
   }
 
   removeItem(item: any) {
-    this.subscriptions.add(this.httpClient.delete(`${environment.baseUrl}/${this.customRoute ?? this.route}/${item.id}`)
-        .subscribe({
-          next: (response: ListResponse) => {
-            this.poNotificationService.success({
-              message: this.literals.excludeSuccess,
-              duration: environment.poNotificationDuration
-            })
-            this.items = response.items
-          }
-        })
+    this.subscriptions.add(
+      this.httpClient.delete(`${environment.baseUrl}/${this.customRoute ?? this.route}/${item.id}`).subscribe({
+        next: (response: ListResponse) => {
+          this.poNotificationService.success({
+            message: this.literals.excludeSuccess,
+            duration: environment.poNotificationDuration,
+          })
+          this.items = response.items
+        },
+      })
     )
   }
 
   removeItems(ids: any[]) {
-    this.subscriptions.add(this.restService.deleteAll(`/${this.customRoute ?? this.route}`, ids)
-        .subscribe({
-          next: (response: ListResponse) => {
-            this.poNotificationService.success({
-              message: this.literals.multiExcludeSuccess,
-              duration: environment.poNotificationDuration
-            })
-            this.items = response.items
-          }
-        })
+    this.subscriptions.add(
+      this.restService.deleteAll(`/${this.customRoute ?? this.route}`, ids).subscribe({
+        next: (response: ListResponse) => {
+          this.poNotificationService.success({
+            message: this.literals.multiExcludeSuccess,
+            duration: environment.poNotificationDuration,
+          })
+          this.items = response.items
+        },
+      })
     )
   }
 
@@ -346,14 +434,24 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   showMoreItems() {
     if (this.hasNext) {
       this.loading = true
-      this.subscriptions.add(this.httpClient.post(this.getRoute(), this.getPayload({ page: this.page += 1, pageSize: this.pageSize, search: this.filter, filter: this.filterExpression }))
-          .pipe(finalize(() => this.loading = false))
+      this.subscriptions.add(
+        this.httpClient
+          .post(
+            this.getRoute(),
+            this.getPayload({
+              page: (this.page += 1),
+              pageSize: this.pageSize,
+              search: this.filter,
+              filter: this.filterExpression,
+            })
+          )
+          .pipe(finalize(() => (this.loading = false)))
           .subscribe({
             next: (response: ListResponse) => {
               this.items = this.items.concat(response.items)
               this.hasNext = response.hasNext
             },
-            error: () => this.items = []
+            error: () => (this.items = []),
           })
       )
     }
@@ -364,12 +462,12 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   submitFilter(expression: string) {
-    this.filterExpression = expression === '' ? null : expression
+    this.filterExpression = expression === "" ? null : expression
     this.search()
   }
 
   changeFilter(filterId: string) {
-    const filter = this.filterModal.savedFilter.savedFilters.find(savedFilter => savedFilter.value === filterId)
+    const filter = this.filterModal.savedFilter.savedFilters.find((savedFilter) => savedFilter.value === filterId)
     this.submitFilter(filter.expression)
   }
 
@@ -384,7 +482,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   private get hasSubtitle(): boolean {
-    return this.initialFields.some(initialField => initialField.type === 'subtitle')
+    return this.initialFields.some((initialField) => initialField.type === "subtitle")
   }
 
   calculateListHeight() {
