@@ -4,8 +4,8 @@ import { map } from "rxjs/operators"
 import { CustomTableComponent } from "src/app/components/custom-table/custom-table.component"
 import { ImportExcelModalComponent } from "src/app/components/import-excel-modal-component/import-excel-modal-component"
 import { LanguagesService } from "src/app/services/languages.service"
+import { WebSocketService } from "src/app/services/websocket.service"
 import { environment } from "src/environments/environment"
-
 @Component({
   selector: "/pedido-list",
   templateUrl: ".//pedido-list.component.html",
@@ -36,10 +36,14 @@ export class PedidoListComponent implements OnInit {
     },
   ]
 
-  constructor(private languagesService: LanguagesService) {}
+  constructor(private languagesService: LanguagesService, private webSocketService: WebSocketService) {}
 
   ngOnInit() {
     this.getLiterals()
+
+    this.webSocketService.listen("novoPedido").subscribe((pedido) => {
+      this.customTable.updateItems()
+    })
   }
 
   getLiterals() {
