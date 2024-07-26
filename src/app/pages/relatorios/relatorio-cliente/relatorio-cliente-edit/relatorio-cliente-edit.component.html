@@ -1,16 +1,17 @@
 <po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
   <form [formGroup]="relatorioClienteForm">
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
       <po-combo
-        class="po-sm-12 po-md-12 po-lg-6 po-xl-6 po-required"
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
         formControlName="clienteId"
         name="clienteId"
         p-clean
-        [p-disabled]="readonly"
+        p-disabled="true"
         [p-filter-service]="clienteIdService"
         [p-label]="this.literals.fields.form['clienteId']"
         p-required
-      > </po-combo>
+      >
+      </po-combo>
     </div>
 
     <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
@@ -19,45 +20,39 @@
         formControlName="dataInicio"
         name="dataInicio"
         p-clean
-        [p-label]="this.literals.fields.form['dataInicio']"
-        [p-readonly]="readonly"
+        [p-label]="this.literals.fields.form['data']"
+        p-disabled="true"
         p-required
-      > </po-datepicker>
+      >
+      </po-datepicker>
     </div>
 
     <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
-      <po-datepicker
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
-        formControlName="dataFim"
-        name="dataFim"
-        p-clean
-        [p-label]="this.literals.fields.form['dataFim']"
-        [p-readonly]="readonly"
-        p-required
-      > </po-datepicker>
-    </div>
-
-    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
-      <po-input
+      <po-number
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
-        formControlName="relatório"
-        name="relatório"
+        formControlName="quantidade"
+        name="quantidade"
         p-clean
-        [p-label]="this.literals.fields.form['relatório']"
-        p-maxlength="4096"
+        [p-label]="this.literals.fields.form['quantidade']"
+        p-disabled="true"
+      >
+      </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-select
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        [p-label]="this.literals.fields.form['isLiberado']"
+        p-field-value="tipoCobranca"
+        name="isLiberado"
+        formControlName="isLiberado"
+        [p-options]="isLiberadoSelect"
+        p-placeholder="Selecione"
         [p-readonly]="readonly"
-      > </po-input>
-    </div>
-
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-      <po-checkbox
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
-        formControlName="desabilitado"
-        name="desabilitado"
+        p-required
         [p-disabled]="readonly"
-        [p-label]="this.literals.fields.form['desabilitado']"
-      > </po-checkbox>
+      >
+      </po-select>
     </div>
-
   </form>
 </po-page-default>

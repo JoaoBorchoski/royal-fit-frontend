@@ -88,6 +88,25 @@ export class ErrorInterceptorService implements HttpInterceptor {
                 duration: environment.poNotificationDuration,
               })
               break
+            case "Quantidade de bonificação insuficiente":
+              this.poNotificationService.warning({
+                message: error.error.message,
+                duration: environment.poNotificationDuration,
+              })
+              break
+            case "Quantidade de estoque insuficiente":
+              this.poNotificationService.warning({
+                message: error.error.message,
+                duration: environment.poNotificationDuration,
+              })
+              break
+            case "Nível de Acesso não encontrado.":
+              this.poNotificationService.warning({
+                message: error.error.message,
+                duration: environment.poNotificationDuration,
+              })
+              break
+
             default:
               this.poNotificationService.warning({
                 message: (error as any)?.data?.name ?? "Ocorreu um erro inesperado",

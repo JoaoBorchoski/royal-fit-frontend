@@ -52,6 +52,7 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
     numero: 0,
     complemento: "",
     telefone: "",
+    profileId: null,
     desabilitado: false,
   })
 
@@ -63,6 +64,7 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
   public readonly serviceApi = `${environment.baseUrl}/funcionarios`
   public estadoIdService = `${environment.baseUrl}/estados/select`
   public cidadeIdService = `${environment.baseUrl}/cidades/select`
+  public profileIdService = `${environment.baseUrl}/profiles/select`
 
   subscriptions = new Subscription()
 
@@ -165,6 +167,7 @@ export class FuncionarioEditComponent implements OnInit, OnDestroy {
           complemento: result.complemento,
           telefone: result.telefone,
           desabilitado: result.desabilitado,
+          profileId: result.profileId,
         })
       },
       error: (error) => console.log(error),

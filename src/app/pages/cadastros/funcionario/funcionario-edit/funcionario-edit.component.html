@@ -43,6 +43,35 @@
       </po-input>
     </div>
 
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="telefone"
+        name="telefone"
+        p-clean
+        p-required
+        [p-label]="this.literals.fields.form['telefone']"
+        p-maxlength="20"
+        p-mask="(99) 99999-9999"
+        [p-readonly]="readonly"
+      >
+      </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="profileId"
+        name="profileId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="profileIdService"
+        [p-label]="this.literals.fields.form['profileId']"
+        p-required
+      >
+      </po-combo>
+    </div>
+
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
@@ -148,32 +177,6 @@
         [p-readonly]="readonly"
       >
       </po-input>
-    </div>
-
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding po-required">
-      <po-input
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
-        formControlName="telefone"
-        name="telefone"
-        p-clean
-        p-required
-        [p-label]="this.literals.fields.form['telefone']"
-        p-maxlength="20"
-        p-mask="(99) 99999-9999"
-        [p-readonly]="readonly"
-      >
-      </po-input>
-    </div>
-
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-      <po-checkbox
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
-        formControlName="desabilitado"
-        name="desabilitado"
-        [p-disabled]="readonly"
-        [p-label]="this.literals.fields.form['desabilitado']"
-      >
-      </po-checkbox>
     </div>
   </form>
 </po-page-default>

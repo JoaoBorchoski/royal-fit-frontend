@@ -132,6 +132,37 @@
         </div>
 
         <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+          <po-select
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+            [p-label]="this.literals.fields.form['isLiberado']"
+            p-field-value="tipoCobranca"
+            name="isLiberado"
+            formControlName="isLiberado"
+            [p-options]="isLiberadoSelect"
+            p-placeholder="Selecione"
+            [p-readonly]="readonly"
+            p-required
+            [p-disabled]="readonly"
+            (p-change)="verifyProdutos()"
+          >
+          </po-select>
+        </div>
+
+        <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
+          <po-input
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            formControlName="descricao"
+            name="descricao"
+            p-clean
+            [p-label]="this.literals.fields.form['descricao']"
+            p-maxlength="255"
+            [p-readonly]="readonly"
+            (p-change)="verifyProdutos()"
+          >
+          </po-input>
+        </div>
+
+        <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
           <po-combo
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
             formControlName="statusPagamentoId"
@@ -144,7 +175,7 @@
             (p-change)="verifyProdutos()"
           >
           </po-combo>
-        </div>
+        </div> -->
 
         <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
         <po-checkbox
@@ -243,3 +274,58 @@
     </po-tab>
   </po-tabs>
 </po-page-default>
+
+<po-modal
+  #poModal
+  p-size="sm"
+  p-hide-close="true"
+  [p-primary-action]="primaryAction"
+  [p-secondary-action]="secondaryAction"
+  p-title="Editar Produto"
+  class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding"
+>
+  <form [formGroup]="pedidoItemFormEdit" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
+      <po-combo
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="produtoId"
+        name="produtoId"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="produtoIdService"
+        [p-label]="this.literals.fields.form['produtoId']"
+        p-required
+        (p-change)="onProdutoIdChangeEdit($event)"
+      >
+      </po-combo>
+    </div>
+    <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="quantidade"
+        name="quantidade"
+        p-clean
+        [p-label]="this.literals.fields.form['quantidade']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+        p-required
+        (p-change)="onQuantidadeChangeEdit($event)"
+      >
+      </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
+      <po-decimal
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="valor"
+        name="valor"
+        p-clean
+        [p-label]="this.literals.fields.form['valor']"
+        p-maxlength="10"
+        p-readonly="true"
+        p-decimal-maxlength="2"
+      >
+      </po-decimal>
+    </div>
+  </form>
+</po-modal>

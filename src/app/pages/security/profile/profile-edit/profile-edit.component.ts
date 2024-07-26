@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core'
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
-import { PoComboOption, PoNotification, PoNotificationService, PoPageAction } from '@po-ui/ng-components'
-import { Subscription } from 'rxjs'
-import { RestService } from 'src/app/services/rest.service'
-import { LanguagesService } from 'src/app/services/languages.service'
-import { environment } from 'src/environments/environment'
+import { Component, OnInit } from "@angular/core"
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms"
+import { ActivatedRoute, Router } from "@angular/router"
+import { PoComboOption, PoNotification, PoNotificationService, PoPageAction } from "@po-ui/ng-components"
+import { Subscription } from "rxjs"
+import { RestService } from "src/app/services/rest.service"
+import { LanguagesService } from "src/app/services/languages.service"
+import { environment } from "src/environments/environment"
+import { AuthService } from "src/app/services/auth.service"
 
 interface IResponseProps {
   statusCode: number
@@ -60,6 +61,7 @@ export class ProfileEditComponent implements OnInit {
   public getProfileCurrentOptionKey: string = ""
   public getProfileUserProfile
   public itemFiltered
+  public user: any
 
   subscriptions = new Subscription()
 
@@ -71,7 +73,7 @@ export class ProfileEditComponent implements OnInit {
   public readonly pageActions: Array<PoPageAction> = []
 
   public checkoutForm: FormGroup = this.formBuilder.group({
-    userGroupId: ["", Validators.required, ],
+    userGroupId: ["", Validators.required],
     name: ["", Validators.required],
     disabled: false,
     menuOptions: this.formBuilder.array([]),
@@ -83,11 +85,14 @@ export class ProfileEditComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private poNotification: PoNotificationService,
-    private languagesService: LanguagesService
-    ) { }
+    private languagesService: LanguagesService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.getLiterals()
+
+    this.user = this.authService.userValue
 
     this.id = this.activatedRoute.snapshot.paramMap.get("id")
 
@@ -105,38 +110,34 @@ export class ProfileEditComponent implements OnInit {
   }
 
   getLiterals() {
-    this.languagesService
-      .getLiterals({ type: 'edit', module: 'security', options: 'profile'})
-      .subscribe({
-        next: res => this.literals = res
-      })
+    this.languagesService.getLiterals({ type: "edit", module: "security", options: "profile" }).subscribe({
+      next: (res) => (this.literals = res),
+    })
   }
 
   getPageType(route: string): string {
     switch (route) {
-      case 'new':
-        return 'new'
-      case 'new/:id':
-        return 'new'
-      case 'edit':
-        return 'edit'
-      case 'edit/:id':
-        return 'edit'
-      case 'view/:id':
-        return 'view'
+      case "new":
+        return "new"
+      case "new/:id":
+        return "new"
+      case "edit":
+        return "edit"
+      case "edit/:id":
+        return "edit"
+      case "view/:id":
+        return "view"
     }
   }
 
   pageButtonsBuilder(pageType: string): null {
-    if (pageType === 'view') {
+    if (pageType === "view") {
       this.readonly = true
 
-      this.pageActions.push(
-        {
-          label: this.literals.return,
-          action: this.goBack.bind(this),
-        }
-      )
+      this.pageActions.push({
+        label: this.literals.return,
+        action: this.goBack.bind(this),
+      })
       return
     }
 
@@ -172,11 +173,20 @@ export class ProfileEditComponent implements OnInit {
   }
 
   getMenuOptionsList() {
-    this.restService.post("/menu-options/all", { }).subscribe({
+    this.restService.post("/menu-options/all", {}).subscribe({
       next: (response: IResponseProps) => {
         this.menuOptionsList = response.data
 
         this.menuOptionsList.map((menuOption) => {
+          if (
+            (menuOption.moduleName == "Segurança" || menuOption.moduleName == "Tabelas") &&
+            this.user.user.login != "admin@royalfitpg.com.br" &&
+            menuOption.sequence != "001" &&
+            menuOption.sequence != "001006"
+          ) {
+            return
+          }
+
           if (menuOption.moduleName !== this.currentOptionName) {
             if (this.currentOptionName !== "") {
               const newMenuOption = this.formBuilder.group({
@@ -193,8 +203,7 @@ export class ProfileEditComponent implements OnInit {
             this.currentOptionKey = menuOption.key
           } else {
             if (this.getProfileUserProfile !== undefined) {
-              this.itemFiltered = this.getProfileUserProfile.menuOptions.find((item) => item.key === menuOption.key
-              )
+              this.itemFiltered = this.getProfileUserProfile.menuOptions.find((item) => item.key === menuOption.key)
 
               const newMenuItem = this.formBuilder.group({
                 menuOptionName: menuOption.label,
@@ -260,14 +269,14 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSubmit(data: ISubmitDataProps) {
-    if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === 'edit') {
+    if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
       this.restService.put(`/profiles/${this.id}`, data).subscribe({
-        next: () => { },
+        next: () => {},
         error: (error) => console.log(error),
       })
     } else {
       this.restService.post("/profiles", data).subscribe({
-        next: () => { },
+        next: () => {},
         error: (error) => console.log(error),
       })
     }

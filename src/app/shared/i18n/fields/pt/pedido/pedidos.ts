@@ -11,6 +11,7 @@ export const pedidosFields = {
     noFileSelected: "Nenhum arquivo selecionado",
     cancel: "Cancelar",
     download: "Baixar modelo",
+    isLiberado: "Status Pedido",
   },
   form: {
     sequencial: "Numero",
@@ -28,5 +29,9 @@ export const pedidosFields = {
     pedidoId: "Pedido",
     quantidade: "Quantidade",
     valor: "Valor",
+    isLiberado: "Status Pedido",
+    descricao: "Descrição",
+    editar: "Editar",
+    excluir: "Excluir",
   },
 }

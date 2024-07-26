@@ -226,7 +226,7 @@ export const generalPt = {
     fields: pedidoItensFields,
   },
   relatorios_relatorioCliente: {
-    title: "Relatórios Cliente",
+    title: "Pedidos Bonificados",
     fields: relatoriosClientesFields,
   },
   relatorios_relatorioFuncionario: {

@@ -25,5 +25,6 @@ export const funcionariosFields = {
     telefone: "Telefone",
     desabilitado: "Desabilitado",
     cancel: "Cancelar",
+    profileId: "Nível de Acesso",
   },
 }

@@ -4,6 +4,8 @@ export const balancosFields = {
     clienteId: "Cliente",
     saldoDevedor: "Saldo Devedor",
     bonificacaoDisponivel: "Bonificação Disponível",
+    dataInicio: "Data Início",
+    dataFim: "Data Fim",
   },
   form: {
     clienteId: "Cliente",

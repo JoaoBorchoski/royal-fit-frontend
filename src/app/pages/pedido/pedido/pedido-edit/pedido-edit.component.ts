@@ -1,7 +1,15 @@
 import { HttpClient } from "@angular/common/http"
-import { Component, OnDestroy, OnInit } from "@angular/core"
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core"
 import { ActivatedRoute, Router } from "@angular/router"
-import { PoDynamicFormField, PoPageAction, PoNotificationService, PoNotification, PoTableAction } from "@po-ui/ng-components"
+import {
+  PoDynamicFormField,
+  PoPageAction,
+  PoNotificationService,
+  PoNotification,
+  PoTableAction,
+  PoModalComponent,
+  PoModalAction,
+} from "@po-ui/ng-components"
 import { FormBuilder } from "@angular/forms"
 import { Subscription } from "rxjs"
 import { environment } from "src/environments/environment"
@@ -15,21 +23,33 @@ import { finalize } from "rxjs/operators"
   styleUrls: ["./pedido-edit.component.scss"],
 })
 export class PedidoEditComponent implements OnInit, OnDestroy {
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent
+  public widthWindow = window.innerWidth
+
   public id: string
   public readonly = false
   public result: any
   public literals: any = {}
   public produtoAtual: any
+  public produtoAtualEdit: any
   public totalPreco = 0
   public disableAddButton: boolean = true
+  public disableEditButton: boolean = true
   public disableProdutos: boolean = true
+  public prodNameEdit: string
 
   public pedidoItens: any[] = []
   public tableActions: PoTableAction[] = []
   public itensTable = []
 
+  public isLiberadoSelect = [
+    { label: "Aguardando", value: 0 },
+    { label: "Liberado", value: 1 },
+  ]
+
   public columnsTable = [
     { property: "id", key: true, visible: false },
+    { property: "produtoId", visible: false },
     {
       property: "produto",
       label: "Produto",
@@ -47,6 +67,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       type: "currency",
       format: "BRL",
       width: "25%",
+      visible: this.widthWindow > 768,
     },
     {
       property: "valor",
@@ -58,17 +79,17 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   ]
 
   pedidoForm = this.formBuilder.group({
-    // sequencial: 0,
     clienteId: null,
     data: null,
     hora: "",
-    valorTotal: null,
-    // desconto: 0,
+    valorTotal: 0,
     funcionarioId: null,
     meioPagamentoId: null,
-    statusPagamentoId: null,
-    isPagamentoPosterior: null,
+    // statusPagamentoId: null,
+    isPagamentoPosterior: false,
     desabilitado: false,
+    isLiberado: 0,
+    descricao: "",
   })
 
   pedidoItemForm = this.formBuilder.group({
@@ -76,6 +97,26 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     quantidade: null,
     valor: 0,
   })
+
+  pedidoItemFormEdit = this.formBuilder.group({
+    id: null,
+    produtoId: null,
+    quantidade: null,
+    valor: 0,
+  })
+
+  public primaryAction: PoModalAction = {
+    label: "Salvar",
+    action: () => this.editItem(),
+    disabled: this.verifyEditButton(),
+  }
+  public secondaryAction: PoModalAction = {
+    label: "Cancelar",
+    action: () => {
+      this.pedidoItemFormEdit.reset()
+      this.poModal.close()
+    },
+  }
 
   public readonly serviceApi = `${environment.baseUrl}/pedidos`
   public clienteIdService = `${environment.baseUrl}/clientes/select`
@@ -125,6 +166,25 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => (this.literals = res),
       })
+  }
+
+  editParameterItem(item: any) {
+    this.subscriptions.add(
+      this.restService.get(`/produtos/${item.produtoId}`).subscribe({
+        next: (res) => {
+          this.prodNameEdit = res.nome
+          this.produtoAtualEdit = res
+        },
+      })
+    )
+
+    this.pedidoItemFormEdit.patchValue({
+      id: item.id,
+      produtoId: item.produtoId,
+      quantidade: item.quantidade,
+      valor: item.valor,
+    })
+    this.poModal.open()
   }
 
   getPageType(route: string): string {
@@ -182,9 +242,11 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           valorTotal: result.valorTotal,
           funcionarioId: result.funcionarioId,
           meioPagamentoId: result.meioPagamentoId,
-          statusPagamentoId: result.statusPagamentoId,
+          // statusPagamentoId: result.statusPagamentoId,
           isPagamentoPosterior: result.isPagamentoPosterior,
+          isLiberado: result.isLiberado ? 1 : 0,
           desabilitado: result.desabilitado,
+          descricao: result.descricao,
         })
         this.getPedidoItens(result.pedidoItemForm)
       },
@@ -196,7 +258,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     this.pedidoItens = itens
     this.itensTable = itens.map((item, index) => {
       return {
-        id: index,
+        id: item.id,
+        produtoId: item.produtoId,
         produto: item.produtoNome,
         quantidade: item.quantidade,
         preco: item.preco,
@@ -207,6 +270,14 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   save(data, willCreateAnother?: boolean) {
     if (this.pedidoForm.valid) {
+      if (this.pedidoItens.length === 0) {
+        this.poNotification.warning({
+          message: "Adicione ao menos um produto ao pedido",
+          duration: environment.poNotificationDuration,
+        })
+        return
+      }
+      data.isLiberado = data.isLiberado == 1 ? true : false
       data.pedidoItemForm = this.pedidoItens
       if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
         this.subscriptions.add(
@@ -261,7 +332,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     this.pedidoForm.controls.hora.markAsDirty()
     this.pedidoForm.controls.funcionarioId.markAsDirty()
     this.pedidoForm.controls.meioPagamentoId.markAsDirty()
-    this.pedidoForm.controls.statusPagamentoId.markAsDirty()
+    // this.pedidoForm.controls.statusPagamentoId.markAsDirty()
   }
 
   goBack() {
@@ -277,10 +348,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         })
         return
       }
-      console.log(this.pedidoItemForm.value)
       this.pedidoItens.push(this.pedidoItemForm.value)
       this.itensTable.push({
-        id: this.itensTable.length,
+        id: this.itensTable.length + 1,
+        produtoId: this.pedidoItemForm.controls.produtoId.value,
         produto: this.produtoAtual.nome,
         quantidade: this.pedidoItemForm.controls.quantidade.value,
         preco: this.produtoAtual.preco,
@@ -298,8 +369,37 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  editItem() {
+    if (this.pedidoItemFormEdit.valid) {
+      const indexItens = this.pedidoItens.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
+      this.totalPreco -= this.pedidoItens[indexItens].valor
+      this.totalPreco += this.pedidoItemFormEdit.value.valor
+      this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
+      this.pedidoItens.splice(indexItens, 1, this.pedidoItemFormEdit.value)
+      const indexTable = this.itensTable.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
+      this.itensTable.splice(indexTable, 1, {
+        id: this.pedidoItemFormEdit.value.id,
+        produtoId: this.pedidoItemFormEdit.controls.produtoId.value,
+        produto: this.prodNameEdit,
+        preco: this.pedidoItemFormEdit.controls.valor.value,
+        quantidade: this.pedidoItemFormEdit.controls.quantidade.value,
+        valor: this.pedidoItemFormEdit.controls.valor.value,
+      })
+      this.poModal.close()
+    } else {
+      this.poNotification.warning({
+        message: "Preencha os campos corretamente",
+        duration: environment.poNotificationDuration,
+      })
+    }
+  }
+
   verifyAddButton() {
     this.disableAddButton = !this.pedidoItemForm.valid
+  }
+
+  verifyEditButton() {
+    return !this.pedidoItemFormEdit.valid
   }
 
   verifyProdutos() {
@@ -308,15 +408,37 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   onProdutoIdChange(event) {
     if (!event) {
+      this.prodNameEdit = ""
       return
     }
     this.subscriptions.add(
       this.restService.get(`/produtos/${event}`).subscribe({
         next: (res) => {
+          this.prodNameEdit = res.nome
           this.produtoAtual = res
           if (this.pedidoItemForm.controls.quantidade.value) {
             this.verifyAddButton()
             this.pedidoItemForm.controls.valor.setValue(this.produtoAtual.preco * +this.pedidoItemForm.controls.quantidade.value)
+          }
+        },
+      })
+    )
+  }
+
+  onProdutoIdChangeEdit(event) {
+    if (!event) {
+      this.prodNameEdit = ""
+      return
+    }
+    this.subscriptions.add(
+      this.restService.get(`/produtos/${event}`).subscribe({
+        next: (res) => {
+          this.prodNameEdit = res.nome
+          this.produtoAtualEdit = res
+          if (this.pedidoItemFormEdit.controls.quantidade.value) {
+            this.pedidoItemFormEdit.controls.valor.setValue(
+              this.produtoAtualEdit.preco * +this.pedidoItemFormEdit.controls.quantidade.value
+            )
           }
         },
       })
@@ -330,6 +452,12 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  onQuantidadeChangeEdit(event) {
+    if (this.produtoAtualEdit) {
+      this.pedidoItemFormEdit.controls.valor.setValue(this.produtoAtualEdit.preco * event)
+    }
+  }
+
   private deleteParameterItem(item: any) {
     this.totalPreco -= item.valor
     this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
@@ -339,6 +467,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   private tableActionsConstructor(literals: any, tableActions: PoTableAction[]) {
+    tableActions.push({ label: literals.editar, action: this.editParameterItem.bind(this), icon: "fa-solid fa-pen" })
     tableActions.push({ label: literals.excluir, action: this.deleteParameterItem.bind(this), icon: "fa-solid fa-trash" })
   }
 }

@@ -59,7 +59,33 @@ export class PedidoListComponent implements OnInit {
             { property: "sequencial", label: this.literals.fields.list["sequencial"], visible: widthWindow > 768 },
             { property: "clienteNome", label: this.literals.fields.list["clienteNome"] },
             { property: "data", label: this.literals.fields.list["data"] },
-            { property: "valorTotal", label: this.literals.fields.list["valorTotal"], type: "currency", format: "BRL" },
+            {
+              property: "valorTotal",
+              label: this.literals.fields.list["valorTotal"],
+              type: "currency",
+              format: "BRL",
+              visible: widthWindow > 768,
+            },
+            {
+              property: "isLiberado",
+              label: this.literals.fields.list["isLiberado"],
+              type: "subtitle",
+              width: widthWindow > 768 ? "150px" : "100px",
+              subtitles: [
+                {
+                  value: true,
+                  color: "color-10",
+                  label: "Liberado",
+                  content: "LB",
+                },
+                {
+                  value: false,
+                  color: "color-07",
+                  label: "Aguardando",
+                  content: "AG",
+                },
+              ],
+            },
           ])
         ),
       })

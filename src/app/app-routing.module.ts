@@ -117,7 +117,7 @@ const routes: Routes = [
         loadChildren: () => import("./modules/pedido/pedido-item/pedido-item.module").then((m) => m.EstoquesModule),
       },
       {
-        path: "relatorios-clientes",
+        path: "pedido-bonificados",
         loadChildren: () =>
           import("./modules/relatorios/relatorio-cliente/relatorio-cliente.module").then((m) => m.RelatorioClienteModule),
       },

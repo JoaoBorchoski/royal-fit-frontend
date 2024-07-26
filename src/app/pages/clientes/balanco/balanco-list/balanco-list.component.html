@@ -7,3 +7,39 @@
   [removed-actions]="removedActions"
 >
 </app-custom-table>
+
+<po-modal
+  #poModal
+  p-size="md"
+  p-hide-close="true"
+  [p-primary-action]="primaryAction"
+  [p-secondary-action]="secondaryAction"
+  p-title="Gerar Relatório Geral de Clientes"
+  class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding"
+>
+  <form [formGroup]="relatorioGeralForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-datepicker
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="dataInicio"
+        name="dataInicio"
+        p-clean
+        [p-label]="this.literals.fields.list['dataInicio']"
+        p-required
+      >
+      </po-datepicker>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-datepicker
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required no-padding"
+        formControlName="dataFim"
+        name="dataFim"
+        p-clean
+        [p-label]="this.literals.fields.list['dataFim']"
+        p-required
+      >
+      </po-datepicker>
+    </div>
+  </form>
+</po-modal>

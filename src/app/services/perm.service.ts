@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core'
-import { Observable, Subject } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { Injectable } from "@angular/core"
+import { Observable, Subject } from "rxjs"
+import { map } from "rxjs/operators"
 interface ISubMenuProps {
   id: string
   icon: string
@@ -28,23 +28,23 @@ interface IPermissions {
 }
 
 interface IPermits {
-  permitAll: boolean,
-  permitCreate: boolean,
-  permitRestore: boolean,
-  permitUpdate: boolean,
-  permitDelete: boolean,
-  permitAdmin: boolean,
+  permitAll: boolean
+  permitCreate: boolean
+  permitRestore: boolean
+  permitUpdate: boolean
+  permitDelete: boolean
+  permitAdmin: boolean
   permitSuperUser: boolean
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PermService {
   private permissions: IPermissions
   private permSubject = new Subject<IPermissions>()
 
-  constructor() { }
+  constructor() {}
 
   savePermissions(permissions: IPermissions) {
     this.permissions = permissions
@@ -53,8 +53,7 @@ export class PermService {
 
   getPermissions(route?: string) {
     if (!this.permissions) {
-      return this.permSubject
-        .pipe(map((permissions) => this.permissionsConstructor(permissions, route)))
+      return this.permSubject.pipe(map((permissions) => this.permissionsConstructor(permissions, route)))
     }
 
     return new Observable<IPermits>((observer) => {
@@ -65,7 +64,7 @@ export class PermService {
     })
   }
 
-  private permissionsConstructor (permissions: IPermissions, route?: string): IPermits {
+  private permissionsConstructor(permissions: IPermissions, route?: string): IPermits {
     let pagePermissions: IPermits = {
       permitAll: false,
       permitCreate: false,
@@ -73,28 +72,28 @@ export class PermService {
       permitUpdate: false,
       permitDelete: false,
       permitAdmin: false,
-      permitSuperUser: false
+      permitSuperUser: false,
     }
-    
-    if (route !== 'isAdmin' && route !== 'isSuperUser' && route) {
+
+    if (route !== "isAdmin" && route !== "isSuperUser" && route) {
       let subMenu: ISubMenuProps
-      permissions.menus.map(menu => {
-        menu.subMenuOptions.map(subMenuOption => {
-          if ('/' + route === subMenuOption.route) subMenu = subMenuOption
+      permissions.menus.map((menu) => {
+        menu.subMenuOptions.map((subMenuOption) => {
+          if ("/" + route === subMenuOption.route) subMenu = subMenuOption
         })
       })
-      
+
       if (subMenu) {
         pagePermissions.permitAll = subMenu.permitAll
         pagePermissions.permitCreate = subMenu.permitCreate
         pagePermissions.permitRestore = subMenu.permitRestore
         pagePermissions.permitUpdate = subMenu.permitUpdate
         pagePermissions.permitDelete = subMenu.permitDelete
-      }  
+      }
     } else {
       if (route) {
-        if (route === 'isAdmin') pagePermissions.permitAdmin = permissions.isAdmin
-        if (route === 'isSuperUser') pagePermissions.permitSuperUser = permissions.isSuperUser
+        if (route === "isAdmin") pagePermissions.permitAdmin = permissions.isAdmin
+        if (route === "isSuperUser") pagePermissions.permitSuperUser = permissions.isSuperUser
       } else {
         pagePermissions.permitAdmin = permissions.isAdmin
         pagePermissions.permitSuperUser = permissions.isSuperUser
