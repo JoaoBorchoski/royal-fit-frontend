@@ -147,22 +147,21 @@ export class ProfileEditComponent implements OnInit {
         action: () => {
           if (this.checkoutForm.valid) {
             this.onSubmit(this.checkoutForm.value)
-            this.router.navigate(["profiles"])
           } else {
             this.poNotification.warning(this.formErrorNotification)
           }
         },
       },
-      {
-        label: this.literals.saveAndNew,
-        action: () => {
-          if (this.checkoutForm.valid) {
-            this.onSubmit(this.checkoutForm.value)
-            this.checkoutForm.reset()
-            this.router.navigate(["profiles/new"])
-          }
-        },
-      },
+      // {
+      //   label: this.literals.saveAndNew,
+      //   action: () => {
+      //     if (this.checkoutForm.valid) {
+      //       this.onSubmit(this.checkoutForm.value)
+      //       this.checkoutForm.reset()
+      //       this.router.navigate(["profiles/new"])
+      //     }
+      //   },
+      // },
       {
         label: this.literals.cancel,
         action: this.goBack.bind(this),
@@ -269,14 +268,20 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSubmit(data: ISubmitDataProps) {
+    console.log(data)
+
     if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
       this.restService.put(`/profiles/${this.id}`, data).subscribe({
-        next: () => {},
+        next: (res: any) => {
+          this.router.navigate(["profiles"])
+        },
         error: (error) => console.log(error),
       })
     } else {
       this.restService.post("/profiles", data).subscribe({
-        next: () => {},
+        next: (res: any) => {
+          this.router.navigate(["profiles"])
+        },
         error: (error) => console.log(error),
       })
     }

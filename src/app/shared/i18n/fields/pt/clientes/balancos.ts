@@ -3,7 +3,7 @@ export const balancosFields = {
     clienteNome: "Cliente",
     clienteId: "Cliente",
     saldoDevedor: "Saldo Devedor",
-    bonificacaoDisponivel: "Bonificação Disponível",
+    bonificacaoDisponivel: "Garrafões Disponíveis",
     dataInicio: "Data Início",
     dataFim: "Data Fim",
   },

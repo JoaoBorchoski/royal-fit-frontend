@@ -3,39 +3,41 @@
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
-        formControlName="nome"
-        name="nome"
+        formControlName="item"
+        name="item"
         p-clean
-        [p-label]="this.literals.fields.form['nome']"
-        p-maxlength="45"
+        [p-label]="this.literals.fields.form['item']"
+        p-maxlength="255"
         [p-readonly]="readonly"
         p-required
       >
       </po-input>
     </div>
 
-    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
-      <po-input
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding po-required">
+      <po-number
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
-        formControlName="descricao"
-        name="descricao"
+        formControlName="quantidade"
+        name="quantidade"
         p-clean
-        [p-label]="this.literals.fields.form['descricao']"
-        p-maxlength="250"
+        [p-label]="this.literals.fields.form['quantidade']"
         [p-readonly]="readonly"
+        p-required
       >
-      </po-input>
+      </po-number>
     </div>
 
-    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-      <po-checkbox
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
-        formControlName="desabilitado"
-        name="desabilitado"
-        [p-disabled]="readonly"
-        [p-label]="this.literals.fields.form['desabilitado']"
+    <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding po-required">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="quantidadeMin"
+        name="quantidadeMin"
+        p-clean
+        [p-label]="this.literals.fields.form['quantidadeMin']"
+        [p-readonly]="readonly"
+        p-required
       >
-      </po-checkbox>
+      </po-number>
     </div>
   </form>
 </po-page-default>

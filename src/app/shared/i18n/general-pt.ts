@@ -210,7 +210,7 @@ export const generalPt = {
     fields: meiosPagamentoFields,
   },
   cadastros_statusPagamento: {
-    title: "Status de Pagamento",
+    title: "Almoxarifado Itens",
     fields: statusPagamentoFields,
   },
   cadastros_bonificacao: {

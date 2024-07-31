@@ -23,5 +23,7 @@ export const clientesFields = {
     complemento: "Complemento",
     telefone: "Telefone",
     desabilitado: "Desabilitado",
+    isBonificado: "Bonificação Disponivel",
+    desconto: "Desconto %",
   },
 }

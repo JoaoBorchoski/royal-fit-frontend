@@ -1,12 +1,13 @@
 import { Component, OnInit } from "@angular/core"
 import { Router } from "@angular/router"
-import { PoMenuItem, PoToolbarAction } from "@po-ui/ng-components"
+import { PoMenuItem, PoNotificationService, PoToolbarAction } from "@po-ui/ng-components"
 import { map } from "rxjs/operators"
 import { AppFunctionService } from "src/app/services/app-function.service"
 import { AuthService } from "src/app/services/auth.service"
 import { RestService } from "src/app/services/rest.service"
 import { PermService } from "src/app/services/perm.service"
 import { LanguagesService } from "src/app/services/languages.service"
+import { WebSocketService } from "src/app/services/websocket.service"
 
 interface ISubMenuProps {
   id: string
@@ -56,7 +57,9 @@ export class DefaultComponent implements OnInit {
     private authService: AuthService,
     private restService: RestService,
     private permService: PermService,
-    private languagesService: LanguagesService
+    private languagesService: LanguagesService,
+    private webSocketService: WebSocketService,
+    private poNotification: PoNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +73,12 @@ export class DefaultComponent implements OnInit {
         this.renderMenu(response.data.menus)
       },
       error: (error) => console.log(error),
+    })
+
+    this.webSocketService.listen("alertaAlmoxarifado").subscribe((alerta) => {
+      this.poNotification.error({
+        message: alerta,
+      })
     })
   }
 

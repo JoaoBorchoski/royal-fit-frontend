@@ -4,7 +4,7 @@ export const garrafoesFields = {
     clienteId: "Cliente",
     quantidade: "Quantidade",
     import: "Importar",
-    importModalTitle: "Importar Produtos",
+    importModalTitle: "Importar Garrafões",
     selectFile: "Selecione um arquivo",
     noFileSelected: "Nenhum arquivo selecionado",
     cancel: "Cancelar",

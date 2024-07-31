@@ -47,6 +47,8 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
     cpfCnpj: "",
     email: "",
     cep: "",
+    isBonificado: false,
+    desconto: null,
     estadoId: null,
     cidadeId: null,
     bairro: "",
@@ -70,6 +72,11 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
   public estadosList: Array<PoComboOption> = []
 
   subscriptions = new Subscription()
+
+  public bonificado = [
+    { value: true, label: "Sim" },
+    { value: false, label: "Não" },
+  ]
 
   public readonly pageActions: Array<PoPageAction> = []
 
@@ -157,6 +164,8 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
           nome: result.nome,
           cpfCnpj: result.cpfCnpj,
           email: result.email,
+          isBonificado: result.isBonificado,
+          desconto: result.desconto,
           cep: result.cep,
           estadoId: result.estadoId,
           cidadeId: result.cidadeId,

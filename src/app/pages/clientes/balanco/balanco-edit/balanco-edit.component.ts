@@ -29,6 +29,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   public literals: any = {}
   public widthWindow = window.innerWidth
   public clienteNome: string
+  public isBonificado: boolean = false
 
   balancoForm = this.formBuilder.group({
     clienteId: null,
@@ -189,6 +190,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   getBalanco(id: string) {
     this.restService.get(`/balancos/${id}`).subscribe({
       next: (result) => {
+        this.isBonificado = result.isBonificado
         this.clienteNome = result.clienteNome
         this.balancoForm.patchValue({
           clienteId: result.clienteId,

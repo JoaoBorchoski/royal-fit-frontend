@@ -100,7 +100,7 @@ const routes: Routes = [
         loadChildren: () => import("./modules/cadastros/meio-pagamento/meio-pagamento.module").then((m) => m.MeioPagamentoModule),
       },
       {
-        path: "status-pagamento",
+        path: "almoxarifado-itens",
         loadChildren: () =>
           import("./modules/cadastros/status-pagamento/status-pagamento.module").then((m) => m.StatusPagamentoModule),
       },

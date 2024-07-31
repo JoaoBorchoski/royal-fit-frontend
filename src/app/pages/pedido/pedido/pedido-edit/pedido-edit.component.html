@@ -39,7 +39,7 @@
             [p-filter-service]="clienteIdService"
             [p-label]="this.literals.fields.form['clienteId']"
             p-required
-            (p-change)="verifyProdutos()"
+            (p-change)="onClienteIdChange($event)"
           >
           </po-combo>
         </div>
@@ -73,19 +73,6 @@
           >
           </po-input>
         </div>
-        <!-- 
-      <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
-        <po-number
-          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
-          formControlName="valorTotal"
-          name="valorTotal"
-          p-clean
-          [p-label]="this.literals.fields.form['valorTotal']"
-          p-maxlength="30"
-          [p-readonly]="readonly"
-        >
-        </po-number>
-      </div> -->
 
         <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
           <po-number

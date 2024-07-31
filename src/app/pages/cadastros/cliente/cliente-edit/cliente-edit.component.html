@@ -74,6 +74,34 @@
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-select
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        [p-label]="this.literals.fields.form['isBonificado']"
+        name="isBonificado"
+        formControlName="isBonificado"
+        [p-options]="bonificado"
+        p-placeholder="Selecione"
+        [p-readonly]="readonly"
+        [p-disabled]="readonly"
+      >
+      </po-select>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+      <po-decimal
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="desconto"
+        name="desconto"
+        p-clean
+        p-decimal="2"
+        [p-readonly]="readonly"
+        p-required
+        [p-thousand-maxlength]="10"
+        [p-label]="this.literals.fields.form['desconto']"
+      ></po-decimal>
+    </div>
+
+    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
         formControlName="cep"

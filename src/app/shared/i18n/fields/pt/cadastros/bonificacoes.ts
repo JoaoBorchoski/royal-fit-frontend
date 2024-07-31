@@ -5,7 +5,7 @@ export const bonificacoesFields = {
     totalVendido: "Total Vendido",
     bonificacaoDisponivel: "Bonificacao Disponivel",
     import: "Importar",
-    importModalTitle: "Importar Produtos",
+    importModalTitle: "Importar Bonificações",
     selectFile: "Selecione um arquivo",
     noFileSelected: "Nenhum arquivo selecionado",
     cancel: "Cancelar",

@@ -37,6 +37,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   public disableEditButton: boolean = true
   public disableProdutos: boolean = true
   public prodNameEdit: string
+  public descPorcentagem: number = 0
 
   public pedidoItens: any[] = []
   public tableActions: PoTableAction[] = []
@@ -234,6 +235,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   getPedido(id: string) {
     this.restService.get(`/pedidos/${id}`).subscribe({
       next: (result) => {
+        this.descPorcentagem = result.desconto
         this.totalPreco = result.valorTotal
         this.pedidoForm.patchValue({
           clienteId: result.clienteId,
@@ -262,8 +264,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         produtoId: item.produtoId,
         produto: item.produtoNome,
         quantidade: item.quantidade,
-        preco: item.preco,
-        valor: item.valor,
+        preco: this.getTotalMinusDesc(item.preco),
+        valor: this.getTotalMinusDesc(item.valor),
       }
     })
   }
@@ -354,7 +356,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         produtoId: this.pedidoItemForm.controls.produtoId.value,
         produto: this.produtoAtual.nome,
         quantidade: this.pedidoItemForm.controls.quantidade.value,
-        preco: this.produtoAtual.preco,
+        preco: this.getTotalMinusDesc(this.produtoAtual.preco),
         valor: this.pedidoItemForm.controls.valor.value,
       })
       this.totalPreco += this.pedidoItemForm.controls.valor.value
@@ -372,7 +374,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   editItem() {
     if (this.pedidoItemFormEdit.valid) {
       const indexItens = this.pedidoItens.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
-      this.totalPreco -= this.pedidoItens[indexItens].valor
+      this.totalPreco -= this.getTotalMinusDesc(this.pedidoItens[indexItens].valor)
       this.totalPreco += this.pedidoItemFormEdit.value.valor
       this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
       this.pedidoItens.splice(indexItens, 1, this.pedidoItemFormEdit.value)
@@ -381,8 +383,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         id: this.pedidoItemFormEdit.value.id,
         produtoId: this.pedidoItemFormEdit.controls.produtoId.value,
         produto: this.prodNameEdit,
-        preco: this.pedidoItemFormEdit.controls.valor.value,
         quantidade: this.pedidoItemFormEdit.controls.quantidade.value,
+        preco: this.getTotalMinusDesc(this.produtoAtualEdit.preco),
         valor: this.pedidoItemFormEdit.controls.valor.value,
       })
       this.poModal.close()
@@ -418,7 +420,9 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           this.produtoAtual = res
           if (this.pedidoItemForm.controls.quantidade.value) {
             this.verifyAddButton()
-            this.pedidoItemForm.controls.valor.setValue(this.produtoAtual.preco * +this.pedidoItemForm.controls.quantidade.value)
+            this.pedidoItemForm.controls.valor.setValue(
+              this.getTotalMinusDesc(this.produtoAtual.preco * +this.pedidoItemForm.controls.quantidade.value)
+            )
           }
         },
       })
@@ -437,7 +441,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           this.produtoAtualEdit = res
           if (this.pedidoItemFormEdit.controls.quantidade.value) {
             this.pedidoItemFormEdit.controls.valor.setValue(
-              this.produtoAtualEdit.preco * +this.pedidoItemFormEdit.controls.quantidade.value
+              this.getTotalMinusDesc(this.produtoAtualEdit.preco * +this.pedidoItemFormEdit.controls.quantidade.value)
             )
           }
         },
@@ -448,14 +452,28 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   onQuantidadeChange(event) {
     if (this.produtoAtual) {
       this.verifyAddButton()
-      this.pedidoItemForm.controls.valor.setValue(this.produtoAtual.preco * event)
+      this.pedidoItemForm.controls.valor.setValue(this.getTotalMinusDesc(this.produtoAtual.preco * event))
     }
   }
 
   onQuantidadeChangeEdit(event) {
     if (this.produtoAtualEdit) {
-      this.pedidoItemFormEdit.controls.valor.setValue(this.produtoAtualEdit.preco * event)
+      this.pedidoItemFormEdit.controls.valor.setValue(this.getTotalMinusDesc(this.produtoAtualEdit.preco * event))
     }
+  }
+
+  onClienteIdChange(event) {
+    if (!event) return
+
+    this.subscriptions.add(
+      this.restService.get(`/clientes/${event}`).subscribe({
+        next: (res) => {
+          this.descPorcentagem = res.desconto
+        },
+      })
+    )
+
+    this.verifyProdutos()
   }
 
   private deleteParameterItem(item: any) {
@@ -469,5 +487,9 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   private tableActionsConstructor(literals: any, tableActions: PoTableAction[]) {
     tableActions.push({ label: literals.editar, action: this.editParameterItem.bind(this), icon: "fa-solid fa-pen" })
     tableActions.push({ label: literals.excluir, action: this.deleteParameterItem.bind(this), icon: "fa-solid fa-trash" })
+  }
+
+  public getTotalMinusDesc(valor: number) {
+    return valor - (valor * this.descPorcentagem) / 100
   }
 }
