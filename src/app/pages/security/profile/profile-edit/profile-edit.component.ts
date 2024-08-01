@@ -268,8 +268,6 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSubmit(data: ISubmitDataProps) {
-    console.log(data)
-
     if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
       this.restService.put(`/profiles/${this.id}`, data).subscribe({
         next: (res: any) => {

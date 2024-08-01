@@ -220,8 +220,9 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         action: () => this.save(this.pedidoForm.value),
       },
       {
-        label: this.literals.saveAndNew,
-        action: () => this.save(this.pedidoForm.value, true),
+        label: "Imprimir Canhoto",
+        action: () => this.imprimirCanhoto(this.pedidoForm.value),
+        disabled: !(this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit"),
       },
       {
         label: this.literals.cancel,
@@ -268,6 +269,22 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         valor: this.getTotalMinusDesc(item.valor),
       }
     })
+  }
+
+  imprimirCanhoto(data) {
+    data.isLiberado = data.isLiberado == 1 ? true : false
+    data.pedidoItemForm = this.pedidoItens
+    this.subscriptions.add(
+      this.restService.put(`/pedidos/${this.id}`, data).subscribe({
+        next: () => {
+          this.poNotification.success({
+            message: "Canhoto impresso com sucesso",
+            duration: environment.poNotificationDuration,
+          })
+        },
+        error: (error) => console.log(error),
+      })
+    )
   }
 
   save(data, willCreateAnother?: boolean) {

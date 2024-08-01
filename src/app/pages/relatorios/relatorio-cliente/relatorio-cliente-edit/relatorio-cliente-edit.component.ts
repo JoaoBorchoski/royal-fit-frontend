@@ -102,10 +102,11 @@ export class RelatorioClienteEditComponent implements OnInit, OnDestroy {
         label: this.literals.save,
         action: () => this.save(this.relatorioClienteForm.value),
       },
-      // {
-      //   label: this.literals.saveAndNew,
-      //   action: () => this.save(this.relatorioClienteForm.value, true),
-      // },
+      {
+        label: "Imprimir Canhoto",
+        action: () => this.imprimirCanhoto(this.relatorioClienteForm.value),
+        disabled: !(this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit"),
+      },
       {
         label: this.literals.cancel,
         action: this.goBack.bind(this),
@@ -179,6 +180,21 @@ export class RelatorioClienteEditComponent implements OnInit, OnDestroy {
         duration: environment.poNotificationDuration,
       })
     }
+  }
+
+  imprimirCanhoto(data) {
+    data.isLiberado = data.isLiberado == 1 ? true : false
+    this.subscriptions.add(
+      this.restService.put(`/pedido-bonificados/${this.id}`, data).subscribe({
+        next: () => {
+          this.poNotification.success({
+            message: "Canhoto impresso com sucesso",
+            duration: environment.poNotificationDuration,
+          })
+        },
+        error: (error) => console.log(error),
+      })
+    )
   }
 
   markAsDirty() {
