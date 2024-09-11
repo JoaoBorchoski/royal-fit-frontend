@@ -34,10 +34,11 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   public isBonificado: boolean = false
   columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
   public user: any
+  @ViewChild("confirmarEntrada", { static: true }) confirmarEntrada: PoModalComponent
 
   tipoCasco = [
-    { label: "Sim", value: true },
-    { label: "Não", value: false },
+    { label: "Sim", value: 0 },
+    { label: "Não", value: 1 },
   ]
 
   balancoForm = this.formBuilder.group({
@@ -58,7 +59,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   addGarrafaoForm = this.formBuilder.group({
     clienteId: null,
     quantidade: null,
-    isRoyalFit: null,
+    isRoyalfit: null,
   })
 
   addRetiradaBonificacaoForm = this.formBuilder.group({
@@ -134,6 +135,18 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
       width: "25%",
     },
   ]
+
+  public addGarrafaoPrimaryAction: PoModalAction = {
+    label: "Selecionar",
+    action: this.addGarrafao.bind(this),
+  }
+
+  public addGarrafaoSecondaryAction: PoModalAction = {
+    label: "Cancelar",
+    action: () => {
+      this.confirmarEntrada.close()
+    },
+  }
 
   ngOnInit(): void {
     this.getLiterals()
@@ -329,28 +342,33 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   }
 
   public addGarrafao() {
-    if (this.addGarrafaoForm.valid) {
-      const data = {
-        ...this.addGarrafaoForm.value,
-        impressoraIp: this.user.impressoraIp,
-      }
-
-      this.subscriptions.add(
-        this.restService.put(`/garrafoes/add-garrafao/${this.id}`, data).subscribe({
-          next: () => {
-            this.poNotification.success({
-              message: this.literals.saveSuccess,
-              duration: environment.poNotificationDuration,
-            })
-            this.getBalanco(this.id)
-            this.addGarrafaoForm.patchValue({
-              quantidade: null,
-            })
-          },
-          error: (error) => console.log(error),
-        })
-      )
+    const data = {
+      ...this.addGarrafaoForm.value,
+      impressoraIp: this.user.impressoraIp,
     }
+    data.isRoyalfit = data.isRoyalfit === 0 ? true : false
+
+    console.log(data)
+
+    this.subscriptions.add(
+      this.restService.put(`/garrafoes/add-garrafao/${this.id}`, data).subscribe({
+        next: (res: any) => {
+          console.log(res)
+          this.poNotification.success({
+            message: this.literals.saveSuccess,
+            duration: environment.poNotificationDuration,
+          })
+          this.getBalanco(this.id)
+          this.addGarrafaoForm.patchValue({
+            quantidade: 0,
+            isRoyalfit: 0,
+          })
+        },
+        error: (error) => console.log(error),
+      })
+    )
+
+    this.confirmarEntrada.close()
   }
 
   public addRetiradaBonificacao() {
@@ -427,7 +445,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  gerarRelatorioEntradaGarrafoes() {
+  public gerarRelatorioEntradaGarrafoes() {
     if (this.relatorioPagamentoForm.valid) {
       this.subscriptions.add(
         this.restService
@@ -445,6 +463,17 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
             error: (error) => console.log(error),
           })
       )
+    } else {
+      this.poNotification.warning({
+        message: "Preencha todos os campos obrigatórios",
+        duration: environment.poNotificationDuration,
+      })
+    }
+  }
+
+  openModalGarrafao() {
+    if (this.addGarrafaoForm.valid && +this.addGarrafaoForm.value.quantidade > 0) {
+      this.confirmarEntrada.open()
     } else {
       this.poNotification.warning({
         message: "Preencha todos os campos obrigatórios",

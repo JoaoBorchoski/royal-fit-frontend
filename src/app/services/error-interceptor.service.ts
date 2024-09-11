@@ -52,7 +52,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
                 duration: environment.poNotificationDuration,
               })
               break
-            case "Funcionários com email duplicado não são permitidos":
+            case "Funcionários com email duplicado não são permitidos.":
               this.poNotificationService.warning({
                 message: error.error.message,
                 duration: environment.poNotificationDuration,
@@ -101,6 +101,18 @@ export class ErrorInterceptorService implements HttpInterceptor {
               })
               break
             case "Nível de Acesso não encontrado.":
+              this.poNotificationService.warning({
+                message: error.error.message,
+                duration: environment.poNotificationDuration,
+              })
+              break
+            case "Cliente não encontrado":
+              this.poNotificationService.warning({
+                message: error.error.message,
+                duration: environment.poNotificationDuration,
+              })
+              break
+            case "Já existe um cliente com este email e/ou CNPJ":
               this.poNotificationService.warning({
                 message: error.error.message,
                 duration: environment.poNotificationDuration,

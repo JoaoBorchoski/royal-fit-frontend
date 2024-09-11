@@ -189,6 +189,8 @@
 
   .po-button {
     padding: 0 16px;
+
+    transition: 0.2s ease-in-out;
   }
 
   button[p-kind="primary"] {

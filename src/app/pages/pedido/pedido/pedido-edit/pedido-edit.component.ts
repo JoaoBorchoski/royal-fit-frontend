@@ -46,6 +46,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   public pedidoItens: any[] = []
   public tableActions: PoTableAction[] = []
   public itensTable = []
+  public horaAtual = new Date().toLocaleTimeString().substring(0, 5).split(":").join("")
 
   public isLiberadoSelect = [
     { label: "Aguardando", value: 0 },
@@ -87,8 +88,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   pedidoForm = this.formBuilder.group({
     clienteId: null,
-    data: null,
-    hora: "",
+    data: new Date(),
+    hora: this.horaAtual,
     valorTotal: 0,
     funcionarioId: null,
     meioPagamentoId: null,
@@ -97,7 +98,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     desabilitado: false,
     isLiberado: 0,
     descricao: "",
-    desconto: null,
+    desconto: 0,
     subTotal: null,
   })
 
