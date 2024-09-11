@@ -9,6 +9,7 @@ import {
   PoModalAction,
   PoModalComponent,
   PoPageDefaultComponent,
+  PoLookupColumn,
 } from "@po-ui/ng-components"
 import { FormBuilder } from "@angular/forms"
 import { Subscription } from "rxjs"
@@ -16,6 +17,7 @@ import { environment } from "src/environments/environment"
 import { RestService } from "src/app/services/rest.service"
 import { LanguagesService } from "src/app/services/languages.service"
 import { ExcelService } from "src/app/services/excel.service"
+import { AuthService } from "src/app/services/auth.service"
 
 @Component({
   selector: "app-balanco-edit",
@@ -30,6 +32,13 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   public widthWindow = window.innerWidth
   public clienteNome: string
   public isBonificado: boolean = false
+  columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
+  public user: any
+
+  tipoCasco = [
+    { label: "Sim", value: true },
+    { label: "Não", value: false },
+  ]
 
   balancoForm = this.formBuilder.group({
     clienteId: null,
@@ -49,6 +58,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   addGarrafaoForm = this.formBuilder.group({
     clienteId: null,
     quantidade: null,
+    isRoyalFit: null,
   })
 
   addRetiradaBonificacaoForm = this.formBuilder.group({
@@ -63,6 +73,12 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   })
 
   relatorioPagamentoForm = this.formBuilder.group({
+    clienteId: null,
+    dataInicio: null,
+    dataFim: null,
+  })
+
+  relatorioEntradaGarrafoesForm = this.formBuilder.group({
     clienteId: null,
     dataInicio: null,
     dataFim: null,
@@ -84,7 +100,8 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private poNotification: PoNotificationService,
     private languagesService: LanguagesService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private authService: AuthService
   ) {}
 
   public itensTable = []
@@ -120,6 +137,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getLiterals()
+    this.user = this.authService.userValue.user
 
     this.id = this.activatedRoute.snapshot.paramMap.get("id")
 
@@ -209,6 +227,12 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
           clienteId: result.clienteId,
         })
         this.relatorioPedidoForm.patchValue({
+          clienteId: result.clienteId,
+        })
+        this.relatorioPagamentoForm.patchValue({
+          clienteId: result.clienteId,
+        })
+        this.relatorioEntradaGarrafoesForm.patchValue({
           clienteId: result.clienteId,
         })
         this.getPedidos(result.clienteId)
@@ -306,8 +330,13 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
 
   public addGarrafao() {
     if (this.addGarrafaoForm.valid) {
+      const data = {
+        ...this.addGarrafaoForm.value,
+        impressoraIp: this.user.impressoraIp,
+      }
+
       this.subscriptions.add(
-        this.restService.put(`/garrafoes/add-garrafao/${this.id}`, this.addGarrafaoForm.value).subscribe({
+        this.restService.put(`/garrafoes/add-garrafao/${this.id}`, data).subscribe({
           next: () => {
             this.poNotification.success({
               message: this.literals.saveSuccess,
@@ -326,8 +355,12 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
 
   public addRetiradaBonificacao() {
     if (this.addRetiradaBonificacaoForm.valid) {
+      const data = {
+        ...this.addRetiradaBonificacaoForm.value,
+        impressoraIp: this.user.impressoraIp,
+      }
       this.subscriptions.add(
-        this.restService.put(`/bonificacoes/add-retirada/${this.id}`, this.addRetiradaBonificacaoForm.value).subscribe({
+        this.restService.put(`/bonificacoes/add-retirada/${this.id}`, data).subscribe({
           next: () => {
             this.poNotification.success({
               message: this.literals.saveSuccess,
@@ -347,13 +380,37 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   public gerarRelatorioPedido() {
     if (this.relatorioPedidoForm.valid) {
       this.subscriptions.add(
+        this.restService.post(`/pedidos/relatorio-cliente/${this.balancoForm.value.clienteId}`, this.relatorioPedidoForm.value).subscribe({
+          next: (result) => {
+            const datIni = this.relatorioPedidoForm.value.dataInicio.toString().split("-").reverse().join("/")
+            const datFim = this.relatorioPedidoForm.value.dataFim.toString().split("-").reverse().join("/")
+            this.excelService.createDownload(result, `Relatório-Pedidos-${this.clienteNome}-${datIni}-${datFim}`)
+            this.poNotification.success({
+              message: "Relatório gerado com sucesso",
+              duration: environment.poNotificationDuration,
+            })
+          },
+          error: (error) => console.log(error),
+        })
+      )
+    } else {
+      this.poNotification.warning({
+        message: "Preencha todos os campos obrigatórios",
+        duration: environment.poNotificationDuration,
+      })
+    }
+  }
+
+  public gerarRelatorioPagamento() {
+    if (this.relatorioPagamentoForm.valid) {
+      this.subscriptions.add(
         this.restService
-          .post(`/pedidos/relatorio-cliente/${this.balancoForm.value.clienteId}`, this.relatorioPedidoForm.value)
+          .post(`/pagamentos/relatorio-cliente/${this.balancoForm.value.clienteId}`, this.relatorioPagamentoForm.value)
           .subscribe({
             next: (result) => {
-              const datIni = this.relatorioPedidoForm.value.dataInicio.toString().split("-").reverse().join("/")
-              const datFim = this.relatorioPedidoForm.value.dataFim.toString().split("-").reverse().join("/")
-              this.excelService.createDownload(result, `Relatório-Pedidos-${this.clienteNome}-${datIni}-${datFim}`)
+              const datIni = this.relatorioPagamentoForm.value.dataInicio.toString().split("-").reverse().join("/")
+              const datFim = this.relatorioPagamentoForm.value.dataFim.toString().split("-").reverse().join("/")
+              this.excelService.createDownload(result, `Relatório-Pagamentos-${this.clienteNome}-${datIni}-${datFim}`)
               this.poNotification.success({
                 message: "Relatório gerado com sucesso",
                 duration: environment.poNotificationDuration,
@@ -370,11 +427,11 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  public gerarRelatorioPagamento() {
+  gerarRelatorioEntradaGarrafoes() {
     if (this.relatorioPagamentoForm.valid) {
       this.subscriptions.add(
         this.restService
-          .post(`/pagamentos/relatorio-cliente/${this.balancoForm.value.clienteId}`, this.relatorioPagamentoForm.value)
+          .post(`/entradas-garrafao/relatorio-cliente/${this.balancoForm.value.clienteId}`, this.relatorioPagamentoForm.value)
           .subscribe({
             next: (result) => {
               const datIni = this.relatorioPagamentoForm.value.dataInicio.toString().split("-").reverse().join("/")

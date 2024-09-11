@@ -9,6 +9,7 @@ import {
   PoTableAction,
   PoModalComponent,
   PoModalAction,
+  PoLookupColumn,
 } from "@po-ui/ng-components"
 import { FormBuilder } from "@angular/forms"
 import { Subscription } from "rxjs"
@@ -16,6 +17,7 @@ import { environment } from "src/environments/environment"
 import { RestService } from "src/app/services/rest.service"
 import { LanguagesService } from "src/app/services/languages.service"
 import { finalize } from "rxjs/operators"
+import { AuthService } from "src/app/services/auth.service"
 
 @Component({
   selector: "app-pedido-edit",
@@ -38,6 +40,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   public disableProdutos: boolean = true
   public prodNameEdit: string
   public descPorcentagem: number = 0
+  public disableDescontoButtom: boolean = false
+  public user: any
 
   public pedidoItens: any[] = []
   public tableActions: PoTableAction[] = []
@@ -47,6 +51,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     { label: "Aguardando", value: 0 },
     { label: "Liberado", value: 1 },
   ]
+
+  columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
 
   public columnsTable = [
     { property: "id", key: true, visible: false },
@@ -91,6 +97,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     desabilitado: false,
     isLiberado: 0,
     descricao: "",
+    desconto: null,
+    subTotal: null,
   })
 
   pedidoItemForm = this.formBuilder.group({
@@ -137,11 +145,13 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private poNotification: PoNotificationService,
-    private languagesService: LanguagesService
+    private languagesService: LanguagesService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.getLiterals()
+    this.user = this.authService.userValue.user
 
     this.id = this.activatedRoute.snapshot.paramMap.get("id")
 
@@ -236,13 +246,14 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   getPedido(id: string) {
     this.restService.get(`/pedidos/${id}`).subscribe({
       next: (result) => {
-        this.descPorcentagem = result.desconto
+        if (result.desconto && result.desconto > 0) this.disableDescontoButtom = true
+
         this.totalPreco = result.valorTotal
         this.pedidoForm.patchValue({
           clienteId: result.clienteId,
           data: result.data ? result.data.substring(0, 10) : null,
           hora: result.hora,
-          valorTotal: result.valorTotal,
+          valorTotal: result.valorTotal - result.desconto,
           funcionarioId: result.funcionarioId,
           meioPagamentoId: result.meioPagamentoId,
           // statusPagamentoId: result.statusPagamentoId,
@@ -250,6 +261,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           isLiberado: result.isLiberado ? 1 : 0,
           desabilitado: result.desabilitado,
           descricao: result.descricao,
+          desconto: result.desconto,
+          subTotal: result.valorTotal,
         })
         this.getPedidoItens(result.pedidoItemForm)
       },
@@ -298,6 +311,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       }
       data.isLiberado = data.isLiberado == 1 ? true : false
       data.pedidoItemForm = this.pedidoItens
+      data.impressoraIp = this.user.impressoraIp
       if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
         this.subscriptions.add(
           this.restService.put(`/pedidos/${this.id}`, data).subscribe({
@@ -508,5 +522,11 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   public getTotalMinusDesc(valor: number) {
     return valor - (valor * this.descPorcentagem) / 100
+  }
+
+  aplicarDesconto() {
+    this.totalPreco = +this.pedidoForm.value.subTotal - +this.pedidoForm.value.desconto
+    this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
+    this.disableDescontoButtom = true
   }
 }

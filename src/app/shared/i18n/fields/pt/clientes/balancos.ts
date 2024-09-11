@@ -19,5 +19,6 @@ export const balancosFields = {
     data: "Data",
     dataInicio: "Data Início",
     dataFim: "Data Fim",
+    isRoyalFit: "Casco RoyalFit",
   },
 }

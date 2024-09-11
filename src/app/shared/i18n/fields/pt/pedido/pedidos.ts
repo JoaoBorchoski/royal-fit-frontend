@@ -18,8 +18,8 @@ export const pedidosFields = {
     clienteId: "Cliente",
     data: "Data",
     hora: "Hora",
-    valorTotal: "Valor Total",
-    desconto: "Desconto",
+    valorTotal: "Valor Total (R$)",
+    desconto: "Desconto (R$)",
     funcionarioId: "Funcionario",
     meioPagamentoId: "Meio Pagamento",
     statusPagamentoId: "Status Pagamento",
@@ -33,5 +33,6 @@ export const pedidosFields = {
     descricao: "Descrição",
     editar: "Editar",
     excluir: "Excluir",
+    subTotal: "SubTotal (R$)",
   },
 }

@@ -15,33 +15,22 @@
   <po-tabs>
     <po-tab p-label="Cabeçalho" p-active="true">
       <form [formGroup]="pedidoForm">
-        <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
-        <po-number
-          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
-          formControlName="sequencial"
-          name="sequencial"
-          p-clean
-          [p-label]="this.literals.fields.form['sequencial']"
-          p-maxlength="10"
-          [p-readonly]="readonly"
-          p-required
-        >
-        </po-number>
-      </div> -->
-
         <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
-          <po-combo
+          <po-lookup
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
             formControlName="clienteId"
             name="clienteId"
+            p-field-label="label"
+            p-field-value="value"
             p-clean
             [p-disabled]="readonly"
             [p-filter-service]="clienteIdService"
             [p-label]="this.literals.fields.form['clienteId']"
             p-required
             (p-change)="onClienteIdChange($event)"
+            [p-columns]="columnsFornecedor"
           >
-          </po-combo>
+          </po-lookup>
         </div>
 
         <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding">
@@ -74,48 +63,40 @@
           </po-input>
         </div>
 
-        <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
-          <po-number
-            class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
-            formControlName="desconto"
-            name="desconto"
-            p-clean
-            [p-label]="this.literals.fields.form['desconto']"
-            p-maxlength="10"
-            [p-readonly]="readonly"
-            (p-change)="verifyProdutos()"
-          >
-          </po-number>
-        </div> -->
-
         <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
-          <po-combo
+          <po-lookup
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
             formControlName="funcionarioId"
             name="funcionarioId"
+            p-field-label="label"
+            p-field-value="value"
             p-clean
             [p-disabled]="readonly"
             [p-filter-service]="funcionarioIdService"
             [p-label]="this.literals.fields.form['funcionarioId']"
             p-required
             (p-change)="verifyProdutos()"
+            [p-columns]="columnsFornecedor"
           >
-          </po-combo>
+          </po-lookup>
         </div>
 
         <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
-          <po-combo
+          <po-lookup
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
             formControlName="meioPagamentoId"
             name="meioPagamentoId"
+            p-field-label="label"
+            p-field-value="value"
             p-clean
             [p-disabled]="readonly"
             [p-filter-service]="meioPagamentoIdService"
             [p-label]="this.literals.fields.form['meioPagamentoId']"
             p-required
             (p-change)="verifyProdutos()"
+            [p-columns]="columnsFornecedor"
           >
-          </po-combo>
+          </po-lookup>
         </div>
 
         <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
@@ -190,18 +171,21 @@
     <po-tab p-label="Produtos" [p-disabled]="disableProdutos">
       <form [formGroup]="pedidoItemForm">
         <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
-          <po-combo
+          <po-lookup
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
             formControlName="produtoId"
             name="produtoId"
+            p-field-label="label"
+            p-field-value="value"
             p-clean
             [p-disabled]="readonly"
             [p-filter-service]="produtoIdService"
             [p-label]="this.literals.fields.form['produtoId']"
             p-required
             (p-change)="onProdutoIdChange($event)"
+            [p-columns]="columnsFornecedor"
           >
-          </po-combo>
+          </po-lookup>
         </div>
         <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
           <po-number
@@ -242,22 +226,79 @@
           >
           </po-button>
         </div>
+      </form>
 
-        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding po-mt-3">
-          <po-divider></po-divider>
-        </div>
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding po-mt-3">
+        <po-divider></po-divider>
+      </div>
 
-        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="max-height: 450px; overflow-y: auto">
-          <po-table [p-items]="itensTable" [p-columns]="columnsTable" [p-actions]="tableActions" [p-actions-right]="true">
-          </po-table>
-        </div>
+      <form [formGroup]="pedidoForm">
+        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+          <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
+            <div class="po-sm-12 po-md-8 po-lg-8 po-xl-8 no-padding">
+              <po-decimal
+                class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+                formControlName="desconto"
+                name="desconto"
+                p-clean
+                [p-label]="this.literals.fields.form['desconto']"
+                p-maxlength="10"
+                p-decimal-maxlength="2"
+                [p-readonly]="disableDescontoButtom"
+                (p-change)="verifyProdutos()"
+              >
+              </po-decimal>
+            </div>
+            <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding po-mt-4">
+              <po-button
+                class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+                p-label="Aplicar"
+                (p-click)="aplicarDesconto()"
+                [p-disabled]="disableDescontoButtom"
+              >
+              </po-button>
+            </div>
+          </div>
 
-        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="display: flex; justify-content: end; margin-top: 8px">
-          <span style="background: var(--primary-color); padding: 8px 16px; color: white"
-            >Valor Total: {{ totalPreco | currency : "BRL" }}</span
-          >
+          <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
+            <po-decimal
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+              formControlName="subTotal"
+              name="subTotal"
+              p-clean
+              [p-label]="this.literals.fields.form['subTotal']"
+              p-maxlength="10"
+              p-decimal-maxlength="2"
+              p-readonly="true"
+            >
+            </po-decimal>
+          </div>
+          <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
+            <po-decimal
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+              formControlName="valorTotal"
+              name="valorTotal"
+              p-clean
+              [p-label]="this.literals.fields.form['valorTotal']"
+              p-maxlength="10"
+              p-decimal-maxlength="2"
+              p-readonly="true"
+            >
+            </po-decimal>
+          </div>
         </div>
       </form>
+
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="max-height: 450px; overflow-y: auto">
+        <po-table [p-items]="itensTable" [p-columns]="columnsTable" [p-actions]="tableActions" [p-actions-right]="true">
+        </po-table>
+      </div>
+
+      <!-- <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="display: flex; justify-content: end; margin-top: 8px">
+        <span style="background: var(--primary-color); padding: 8px 16px; color: white"
+          >Valor Total: {{ totalPreco | currency : "BRL" }}</span
+        >
+      </div> -->
     </po-tab>
   </po-tabs>
 </po-page-default>

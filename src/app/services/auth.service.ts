@@ -45,8 +45,7 @@ export class AuthService {
   public response: ResponseProps
 
   constructor(private restService: RestService, private router: Router, private poDialogService: PoDialogService) {
-    this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem("@royalfit:user"))
-    )
+    this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem("@royalfit:user")))
     this.user = this.userSubject.asObservable()
   }
 
@@ -71,8 +70,8 @@ export class AuthService {
               name: response.user.name,
               login: response.user.login,
               avatar: response.user.avatar,
-              tfa: response.user.tfa
-            }
+              tfa: response.user.tfa,
+            },
           }
 
           if (!response.user.tfa || response.user.mustActiveTwoFactorAuthentication) {
@@ -83,21 +82,32 @@ export class AuthService {
           if (this.response.user.mustChangePassword) {
             this.router.navigate([`reset/${this.response.user.mustChangePassword}`])
           }
-          
-          if (!this.response.user.mustChangePassword && !this.response.user.isBlocked && !this.response.user.tfa && !this.response.user.mustActiveTwoFactorAuthentication) {
-            this.router.navigate(["home"])
+
+          if (
+            !this.response.user.mustChangePassword &&
+            !this.response.user.isBlocked &&
+            !this.response.user.tfa &&
+            !this.response.user.mustActiveTwoFactorAuthentication
+          ) {
+            // this.router.navigate(["home"])
+            resolve({
+              sucess: true,
+              value: valuesToSave,
+            })
           }
 
           if (response.user.isBlocked) {
             this.poDialogService.alert({
-              title: 'Usuário Bloqueado',
+              title: "Usuário Bloqueado",
               message: `
               <p>
-                <b>Motivo de bloqueio:</b> ${response.user.blockReasonId ? response.user.blockReasonId.description : 'Não definido'}
+                <b>Motivo de bloqueio:</b> ${response.user.blockReasonId ? response.user.blockReasonId.description : "Não definido"}
               </p>
               <p>
-                <b>Instruções de Reset:</b> ${response.user.blockReasonId ? response.user.blockReasonId.instructionsToSolve : 'Contate um administrador.'}
-              </p>`
+                <b>Instruções de Reset:</b> ${
+                  response.user.blockReasonId ? response.user.blockReasonId.instructionsToSolve : "Contate um administrador."
+                }
+              </p>`,
             })
             localStorage.removeItem("@royalfit:user")
             localStorage.removeItem("@royalfit:temp")
@@ -106,11 +116,11 @@ export class AuthService {
 
           if (response.user.isDisabled) {
             this.poDialogService.alert({
-              title: 'Usuário Inativo',
+              title: "Usuário Inativo",
               message: `
               <p>
                 Caso queira ativar novamente sua conta, entre em contato com um administrador.
-              </p>`
+              </p>`,
             })
             localStorage.removeItem("@royalfit:user")
             localStorage.removeItem("@royalfit:temp")
@@ -120,7 +130,7 @@ export class AuthService {
           resolve({
             tfa: response.user.tfa,
             mustActiveTwoFactorAuthentication: response.user.mustActiveTwoFactorAuthentication,
-            value: valuesToSave
+            value: valuesToSave,
           })
         },
         error: (error) => {
@@ -139,23 +149,21 @@ export class AuthService {
 
   resetPassword(event: ResetPasswordRequestProps) {
     const payload = {
-      password: event.newPassword
+      password: event.newPassword,
     }
 
-    this.restService
-      .post(`/passwords/reset?token=${event.id}`, payload)
-      .subscribe({
-        next: () => {
-          if (this.response.user.mustChangePassword) {
-            this.router.navigate(["home"])
-          } else {
-            this.router.navigate(["login"])
-          }
-        },
-        error: (error) => {
-          console.log(error)
-        },
-      })
+    this.restService.post(`/passwords/reset?token=${event.id}`, payload).subscribe({
+      next: () => {
+        if (this.response.user.mustChangePassword) {
+          this.router.navigate(["home"])
+        } else {
+          this.router.navigate(["login"])
+        }
+      },
+      error: (error) => {
+        console.log(error)
+      },
+    })
   }
 
   get tablePreferences() {
@@ -165,7 +173,7 @@ export class AuthService {
   routeTablePreferences(route: string) {
     const preferences = this.tablePreferences
     if (preferences) {
-      const preference = preferences.find(preference => preference.route === route)
+      const preference = preferences.find((preference) => preference.route === route)
       return preference
     }
     return null
@@ -186,8 +194,8 @@ export class AuthService {
     }
 
     tablePreferences.push({ route, preferences })
-    
+
     localStorage.removeItem("@royalfit:preferences")
     localStorage.setItem("@royalfit:preferences", JSON.stringify(tablePreferences))
-  } 
+  }
 }

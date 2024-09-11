@@ -91,3 +91,20 @@
     </form>
   </div>
 </po-modal>
+
+<po-modal #impressoraIp [p-primary-action]="selectImpressora" p-title="Selecionar Impressora">
+  <form [formGroup]="impressoraForm">
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-select
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding"
+        name="impressoraIp"
+        formControlName="impressoraIp"
+        p-placeholder="Selecione"
+        [p-options]="impressorasIps"
+        p-required
+        p-size="xl"
+      >
+      </po-select>
+    </div>
+  </form>
+</po-modal>
