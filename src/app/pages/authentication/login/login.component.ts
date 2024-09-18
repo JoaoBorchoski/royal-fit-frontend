@@ -67,10 +67,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     {
       label: "Escritório",
       value: "45.227.182.222:9100",
+      // value: "0",
     },
     {
       label: "Carregamento",
       value: "45.227.182.222:9101",
+      // value: "1",
     },
   ]
 

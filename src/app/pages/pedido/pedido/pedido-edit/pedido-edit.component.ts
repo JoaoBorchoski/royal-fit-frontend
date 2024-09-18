@@ -249,16 +249,16 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       next: (result) => {
         if (result.desconto && result.desconto > 0) this.disableDescontoButtom = true
 
-        this.totalPreco = result.valorTotal
+        // this.totalPreco = result.valorTotal
         this.pedidoForm.patchValue({
           clienteId: result.clienteId,
           data: result.data ? result.data.substring(0, 10) : null,
           hora: result.hora,
-          valorTotal: result.valorTotal - result.desconto,
+          valorTotal: result.valorTotal - result.desconto ?? 0,
           funcionarioId: result.funcionarioId,
           meioPagamentoId: result.meioPagamentoId,
           // statusPagamentoId: result.statusPagamentoId,
-          isPagamentoPosterior: result.isPagamentoPosterior,
+          // isPagamentoPosterior: result.isPagamentoPosterior,
           isLiberado: result.isLiberado ? 1 : 0,
           desabilitado: result.desabilitado,
           descricao: result.descricao,
@@ -382,7 +382,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         })
         return
       }
-      this.pedidoItens.push(this.pedidoItemForm.value)
+      this.pedidoItens.push({ ...this.pedidoItemForm.value, id: this.pedidoItens.length + 1 })
+
       this.itensTable.push({
         id: this.itensTable.length + 1,
         produtoId: this.pedidoItemForm.controls.produtoId.value,
@@ -391,8 +392,14 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         preco: this.getTotalMinusDesc(this.produtoAtual.preco),
         valor: this.pedidoItemForm.controls.valor.value,
       })
-      this.totalPreco += this.pedidoItemForm.controls.valor.value
-      this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
+      const novoTotal = this.pedidoItens.reduce((acc, item) => acc + item.valor, 0)
+
+      // this.totalPreco = novoTotal
+      this.pedidoForm.patchValue({
+        subTotal: novoTotal,
+        valorTotal: novoTotal,
+      })
+
       this.pedidoItemForm.reset()
       this.disableAddButton = true
     } else {
@@ -406,10 +413,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   editItem() {
     if (this.pedidoItemFormEdit.valid) {
       const indexItens = this.pedidoItens.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
-      this.totalPreco -= this.getTotalMinusDesc(this.pedidoItens[indexItens].valor)
-      this.totalPreco += this.pedidoItemFormEdit.value.valor
-      this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
-      this.pedidoItens.splice(indexItens, 1, this.pedidoItemFormEdit.value)
+      // this.totalPreco -= this.getTotalMinusDesc(this.pedidoItens[indexItens].valor)
+      // this.totalPreco += this.pedidoItemFormEdit.value.valor
+      // this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
+      this.pedidoItens.splice(indexItens, 1, { ...this.pedidoItemFormEdit.value, id: this.pedidoItens.length + 1 })
       const indexTable = this.itensTable.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
       this.itensTable.splice(indexTable, 1, {
         id: this.pedidoItemFormEdit.value.id,
@@ -419,6 +426,15 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         preco: this.getTotalMinusDesc(this.produtoAtualEdit.preco),
         valor: this.pedidoItemFormEdit.controls.valor.value,
       })
+
+      const novoTotal = this.pedidoItens.reduce((acc, item) => acc + item.valor, 0)
+
+      // this.totalPreco = novoTotal
+      this.pedidoForm.patchValue({
+        subTotal: novoTotal,
+        valorTotal: novoTotal,
+      })
+
       this.poModal.close()
     } else {
       this.poNotification.warning({
@@ -509,11 +525,12 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   private deleteParameterItem(item: any) {
-    this.totalPreco -= item.valor
-    this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
-    const index = this.itensTable.indexOf(item)
-    this.itensTable.splice(index, 1)
-    this.pedidoItens.splice(index, 1)
+    const indexTable = this.itensTable.indexOf(item)
+    const indexItens = this.pedidoItens.findIndex((it) => it.id === item.id)
+    this.itensTable.splice(indexTable, 1)
+    this.pedidoItens.splice(indexItens, 1)
+    const novoTotal = this.pedidoItens.reduce((acc, item) => acc + item.valor, 0)
+    this.pedidoForm.controls.valorTotal.setValue(novoTotal)
   }
 
   private tableActionsConstructor(literals: any, tableActions: PoTableAction[]) {
@@ -526,8 +543,16 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   aplicarDesconto() {
-    this.totalPreco = +this.pedidoForm.value.subTotal - +this.pedidoForm.value.desconto
-    this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
-    this.disableDescontoButtom = true
+    if (this.pedidoForm.value.desconto > 0 && this.pedidoForm.value.desconto <= this.totalPreco) {
+      const novoTotal = +this.pedidoForm.value.subTotal - +this.pedidoForm.value.desconto
+      // this.totalPreco = novoTotal
+      this.pedidoForm.controls.valorTotal.setValue(novoTotal)
+      this.disableDescontoButtom = true
+    } else {
+      this.poNotification.warning({
+        message: "O desconto deve ser maior que R$ 0,00 e menor que o valor total!",
+        duration: environment.poNotificationDuration,
+      })
+    }
   }
 }
