@@ -171,6 +171,7 @@
             p-clean
             [p-label]="this.literals.fields.form['quantidade']"
             p-maxlength="10"
+            (p-change)="onChengeQuantidadeRetiradaBonificacao($event)"
           >
           </po-number>
         </div>
@@ -287,7 +288,7 @@
           </div>
 
           <div class="po-sm-12 po-md-6 po-lg-3 po-xl-3 no-padding po-mt-4">
-            <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Gerar Relatório" (p-click)="gerarRelatorioPagamento()">
+            <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Gerar Relatório" (p-click)="gerarRelatorioEntradaGarrafoes()">
             </po-button>
           </div>
         </form>

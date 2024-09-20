@@ -18,6 +18,7 @@ import { RestService } from "src/app/services/rest.service"
 import { LanguagesService } from "src/app/services/languages.service"
 import { ExcelService } from "src/app/services/excel.service"
 import { AuthService } from "src/app/services/auth.service"
+import { parse } from "uuid"
 
 @Component({
   selector: "app-balanco-edit",
@@ -322,7 +323,17 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   }
 
   public addPagamento() {
-    if (this.addPagamentoForm.valid) {
+    if (this.addPagamentoForm.valid && +this.addPagamentoForm.value.valor > 0) {
+      if (+this.addPagamentoForm.value.valor > +this.balancoForm.value.saldoDevedor) {
+        this.poNotification.warning({
+          message: "Valor do pagamento não pode ser maior que o saldo devedor",
+          duration: environment.poNotificationDuration,
+        })
+        this.addPagamentoForm.patchValue({
+          valor: null,
+        })
+        return
+      }
       this.subscriptions.add(
         this.restService.put(`/balancos/add-valor/${this.id}`, this.addPagamentoForm.value).subscribe({
           next: () => {
@@ -338,6 +349,11 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
           error: (error) => console.log(error),
         })
       )
+    } else {
+      this.poNotification.warning({
+        message: "Preencha todos os campos obrigatórios / Valor inválido",
+        duration: environment.poNotificationDuration,
+      })
     }
   }
 
@@ -372,7 +388,11 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   }
 
   public addRetiradaBonificacao() {
-    if (this.addRetiradaBonificacaoForm.valid) {
+    if (
+      this.addRetiradaBonificacaoForm.valid &&
+      this.addRetiradaBonificacaoForm.value.quantidade <= this.balancoForm.value.bonificacaoDisponivel &&
+      +this.addRetiradaBonificacaoForm.value.quantidade > 0
+    ) {
       const data = {
         ...this.addRetiradaBonificacaoForm.value,
         impressoraIp: this.user.impressoraIp,
@@ -386,12 +406,21 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
             })
             this.getBalanco(this.id)
             this.addRetiradaBonificacaoForm.patchValue({
-              quantidade: null,
+              quantidade: 0,
             })
           },
           error: (error) => console.log(error),
         })
       )
+    } else {
+      this.addRetiradaBonificacaoForm.patchValue({
+        quantidade: 0,
+      })
+
+      this.poNotification.warning({
+        message: "Quantidade de bonificação indisponível ou inválida",
+        duration: environment.poNotificationDuration,
+      })
     }
   }
 
@@ -446,14 +475,14 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   }
 
   public gerarRelatorioEntradaGarrafoes() {
-    if (this.relatorioPagamentoForm.valid) {
+    if (this.relatorioEntradaGarrafoesForm.valid) {
       this.subscriptions.add(
         this.restService
-          .post(`/entradas-garrafao/relatorio-cliente/${this.balancoForm.value.clienteId}`, this.relatorioPagamentoForm.value)
+          .post(`/entradas-garrafao/relatorio-cliente/${this.balancoForm.value.clienteId}`, this.relatorioEntradaGarrafoesForm.value)
           .subscribe({
             next: (result) => {
-              const datIni = this.relatorioPagamentoForm.value.dataInicio.toString().split("-").reverse().join("/")
-              const datFim = this.relatorioPagamentoForm.value.dataFim.toString().split("-").reverse().join("/")
+              const datIni = this.relatorioEntradaGarrafoesForm.value.dataInicio.toString().split("-").reverse().join("/")
+              const datFim = this.relatorioEntradaGarrafoesForm.value.dataFim.toString().split("-").reverse().join("/")
               this.excelService.createDownload(result, `Relatório-Pagamentos-${this.clienteNome}-${datIni}-${datFim}`)
               this.poNotification.success({
                 message: "Relatório gerado com sucesso",
@@ -480,5 +509,13 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
         duration: environment.poNotificationDuration,
       })
     }
+  }
+
+  onChengeQuantidadeRetiradaBonificacao(event) {
+    const valor = Math.floor(parseInt(event))
+
+    this.addRetiradaBonificacaoForm.patchValue({
+      quantidade: valor,
+    })
   }
 }

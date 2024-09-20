@@ -94,7 +94,8 @@ export class BalancoListComponent implements OnInit {
           (this.initialFields = [
             { property: "id", key: true, visible: false },
             { property: "clienteNome", label: this.literals.fields.list["clienteNome"] },
-            { property: "bonificacaoDisponivel", label: this.literals.fields.list["bonificacaoDisponivel"], type: "number" },
+            { property: "garrafoesDisponivel", label: "Garrafões Disponíveis", type: "number" },
+            { property: "bonificacaoDisponivel", label: "Bonificações Disponíveis", type: "number" },
             { property: "saldoDevedor", label: this.literals.fields.list["saldoDevedor"], type: "currency", currency: "BRL" },
           ]),
       })

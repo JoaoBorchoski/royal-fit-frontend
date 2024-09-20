@@ -128,46 +128,8 @@
             (p-change)="verifyProdutos()"
           >
           </po-input>
-        </div>
-
-        <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
-          <po-combo
-            class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
-            formControlName="statusPagamentoId"
-            name="statusPagamentoId"
-            p-clean
-            [p-disabled]="readonly"
-            [p-filter-service]="statusPagamentoIdService"
-            [p-label]="this.literals.fields.form['statusPagamentoId']"
-            p-required
-            (p-change)="verifyProdutos()"
-          >
-          </po-combo>
-        </div> -->
-
-        <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
-        <po-checkbox
-          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
-          formControlName="isPagamentoPosterior"
-          name="isPagamentoPosterior"
-          [p-disabled]="readonly"
-          [p-label]="this.literals.fields.form['isPagamentoPosterior']"
-        >
-        </po-checkbox>
-      </div> -->
-        <!-- 
-        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-          <po-checkbox
-            class="po-sm-12 po-md-12 po-lg-12 po-xl-12 checkbox-header"
-            formControlName="desabilitado"
-            name="desabilitado"
-            [p-disabled]="readonly"
-            [p-label]="this.literals.fields.form['desabilitado']"
-          >
-          </po-checkbox>
-        </div> -->
-      </form></po-tab
-    >
+        </div></form
+    ></po-tab>
     <po-tab p-label="Produtos" [p-disabled]="disableProdutos">
       <form [formGroup]="pedidoItemForm">
         <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
@@ -245,7 +207,6 @@
                 p-maxlength="10"
                 p-decimal-maxlength="2"
                 [p-readonly]="disableDescontoButtom"
-                (p-change)="verifyProdutos()"
               >
               </po-decimal>
             </div>
@@ -293,12 +254,6 @@
       <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="max-height: 450px; overflow-y: auto">
         <po-table [p-items]="itensTable" [p-columns]="columnsTable" [p-actions]="tableActions" [p-actions-right]="true"> </po-table>
       </div>
-
-      <!-- <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="display: flex; justify-content: end; margin-top: 8px">
-        <span style="background: var(--primary-color); padding: 8px 16px; color: white"
-          >Valor Total: {{ totalPreco | currency : "BRL" }}</span
-        >
-      </div> -->
     </po-tab>
   </po-tabs>
 </po-page-default>

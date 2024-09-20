@@ -254,7 +254,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           clienteId: result.clienteId,
           data: result.data ? result.data.substring(0, 10) : null,
           hora: result.hora,
-          valorTotal: result.valorTotal - result.desconto ?? 0,
+          // valorTotal: result.valorTotal - result.desconto ?? 0,
+          valorTotal: +(result.valorTotal - result.desconto ?? 0).toFixed(2),
           funcionarioId: result.funcionarioId,
           meioPagamentoId: result.meioPagamentoId,
           // statusPagamentoId: result.statusPagamentoId,
@@ -288,6 +289,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   imprimirCanhoto(data) {
     data.isLiberado = data.isLiberado == 1 ? true : false
     data.pedidoItemForm = this.pedidoItens
+    data.impressoraIp = this.user.impressoraIp
+
     this.subscriptions.add(
       this.restService.put(`/pedidos/${this.id}`, data).subscribe({
         next: () => {
@@ -313,6 +316,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       data.isLiberado = data.isLiberado == 1 ? true : false
       data.pedidoItemForm = this.pedidoItens
       data.impressoraIp = this.user.impressoraIp
+      data.valorTotal = this.pedidoForm.value.subTotal
+
       if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
         this.subscriptions.add(
           this.restService.put(`/pedidos/${this.id}`, data).subscribe({
@@ -394,10 +399,9 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       })
       const novoTotal = this.pedidoItens.reduce((acc, item) => acc + item.valor, 0)
 
-      // this.totalPreco = novoTotal
       this.pedidoForm.patchValue({
         subTotal: novoTotal,
-        valorTotal: novoTotal,
+        valorTotal: novoTotal - this.pedidoForm.value.desconto,
       })
 
       this.pedidoItemForm.reset()
@@ -429,12 +433,12 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
       const novoTotal = this.pedidoItens.reduce((acc, item) => acc + item.valor, 0)
 
-      // this.totalPreco = novoTotal
       this.pedidoForm.patchValue({
         subTotal: novoTotal,
-        valorTotal: novoTotal,
+        valorTotal: novoTotal - this.pedidoForm.value.desconto,
       })
 
+      this.pedidoItemFormEdit.reset()
       this.poModal.close()
     } else {
       this.poNotification.warning({
@@ -530,7 +534,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     this.itensTable.splice(indexTable, 1)
     this.pedidoItens.splice(indexItens, 1)
     const novoTotal = this.pedidoItens.reduce((acc, item) => acc + item.valor, 0)
-    this.pedidoForm.controls.valorTotal.setValue(novoTotal)
+    this.pedidoForm.patchValue({
+      subTotal: novoTotal,
+      valorTotal: novoTotal - this.pedidoForm.value.desconto,
+    })
   }
 
   private tableActionsConstructor(literals: any, tableActions: PoTableAction[]) {
@@ -543,14 +550,14 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   aplicarDesconto() {
-    if (this.pedidoForm.value.desconto > 0 && this.pedidoForm.value.desconto <= this.totalPreco) {
+    if (this.pedidoForm.valid && +this.pedidoForm.value.desconto > 0) {
       const novoTotal = +this.pedidoForm.value.subTotal - +this.pedidoForm.value.desconto
       // this.totalPreco = novoTotal
       this.pedidoForm.controls.valorTotal.setValue(novoTotal)
       this.disableDescontoButtom = true
     } else {
       this.poNotification.warning({
-        message: "O desconto deve ser maior que R$ 0,00 e menor que o valor total!",
+        message: "O desconto deve ser maior que R$ 0,00!",
         duration: environment.poNotificationDuration,
       })
     }

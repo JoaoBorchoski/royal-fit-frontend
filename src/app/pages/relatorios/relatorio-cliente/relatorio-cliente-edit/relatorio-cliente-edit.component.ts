@@ -7,6 +7,7 @@ import { Subscription } from "rxjs"
 import { environment } from "src/environments/environment"
 import { RestService } from "src/app/services/rest.service"
 import { LanguagesService } from "src/app/services/languages.service"
+import { AuthService } from "src/app/services/auth.service"
 
 @Component({
   selector: "app-relatorio-cliente-edit",
@@ -18,6 +19,7 @@ export class RelatorioClienteEditComponent implements OnInit, OnDestroy {
   public readonly = false
   public result: any
   public literals: any = {}
+  public user: any
 
   public isLiberadoSelect = [
     { label: "Aguardando", value: 0 },
@@ -46,11 +48,13 @@ export class RelatorioClienteEditComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private poNotification: PoNotificationService,
-    private languagesService: LanguagesService
+    private languagesService: LanguagesService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.getLiterals()
+    this.user = this.authService.userValue.user
 
     this.id = this.activatedRoute.snapshot.paramMap.get("id")
 
@@ -184,6 +188,7 @@ export class RelatorioClienteEditComponent implements OnInit, OnDestroy {
 
   imprimirCanhoto(data) {
     data.isLiberado = data.isLiberado == 1 ? true : false
+    data.impressoraIp = this.user.impressoraIp
     this.subscriptions.add(
       this.restService.put(`/pedido-bonificados/${this.id}`, data).subscribe({
         next: () => {
