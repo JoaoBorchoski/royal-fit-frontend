@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http"
 import { Component, OnDestroy, OnInit } from "@angular/core"
 import { ActivatedRoute, Router } from "@angular/router"
-import { PoDynamicFormField, PoPageAction, PoNotificationService, PoNotification } from "@po-ui/ng-components"
+import { PoDynamicFormField, PoPageAction, PoNotificationService, PoNotification, PoLookupColumn } from "@po-ui/ng-components"
 import { FormBuilder } from "@angular/forms"
 import { Subscription } from "rxjs"
 import { environment } from "src/environments/environment"
@@ -32,6 +32,7 @@ export class EstoqueEditComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription()
 
   public readonly pageActions: Array<PoPageAction> = []
+  columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
 
   constructor(
     private formBuilder: FormBuilder,
