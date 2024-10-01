@@ -34,5 +34,6 @@ export const pedidosFields = {
     editar: "Editar",
     excluir: "Excluir",
     subTotal: "SubTotal (R$)",
+    tipoEntrega: "Tipo Entrega",
   },
 }

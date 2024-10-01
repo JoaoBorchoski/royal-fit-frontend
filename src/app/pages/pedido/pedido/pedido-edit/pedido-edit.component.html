@@ -63,6 +63,21 @@
           </po-input>
         </div>
 
+        <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+          <po-select
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+            [p-label]="this.literals.fields.form['tipoEntrega']"
+            name="tipoEntrega"
+            formControlName="tipoEntrega"
+            [p-options]="tipoEntregaSelect"
+            p-placeholder="Selecione"
+            [p-readonly]="readonly"
+            p-required
+            [p-disabled]="readonly"
+            (p-change)="verifyProdutos()"
+          ></po-select>
+        </div>
+
         <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
           <po-lookup
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"

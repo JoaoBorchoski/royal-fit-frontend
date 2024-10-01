@@ -42,6 +42,11 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
     { label: "Não", value: 1 },
   ]
 
+  tamanhoCasco = [
+    { label: "20L", value: 20 },
+    { label: "10L", value: 10 },
+  ]
+
   balancoForm = this.formBuilder.group({
     clienteId: null,
     saldoDevedor: 0,
@@ -61,6 +66,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
     clienteId: null,
     quantidade: null,
     isRoyalfit: null,
+    tamanhoCasco: null,
   })
 
   addRetiradaBonificacaoForm = this.formBuilder.group({
@@ -483,7 +489,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
             next: (result) => {
               const datIni = this.relatorioEntradaGarrafoesForm.value.dataInicio.toString().split("-").reverse().join("/")
               const datFim = this.relatorioEntradaGarrafoesForm.value.dataFim.toString().split("-").reverse().join("/")
-              this.excelService.createDownload(result, `Relatório-Pagamentos-${this.clienteNome}-${datIni}-${datFim}`)
+              this.excelService.createDownload(result, `Relatório-Entrada-Garrafões-${this.clienteNome}-${datIni}-${datFim}`)
               this.poNotification.success({
                 message: "Relatório gerado com sucesso",
                 duration: environment.poNotificationDuration,

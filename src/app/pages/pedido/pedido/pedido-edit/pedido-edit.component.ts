@@ -42,6 +42,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   public descPorcentagem: number = 0
   public disableDescontoButtom: boolean = false
   public user: any
+  public descontosCliente: any[] = []
 
   public pedidoItens: any[] = []
   public tableActions: PoTableAction[] = []
@@ -51,6 +52,12 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   public isLiberadoSelect = [
     { label: "Aguardando", value: 0 },
     { label: "Liberado", value: 1 },
+  ]
+
+  public tipoEntregaSelect = [
+    { label: "Retirada na Fonte", value: 0 },
+    { label: "Entrega PG", value: 1 },
+    { label: "Entrega outras regiões", value: 2 },
   ]
 
   columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
@@ -100,6 +107,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     descricao: "",
     desconto: 0,
     subTotal: null,
+    tipoEntrega: null,
   })
 
   pedidoItemForm = this.formBuilder.group({
@@ -133,7 +141,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   public funcionarioIdService = `${environment.baseUrl}/funcionarios/select`
   public meioPagamentoIdService = `${environment.baseUrl}/meios-pagamento/select`
   public statusPagamentoIdService = `${environment.baseUrl}/status-pagamento/select`
-  public produtoIdService = `${environment.baseUrl}/produtos/select`
+  public produtoIdService = `${environment.baseUrl}/produtos/select-without-desabilitado`
 
   subscriptions = new Subscription()
 
@@ -265,6 +273,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           descricao: result.descricao,
           desconto: result.desconto,
           subTotal: result.valorTotal,
+          tipoEntrega: result.tipoEntrega,
         })
         this.getPedidoItens(result.pedidoItemForm)
       },
@@ -470,11 +479,44 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         next: (res) => {
           this.prodNameEdit = res.nome
           this.produtoAtual = res
-          if (this.pedidoItemForm.controls.quantidade.value) {
+          this.descontosCliente.forEach((desconto) => {
+            if (res.id === desconto.produtoId) {
+              this.produtoAtual.preco -= (this.produtoAtual.preco * desconto.desconto) / 100
+            }
+          })
+
+          const quantidade = +this.pedidoItemForm.controls.quantidade.value
+          if (quantidade) {
+            const produtoIdEspecial = "fbe43047-093b-496b-9c59-ce5c2ce66b34"
+            const tipoEntrega = this.pedidoForm.controls.tipoEntrega.value
+            const isProdutoEspecial = res.id === produtoIdEspecial
+
+            const aplicarPreco = (faixas: { limite: number; preco: number }[]) => {
+              const faixa = faixas.find((f) => quantidade <= f.limite) || faixas[faixas.length - 1]
+              this.produtoAtual.preco = faixa.preco
+            }
+
+            if (isProdutoEspecial) {
+              if (tipoEntrega === 1) {
+                aplicarPreco([
+                  { limite: 49, preco: 5.8 },
+                  { limite: 99, preco: 5.7 },
+                  { limite: Infinity, preco: 5.6 },
+                ])
+              } else if (tipoEntrega === 2) {
+                aplicarPreco([
+                  { limite: 19, preco: 6.9 },
+                  { limite: 29, preco: 6.8 },
+                  { limite: 49, preco: 6.5 },
+                  { limite: Infinity, preco: 6.4 },
+                ])
+              }
+            }
+
             this.verifyAddButton()
-            this.pedidoItemForm.controls.valor.setValue(
-              this.getTotalMinusDesc(this.produtoAtual.preco * +this.pedidoItemForm.controls.quantidade.value)
-            )
+
+            const total = this.getTotalMinusDesc(this.produtoAtual.preco * quantidade)
+            this.pedidoItemForm.controls.valor.setValue(total)
           }
         },
       })
@@ -491,6 +533,13 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         next: (res) => {
           this.prodNameEdit = res.nome
           this.produtoAtualEdit = res
+
+          this.descontosCliente.forEach((desconto) => {
+            if (res.id === desconto.produtoId) {
+              this.produtoAtualEdit.preco = this.produtoAtualEdit.preco - (this.produtoAtualEdit.preco * desconto.desconto) / 100
+            }
+          })
+
           if (this.pedidoItemFormEdit.controls.quantidade.value) {
             this.pedidoItemFormEdit.controls.valor.setValue(
               this.getTotalMinusDesc(this.produtoAtualEdit.preco * +this.pedidoItemFormEdit.controls.quantidade.value)
@@ -504,13 +553,41 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   onQuantidadeChange(event) {
     if (this.produtoAtual) {
       this.verifyAddButton()
-      this.pedidoItemForm.controls.valor.setValue(this.getTotalMinusDesc(this.produtoAtual.preco * event))
+
+      const tipoEntrega = this.pedidoForm.controls.tipoEntrega.value
+      const produtoIdEspecial = "fbe43047-093b-496b-9c59-ce5c2ce66b34"
+      const quantidade = +event
+
+      const aplicarPreco = (faixas: { limite: number; preco: number }[]) => {
+        const faixa = faixas.find((f) => quantidade <= f.limite) || faixas[faixas.length - 1]
+        this.produtoAtual.preco = faixa.preco
+      }
+
+      if (this.produtoAtual.id === produtoIdEspecial) {
+        if (tipoEntrega === 1) {
+          aplicarPreco([
+            { limite: 49, preco: 5.8 },
+            { limite: 99, preco: 5.7 },
+            { limite: Infinity, preco: 5.6 },
+          ])
+        } else if (tipoEntrega === 2) {
+          aplicarPreco([
+            { limite: 19, preco: 6.9 },
+            { limite: 29, preco: 6.8 },
+            { limite: 49, preco: 6.5 },
+            { limite: Infinity, preco: 6.4 },
+          ])
+        }
+      }
+
+      const total = +(this.produtoAtual.preco * quantidade).toFixed(2)
+      this.pedidoItemForm.controls.valor.setValue(total)
     }
   }
 
   onQuantidadeChangeEdit(event) {
     if (this.produtoAtualEdit) {
-      this.pedidoItemFormEdit.controls.valor.setValue(this.getTotalMinusDesc(this.produtoAtualEdit.preco * event))
+      this.pedidoItemFormEdit.controls.valor.setValue(+(+this.produtoAtualEdit.preco * +event).toFixed(2))
     }
   }
 
@@ -519,8 +596,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.restService.get(`/clientes/${event}`).subscribe({
-        next: (res) => {
-          this.descPorcentagem = res.desconto
+        next: (result: any) => {
+          this.descontosCliente = result.descontos
         },
       })
     )

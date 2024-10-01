@@ -1,8 +1,15 @@
 import { HttpClient } from "@angular/common/http"
 import { Component, OnDestroy, OnInit } from "@angular/core"
 import { ActivatedRoute, Router } from "@angular/router"
-import { PoDynamicFormField, PoPageAction, PoNotificationService, PoNotification, PoComboOption } from "@po-ui/ng-components"
-import { FormBuilder } from "@angular/forms"
+import {
+  PoDynamicFormField,
+  PoPageAction,
+  PoNotificationService,
+  PoNotification,
+  PoComboOption,
+  PoLookupColumn,
+} from "@po-ui/ng-components"
+import { FormArray, FormBuilder } from "@angular/forms"
 import { Subscription } from "rxjs"
 import { environment } from "src/environments/environment"
 import { RestService } from "src/app/services/rest.service"
@@ -41,6 +48,8 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
   public result: any
   public literals: any = {}
   public CnpjMask = "99.999.999/9999-99"
+  public produtoIdService = `${environment.baseUrl}/produtos/select`
+  columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
 
   clienteForm = this.formBuilder.group({
     nome: "",
@@ -48,7 +57,7 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
     email: "",
     cep: "",
     isBonificado: false,
-    desconto: null,
+    desconto: 0,
     estadoId: null,
     cidadeId: null,
     bairro: "",
@@ -57,7 +66,49 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
     complemento: "",
     telefone: "",
     desabilitado: false,
+    descontos: this.formBuilder.array([
+      this.formBuilder.group({
+        produtoId: "33367833-9fc0-4e17-af4e-a835d9edc3be",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "fbe43047-093b-496b-9c59-ce5c2ce66b34",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "907a8147-dada-4532-82a7-0346666792c9",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "906b4eb8-7fa7-41c3-88f1-b826048ebf31",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "28f4726e-db0f-4d48-88a0-64f0ec4d697b",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "4c652b29-b73d-4148-8015-5055cfdd8adc",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "83ee8914-44d9-48be-9b9b-55057bb44787",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "17239db9-cbce-487f-9703-e700b5d3cc42",
+        desconto: 0,
+      }),
+      this.formBuilder.group({
+        produtoId: "1a1193c9-0ff4-4d1c-95b3-8a9c8bc9334b",
+        desconto: 0,
+      }),
+    ]),
   })
+
+  get descontos() {
+    return this.clienteForm.get("descontos") as FormArray
+  }
 
   public cepErrorNotification: PoNotification = {
     message: "CEP inválido",
@@ -176,6 +227,8 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
           telefone: result.telefone,
           desabilitado: result.desabilitado,
         })
+
+        this.clienteForm.controls.descontos.patchValue(result.descontos)
       },
       error: (error) => console.log(error),
     })
@@ -304,5 +357,17 @@ export class ClienteEditComponent implements OnInit, OnDestroy {
     this.clienteForm.controls.cpfCnpj.setErrors({
       error: "CNPJ Inválido!",
     })
+  }
+
+  onChangeDesconto(event: any, index: number) {
+    const value = parseFloat(event.toString().replace(",", "."))
+
+    if (value <= 0 || value >= 100) {
+      this.poNotification.warning({
+        message: "Desconto deve ser entre 0 e 100",
+        duration: environment.poNotificationDuration,
+      })
+      this.clienteForm.controls.descontos.at(index).patchValue({ desconto: 0 })
+    }
   }
 }

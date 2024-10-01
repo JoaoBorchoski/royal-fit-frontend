@@ -1,5 +1,9 @@
 <po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
   <form [formGroup]="clienteForm">
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-divider p-label="Infomações Básicas"></po-divider>
+    </div>
+
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-input
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
@@ -87,7 +91,7 @@
       </po-select>
     </div>
 
-    <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+    <!-- <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
       <po-decimal
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
         formControlName="desconto"
@@ -99,6 +103,50 @@
         [p-thousand-maxlength]="10"
         [p-label]="this.literals.fields.form['desconto']"
       ></po-decimal>
+    </div> -->
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-divider p-label="Infomações sobre Descontos"></po-divider>
+    </div>
+
+    <div formArrayName="descontos">
+      <div *ngFor="let desc of descontos.controls; let i = index">
+        <div [formGroupName]="i">
+          <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+            <po-lookup
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+              formControlName="produtoId"
+              name="produtoId"
+              p-field-label="label"
+              p-field-value="value"
+              p-clean
+              p-disabled="true"
+              [p-filter-service]="produtoIdService"
+              p-label="Produto"
+              p-required
+              [p-columns]="columnsFornecedor"
+            >
+            </po-lookup>
+          </div>
+          <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+            <po-decimal
+              class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+              formControlName="desconto"
+              name="desconto"
+              p-clean
+              p-decimal="2"
+              p-required
+              [p-thousand-maxlength]="10"
+              p-label="Desconto"
+              (p-change)="onChangeDesconto($event, i)"
+            ></po-decimal>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-divider p-label="Infomações Adicionais"></po-divider>
     </div>
 
     <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
