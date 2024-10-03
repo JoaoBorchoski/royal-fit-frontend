@@ -55,7 +55,7 @@
         </div>
 
         <div class="po-sm-12 po-md-12 po-lg-6 po-xl-6 no-padding">
-          <po-number
+          <po-input
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
             formControlName="garrafoesDisponivel"
             name="garrafoesDisponivel"
@@ -65,7 +65,7 @@
             p-readonly="true"
             p-decimal-maxlength="2"
           >
-          </po-number>
+          </po-input>
         </div>
       </form>
 
@@ -74,7 +74,7 @@
       </div>
 
       <form [formGroup]="addPagamentoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-required">
           <po-decimal
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
             formControlName="valor"
@@ -83,6 +83,7 @@
             [p-label]="this.literals.fields.form['valor']"
             p-maxlength="10"
             p-decimal-maxlength="2"
+            p-required
           >
           </po-decimal>
         </div>
@@ -98,15 +99,16 @@
             [p-disabled]="readonly"
             [p-filter-service]="meioPagamentoIdService"
             [p-label]="this.literals.fields.form['meioPagamentoId']"
-            p-required
             [p-columns]="columnsFornecedor"
+            p-required
           >
           </po-lookup>
         </div>
 
-        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-required">
           <po-datepicker
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+            p-required
             formControlName="data"
             name="data"
             p-clean
@@ -126,7 +128,7 @@
       </div>
 
       <form [formGroup]="addGarrafaoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-        <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding">
+        <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding po-required">
           <po-number
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
             formControlName="quantidade"
@@ -135,10 +137,11 @@
             [p-label]="this.literals.fields.form['quantidade']"
             p-maxlength="10"
             p-required
+            p-required
           >
           </po-number>
         </div>
-        <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding">
+        <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding po-required">
           <po-select
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
             formControlName="tamanhoCasco"
@@ -153,7 +156,7 @@
           </po-select>
         </div>
 
-        <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding">
+        <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding po-required">
           <po-select
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
             formControlName="isRoyalfit"
@@ -178,11 +181,12 @@
       </div>
 
       <form *ngIf="isBonificado" [formGroup]="addRetiradaBonificacaoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-        <div class="po-sm-12 po-md-12 po-lg-4 po-xl-4 no-padding">
+        <div class="po-sm-12 po-md-12 po-lg-9 po-xl-9 no-padding po-required">
           <po-number
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
             formControlName="quantidade"
             name="quantidade"
+            p-required
             p-clean
             [p-label]="this.literals.fields.form['quantidade']"
             p-maxlength="10"
@@ -191,7 +195,7 @@
           </po-number>
         </div>
 
-        <div class="po-sm-12 po-md-12 po-lg-4 po-xl-4 no-padding po-mt-4">
+        <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding po-mt-4">
           <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Retirar" (p-click)="addRetiradaBonificacao()"> </po-button>
         </div>
       </form>
