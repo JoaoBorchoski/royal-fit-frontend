@@ -104,7 +104,7 @@
             p-field-label="label"
             p-field-value="value"
             p-clean
-            [p-disabled]="readonly"
+            [p-disabled]="readonly || disableMeioPagamento"
             [p-filter-service]="meioPagamentoIdService"
             [p-label]="this.literals.fields.form['meioPagamentoId']"
             p-required
@@ -211,7 +211,7 @@
 
       <form [formGroup]="pedidoForm">
         <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-          <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
+          <!-- <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
             <div class="po-sm-12 po-md-8 po-lg-8 po-xl-8 no-padding">
               <po-decimal
                 class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
@@ -249,7 +249,8 @@
               p-readonly="true"
             >
             </po-decimal>
-          </div>
+          </div> -->
+
           <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding">
             <po-decimal
               class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
@@ -266,7 +267,7 @@
         </div>
       </form>
 
-      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" style="max-height: 450px; overflow-y: auto">
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12" style="max-height: 450px; overflow-y: auto">
         <po-table [p-items]="itensTable" [p-columns]="columnsTable" [p-actions]="tableActions" [p-actions-right]="true"> </po-table>
       </div>
     </po-tab>

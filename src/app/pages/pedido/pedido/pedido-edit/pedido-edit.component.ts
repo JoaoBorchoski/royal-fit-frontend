@@ -18,6 +18,7 @@ import { RestService } from "src/app/services/rest.service"
 import { LanguagesService } from "src/app/services/languages.service"
 import { finalize } from "rxjs/operators"
 import { AuthService } from "src/app/services/auth.service"
+import { v4 as uuidv4 } from "uuid"
 
 @Component({
   selector: "app-pedido-edit",
@@ -30,6 +31,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   public id: string
   public readonly = false
+  public disableMeioPagamento = false
   public result: any
   public literals: any = {}
   public produtoAtual: any
@@ -167,6 +169,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     this.pageButtonsBuilder(this.getPageType(this.activatedRoute.snapshot.routeConfig.path))
 
     if (this.id) {
+      this.disableMeioPagamento = true
       this.subscriptions.add(this.getPedido(this.id))
     }
   }
@@ -262,8 +265,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           clienteId: result.clienteId,
           data: result.data ? result.data.substring(0, 10) : null,
           hora: result.hora,
-          // valorTotal: result.valorTotal - result.desconto ?? 0,
-          valorTotal: +(result.valorTotal - result.desconto ?? 0).toFixed(2),
+          // valorTotal: +(result.valorTotal - result.desconto ?? 0).toFixed(2),
+          valorTotal: +result.valorTotal.toFixed(2),
           funcionarioId: result.funcionarioId,
           meioPagamentoId: result.meioPagamentoId,
           // statusPagamentoId: result.statusPagamentoId,
@@ -396,10 +399,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         })
         return
       }
-      this.pedidoItens.push({ ...this.pedidoItemForm.value, id: this.pedidoItens.length + 1 })
+      this.pedidoItens.push({ ...this.pedidoItemForm.value, id: uuidv4() })
 
       this.itensTable.push({
-        id: this.itensTable.length + 1,
+        id: uuidv4(),
         produtoId: this.pedidoItemForm.controls.produtoId.value,
         produto: this.produtoAtual.nome,
         quantidade: this.pedidoItemForm.controls.quantidade.value,
@@ -429,7 +432,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       // this.totalPreco -= this.getTotalMinusDesc(this.pedidoItens[indexItens].valor)
       // this.totalPreco += this.pedidoItemFormEdit.value.valor
       // this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
-      this.pedidoItens.splice(indexItens, 1, { ...this.pedidoItemFormEdit.value, id: this.pedidoItens.length + 1 })
+      this.pedidoItens.splice(indexItens, 1, { ...this.pedidoItemFormEdit.value, id: this.pedidoItemFormEdit.value.id })
       const indexTable = this.itensTable.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
       this.itensTable.splice(indexTable, 1, {
         id: this.pedidoItemFormEdit.value.id,
