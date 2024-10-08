@@ -15,4 +15,5 @@ export interface User {
   name?: string
   token?: string
   user?: UserDTO
+  isAdmin?: boolean
 }

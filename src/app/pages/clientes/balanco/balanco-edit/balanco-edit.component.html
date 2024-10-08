@@ -176,11 +176,11 @@
         </div>
       </form>
 
-      <div *ngIf="isBonificado" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <div *ngIf="showBonificacao()" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
         <po-divider p-label="Retirada de Bonificação"></po-divider>
       </div>
 
-      <form *ngIf="isBonificado" [formGroup]="addRetiradaBonificacaoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <form *ngIf="showBonificacao()" [formGroup]="addRetiradaBonificacaoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
         <div class="po-sm-12 po-md-12 po-lg-9 po-xl-9 no-padding po-required">
           <po-number
             class="po-sm-12 po-md-12 po-lg-12 po-xl-12"

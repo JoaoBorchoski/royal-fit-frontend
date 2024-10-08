@@ -28,6 +28,7 @@ interface ResponseProps {
       instructionsToSolve?: string
     }
     isDisabled?: boolean
+    isAdmin?: boolean
   }
 }
 
@@ -71,6 +72,7 @@ export class AuthService {
               login: response.user.login,
               avatar: response.user.avatar,
               tfa: response.user.tfa,
+              isAdmin: response.user.isAdmin,
             },
           }
 

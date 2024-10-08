@@ -302,6 +302,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     data.isLiberado = data.isLiberado == 1 ? true : false
     data.pedidoItemForm = this.pedidoItens
     data.impressoraIp = this.user.impressoraIp
+    data.impressao = true
 
     this.subscriptions.add(
       this.restService.put(`/pedidos/${this.id}`, data).subscribe({
@@ -329,6 +330,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       data.pedidoItemForm = this.pedidoItens
       data.impressoraIp = this.user.impressoraIp
       data.valorTotal = this.pedidoForm.value.subTotal
+
+      console.log(data)
 
       if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
         this.subscriptions.add(
@@ -428,6 +431,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   editItem() {
     if (this.pedidoItemFormEdit.valid) {
+      console.log(this.pedidoItemFormEdit.value)
+
       const indexItens = this.pedidoItens.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
       // this.totalPreco -= this.getTotalMinusDesc(this.pedidoItens[indexItens].valor)
       // this.totalPreco += this.pedidoItemFormEdit.value.valor

@@ -158,6 +158,7 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getLiterals()
     this.user = this.authService.userValue.user
+    console.log(this.user)
 
     this.id = this.activatedRoute.snapshot.paramMap.get("id")
 
@@ -523,5 +524,9 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
     this.addRetiradaBonificacaoForm.patchValue({
       quantidade: valor,
     })
+  }
+
+  showBonificacao() {
+    return this.isBonificado && this.user.isAdmin
   }
 }

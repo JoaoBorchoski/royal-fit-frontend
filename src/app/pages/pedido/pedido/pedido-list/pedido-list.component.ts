@@ -36,10 +36,16 @@ export class PedidoListComponent implements OnInit {
     },
   ]
 
-  constructor(private languagesService: LanguagesService) {}
+  constructor(private languagesService: LanguagesService) // private webSocketService: WebSocketService
+
+  {}
 
   ngOnInit() {
     this.getLiterals()
+
+    // this.webSocketService.listen("novoPedido").subscribe((pedido) => {
+    //   this.customTable.updateItems()
+    // })
 
     setInterval(() => {
       this.customTable.updateItems()
