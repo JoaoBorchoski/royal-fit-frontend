@@ -12,7 +12,7 @@ import {
   PoLookupColumn,
 } from "@po-ui/ng-components"
 import { FormBuilder } from "@angular/forms"
-import { Subscription } from "rxjs"
+import { iif, Subscription } from "rxjs"
 import { environment } from "src/environments/environment"
 import { RestService } from "src/app/services/rest.service"
 import { LanguagesService } from "src/app/services/languages.service"
@@ -285,14 +285,49 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   getPedidoItens(itens) {
-    this.pedidoItens = itens
     this.itensTable = itens.map((item, index) => {
-      return {
+      const produtoIdEspecial = "fbe43047-093b-496b-9c59-ce5c2ce66b34"
+      const tipoEntrega = this.pedidoForm.controls.tipoEntrega.value
+      const isProdutoEspecial = item.produtoId === produtoIdEspecial
+      let preco = item.preco
+
+      const aplicarPreco = (faixas: { limite: number; preco: number }[]) => {
+        const faixa = faixas.find((f) => item.quantidade <= f.limite) || faixas[faixas.length - 1]
+        preco = faixa.preco
+      }
+
+      if (isProdutoEspecial) {
+        if (tipoEntrega === 1) {
+          aplicarPreco([
+            { limite: 49, preco: 5.8 },
+            { limite: 99, preco: 5.7 },
+            { limite: Infinity, preco: 5.6 },
+          ])
+        } else if (tipoEntrega === 2) {
+          aplicarPreco([
+            { limite: 19, preco: 6.9 },
+            { limite: 29, preco: 6.8 },
+            { limite: 49, preco: 6.5 },
+            { limite: Infinity, preco: 6.4 },
+          ])
+        }
+      }
+
+      this.pedidoItens.push({
         id: item.id,
         produtoId: item.produtoId,
+        quantidade: item.quantidade,
+        valor: item.valor,
+        preco: preco,
+        produto: item.produtoNome,
+      })
+
+      return {
+        id: item.id,
+        produtoId: item.c,
         produto: item.produtoNome,
         quantidade: item.quantidade,
-        preco: this.getTotalMinusDesc(item.preco),
+        preco: this.getTotalMinusDesc(preco),
         valor: this.getTotalMinusDesc(item.valor),
       }
     })
@@ -330,8 +365,6 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       data.pedidoItemForm = this.pedidoItens
       data.impressoraIp = this.user.impressoraIp
       data.valorTotal = this.pedidoForm.value.subTotal
-
-      console.log(data)
 
       if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
         this.subscriptions.add(
@@ -394,7 +427,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   addIten() {
-    if (this.pedidoItemForm.valid) {
+    if (this.pedidoItemForm.valid && this.verifyAddButton()) {
       if (this.pedidoItens.some((item) => item.produtoId === this.pedidoItemForm.controls.produtoId.value)) {
         this.poNotification.warning({
           message: "Produto já adicionado",
@@ -431,8 +464,6 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   editItem() {
     if (this.pedidoItemFormEdit.valid) {
-      console.log(this.pedidoItemFormEdit.value)
-
       const indexItens = this.pedidoItens.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
       // this.totalPreco -= this.getTotalMinusDesc(this.pedidoItens[indexItens].valor)
       // this.totalPreco += this.pedidoItemFormEdit.value.valor
@@ -466,7 +497,14 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   verifyAddButton() {
+    if (this.pedidoItemForm.controls.valor.value / +this.pedidoItemForm.controls.quantidade.value !== this.produtoAtual.preco) {
+      this.disableAddButton = false
+      return false
+    }
+
     this.disableAddButton = !this.pedidoItemForm.valid
+
+    return true
   }
 
   verifyEditButton() {
@@ -560,8 +598,6 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
   onQuantidadeChange(event) {
     if (this.produtoAtual) {
-      this.verifyAddButton()
-
       const tipoEntrega = this.pedidoForm.controls.tipoEntrega.value
       const produtoIdEspecial = "fbe43047-093b-496b-9c59-ce5c2ce66b34"
       const quantidade = +event
@@ -590,6 +626,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
       const total = +(this.produtoAtual.preco * quantidade).toFixed(2)
       this.pedidoItemForm.controls.valor.setValue(total)
+
+      this.verifyAddButton()
     }
   }
 

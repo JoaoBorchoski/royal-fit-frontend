@@ -36,9 +36,9 @@ export class PedidoListComponent implements OnInit {
     },
   ]
 
-  constructor(private languagesService: LanguagesService) // private webSocketService: WebSocketService
-
-  {}
+  constructor(
+    private languagesService: LanguagesService // private webSocketService: WebSocketService
+  ) {}
 
   ngOnInit() {
     this.getLiterals()
