@@ -278,18 +278,24 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
           subTotal: result.valorTotal,
           tipoEntrega: result.tipoEntrega,
         })
-        this.getPedidoItens(result.pedidoItemForm)
+        this.getPedidoItens(result.pedidoItemForm, result.descontos)
       },
       error: (error) => console.log(error),
     })
   }
 
-  getPedidoItens(itens) {
+  getPedidoItens(itens, descontos) {
     this.itensTable = itens.map((item, index) => {
       const produtoIdEspecial = "fbe43047-093b-496b-9c59-ce5c2ce66b34"
       const tipoEntrega = this.pedidoForm.controls.tipoEntrega.value
       const isProdutoEspecial = item.produtoId === produtoIdEspecial
       let preco = item.preco
+
+      descontos.forEach((desconto) => {
+        if (item.produtoId === desconto.produtoId) {
+          preco -= (preco * desconto.desconto) / 100
+        }
+      })
 
       const aplicarPreco = (faixas: { limite: number; preco: number }[]) => {
         const faixa = faixas.find((f) => item.quantidade <= f.limite) || faixas[faixas.length - 1]
@@ -324,7 +330,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
       return {
         id: item.id,
-        produtoId: item.c,
+        produtoId: item.produtoId,
         produto: item.produtoNome,
         quantidade: item.quantidade,
         preco: this.getTotalMinusDesc(preco),
@@ -427,7 +433,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   addIten() {
-    if (this.pedidoItemForm.valid && this.verifyAddButton()) {
+    if (this.pedidoItemForm.valid) {
       if (this.pedidoItens.some((item) => item.produtoId === this.pedidoItemForm.controls.produtoId.value)) {
         this.poNotification.warning({
           message: "Produto já adicionado",
