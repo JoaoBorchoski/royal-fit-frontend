@@ -124,7 +124,7 @@
       </form>
 
       <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
-        <po-divider p-label="Adicionar Garrafões"></po-divider>
+        <po-divider p-label="Entrada de Garrafões"></po-divider>
       </div>
 
       <form [formGroup]="addGarrafaoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
@@ -173,6 +173,32 @@
 
         <div class="po-sm-12 po-md-12 po-lg-3 po-xl-3 no-padding po-mt-4">
           <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12" p-label="Adicionar" (p-click)="openModalGarrafao()"> </po-button>
+        </div>
+      </form>
+
+      <form [formGroup]="imprimirReciboForm">
+        <div class="po-sm-12 po-md-8 po-lg-8 po-xl-8 no-padding po-mt-2">
+          <po-lookup
+            class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+            formControlName="entradaId"
+            name="entradaId"
+            p-field-label="label"
+            p-field-value="value"
+            p-clean
+            [p-disabled]="readonly"
+            [p-filter-service]="entradaIdService"
+            p-label="Reimpressão de Recibo"
+            p-required
+            (p-change)="onEntradaIdChange($event)"
+            [p-columns]="columnsEntrada"
+            p-infinite-scroll="true"
+          >
+          </po-lookup>
+        </div>
+
+        <div class="po-sm-12 po-md-4 po-lg-4 po-xl-4 no-padding po-mt-2">
+          <po-button class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-mt-4" p-label="Imprimir" (p-click)="imprimirReciboEntrada()">
+          </po-button>
         </div>
       </form>
 

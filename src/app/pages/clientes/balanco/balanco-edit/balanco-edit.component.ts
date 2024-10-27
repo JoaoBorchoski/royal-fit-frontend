@@ -32,10 +32,18 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   public literals: any = {}
   public widthWindow = window.innerWidth
   public clienteNome: string
+  public clienteId: string
   public isBonificado: boolean = false
   columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
   public user: any
   @ViewChild("confirmarEntrada", { static: true }) confirmarEntrada: PoModalComponent
+  public entradaIdService = `${environment.baseUrl}/entradas-garrafao/select`
+  public columnsEntrada: Array<PoLookupColumn> = [
+    { property: "label", label: "Quantidade", width: "20%" },
+    { property: "date", label: "Data", width: "30%" },
+    { property: "isRoyalfit", label: "Garrafão RoyalFit", width: "25%" },
+    { property: "tamanhoCasco", label: "Tamanho Casco", width: "25%" },
+  ]
 
   tipoCasco = [
     { label: "Sim", value: 0 },
@@ -67,6 +75,10 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
     quantidade: null,
     isRoyalfit: null,
     tamanhoCasco: null,
+  })
+
+  imprimirReciboForm = this.formBuilder.group({
+    entradaId: null,
   })
 
   addRetiradaBonificacaoForm = this.formBuilder.group({
@@ -158,7 +170,6 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getLiterals()
     this.user = this.authService.userValue.user
-    console.log(this.user)
 
     this.id = this.activatedRoute.snapshot.paramMap.get("id")
 
@@ -257,6 +268,8 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
           clienteId: result.clienteId,
         })
         this.getPedidos(result.clienteId)
+
+        this.entradaIdService = `${environment.baseUrl}/entradas-garrafao/select` + `?clienteId=${result.clienteId}`
       },
       error: (error) => console.log(error),
     })
@@ -528,5 +541,35 @@ export class BalancoEditComponent implements OnInit, OnDestroy {
 
   showBonificacao() {
     return this.isBonificado && this.user.isAdmin
+  }
+
+  onEntradaIdChange(event) {
+    // console.log(event)
+  }
+
+  imprimirReciboEntrada() {
+    if (this.imprimirReciboForm.valid) {
+      const data = {
+        ...this.imprimirReciboForm.value,
+        impressoraIp: this.user.impressoraIp,
+      }
+
+      this.subscriptions.add(
+        this.restService.post(`/entradas-garrafao/imprimir-recibo`, data).subscribe({
+          next: (result) => {
+            this.poNotification.success({
+              message: "Recibo gerado com sucesso",
+              duration: environment.poNotificationDuration,
+            })
+          },
+          error: (error) => console.log(error),
+        })
+      )
+    } else {
+      this.poNotification.warning({
+        message: "Preencha todos os campos obrigatórios",
+        duration: environment.poNotificationDuration,
+      })
+    }
   }
 }
