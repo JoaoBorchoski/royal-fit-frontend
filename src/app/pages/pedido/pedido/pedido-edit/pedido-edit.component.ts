@@ -60,6 +60,8 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
     { label: "Retirada na Fonte", value: 0 },
     { label: "Entrega PG", value: 1 },
     { label: "Entrega outras regiões", value: 2 },
+    { label: "Entrega União da Vitória", value: 3 },
+    { label: "Entrega Jaguariaiva", value: 4 },
   ]
 
   columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
@@ -316,6 +318,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
             { limite: 49, preco: 6.5 },
             { limite: Infinity, preco: 6.4 },
           ])
+        } else if (tipoEntrega === 3) {
+          aplicarPreco([{ limite: Infinity, preco: 7.95 }])
+        } else if (tipoEntrega === 4) {
+          aplicarPreco([{ limite: Infinity, preco: 6.7 }])
         }
       }
 
@@ -441,7 +447,13 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
         })
         return
       }
-      this.pedidoItens.push({ ...this.pedidoItemForm.value, id: uuidv4() })
+      this.pedidoItens.push({
+        ...this.pedidoItemForm.value,
+        id: uuidv4(),
+        preco: +(+this.pedidoItemForm.value.valor / +this.pedidoItemForm.value.quantidade).toFixed(2),
+      })
+
+      console.log(this.pedidoItens)
 
       this.itensTable.push({
         id: uuidv4(),
@@ -474,7 +486,11 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
       // this.totalPreco -= this.getTotalMinusDesc(this.pedidoItens[indexItens].valor)
       // this.totalPreco += this.pedidoItemFormEdit.value.valor
       // this.pedidoForm.controls.valorTotal.setValue(this.totalPreco)
-      this.pedidoItens.splice(indexItens, 1, { ...this.pedidoItemFormEdit.value, id: this.pedidoItemFormEdit.value.id })
+      this.pedidoItens.splice(indexItens, 1, {
+        ...this.pedidoItemFormEdit.value,
+        id: this.pedidoItemFormEdit.value.id,
+        preco: +(+this.pedidoItemFormEdit.value.valor / +this.pedidoItemFormEdit.value.quantidade).toFixed(2),
+      })
       const indexTable = this.itensTable.findIndex((item) => item.id === this.pedidoItemFormEdit.value.id)
       this.itensTable.splice(indexTable, 1, {
         id: this.pedidoItemFormEdit.value.id,
@@ -562,6 +578,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
                   { limite: 49, preco: 6.5 },
                   { limite: Infinity, preco: 6.4 },
                 ])
+              } else if (tipoEntrega === 3) {
+                aplicarPreco([{ limite: Infinity, preco: 7.95 }])
+              } else if (tipoEntrega === 4) {
+                aplicarPreco([{ limite: Infinity, preco: 6.7 }])
               }
             }
 
@@ -627,6 +647,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
             { limite: 49, preco: 6.5 },
             { limite: Infinity, preco: 6.4 },
           ])
+        } else if (tipoEntrega === 3) {
+          aplicarPreco([{ limite: Infinity, preco: 7.95 }])
+        } else if (tipoEntrega === 4) {
+          aplicarPreco([{ limite: Infinity, preco: 6.7 }])
         }
       }
 
