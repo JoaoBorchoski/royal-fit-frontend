@@ -52,8 +52,7 @@ const routes: Routes = [
       },
       {
         path: "profile-options",
-        loadChildren: () =>
-          import("./modules/security/profile-options/profile-options.module").then((m) => m.ProfileOptionsModule),
+        loadChildren: () => import("./modules/security/profile-options/profile-options.module").then((m) => m.ProfileOptionsModule),
       },
       {
         path: "users-profiles",
@@ -101,8 +100,7 @@ const routes: Routes = [
       },
       {
         path: "almoxarifado-itens",
-        loadChildren: () =>
-          import("./modules/cadastros/status-pagamento/status-pagamento.module").then((m) => m.StatusPagamentoModule),
+        loadChildren: () => import("./modules/cadastros/status-pagamento/status-pagamento.module").then((m) => m.StatusPagamentoModule),
       },
       {
         path: "bonificacoes",
@@ -118,15 +116,12 @@ const routes: Routes = [
       },
       {
         path: "pedido-bonificados",
-        loadChildren: () =>
-          import("./modules/relatorios/relatorio-cliente/relatorio-cliente.module").then((m) => m.RelatorioClienteModule),
+        loadChildren: () => import("./modules/relatorios/relatorio-cliente/relatorio-cliente.module").then((m) => m.RelatorioClienteModule),
       },
       {
         path: "relatorios-funcionarios",
         loadChildren: () =>
-          import("./modules/relatorios/relatorio-funcionario/relatorio-funcionario.module").then(
-            (m) => m.RelatorioFuncionarioModule
-          ),
+          import("./modules/relatorios/relatorio-funcionario/relatorio-funcionario.module").then((m) => m.RelatorioFuncionarioModule),
       },
       {
         path: "balancos",
@@ -135,6 +130,18 @@ const routes: Routes = [
       {
         path: "pagamentos",
         loadChildren: () => import("./modules/clientes/pagamento/pagamento.module").then((m) => m.PagamentoModule),
+      },
+      {
+        path: "financeiro-caixas",
+        loadChildren: () => import("./modules/financeiro/caixa/caixa.module").then((m) => m.CaixaModule),
+      },
+      {
+        path: "controle-despesas",
+        loadChildren: () => import("./modules/financeiro/controle-despesa/controle-despesa.module").then((m) => m.ControleDespesaModule),
+      },
+      {
+        path: "fechamentos",
+        loadChildren: () => import("./modules/financeiro/fechamento/fechamento.module").then((m) => m.FechamentoModule),
       },
     ],
   },

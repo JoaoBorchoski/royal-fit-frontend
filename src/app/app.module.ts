@@ -1,3 +1,9 @@
+import { FechamentoListComponent } from "./pages/financeiro/fechamento/fechamento-list/fechamento-list.component"
+import { FechamentoEditComponent } from "./pages/financeiro/fechamento/fechamento-edit/fechamento-edit.component"
+import { ControleDespesaListComponent } from "./pages/financeiro/controle-despesa/controle-despesa-list/controle-despesa-list.component"
+import { ControleDespesaEditComponent } from "./pages/financeiro/controle-despesa/controle-despesa-edit/controle-despesa-edit.component"
+import { CaixaListComponent } from "./pages/financeiro/caixa/caixa-list/caixa-list.component"
+import { CaixaEditComponent } from "./pages/financeiro/caixa/caixa-edit/caixa-edit.component"
 import { HTTP_INTERCEPTORS } from "@angular/common/http"
 import { NgModule } from "@angular/core"
 import { BrowserModule } from "@angular/platform-browser"
@@ -144,6 +150,12 @@ import { i18nConfig } from "./shared/i18n"
     ProfileComponent,
     NotAuthorizedComponent,
     ImportExcelModalComponent,
+    CaixaEditComponent,
+    CaixaListComponent,
+    ControleDespesaEditComponent,
+    ControleDespesaListComponent,
+    FechamentoEditComponent,
+    FechamentoListComponent,
   ],
   imports: [
     BrowserModule,

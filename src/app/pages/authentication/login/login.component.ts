@@ -66,13 +66,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   public impressorasIps: any[] = [
     {
       label: "Escritório",
-      value: "45.227.182.222:9100",
-      // value: "0",
+      // value: "45.227.182.222:9100",
+      value: "0",
     },
     {
       label: "Carregamento",
-      value: "45.227.182.222:9101",
-      // value: "1",
+      // value: "45.227.182.222:9101",
+      value: "1",
     },
   ]
 

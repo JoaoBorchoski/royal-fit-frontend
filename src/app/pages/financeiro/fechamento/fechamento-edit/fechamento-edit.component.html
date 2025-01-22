@@ -1,0 +1,64 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="fechamentoForm">
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-datepicker
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="data"
+        name="data"
+        p-clean
+        [p-label]="this.literals.fields.form['data']"
+        [p-readonly]="readonly"
+        p-required
+      > </po-datepicker>
+    </div>
+
+    <div class="po-sm-12 po-md-2 po-lg-2 po-xl-2 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="saldoInicial"
+        name="saldoInicial"
+        p-clean
+        [p-label]="this.literals.fields.form['saldoInicial']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+      > </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-2 po-lg-2 po-xl-2 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="saldoFinal"
+        name="saldoFinal"
+        p-clean
+        [p-label]="this.literals.fields.form['saldoFinal']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+      > </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-2 po-lg-2 po-xl-2 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="saldoEntradas"
+        name="saldoEntradas"
+        p-clean
+        [p-label]="this.literals.fields.form['saldoEntradas']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+      > </po-number>
+    </div>
+
+    <div class="po-sm-12 po-md-2 po-lg-2 po-xl-2 no-padding">
+      <po-number
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="valorTotal"
+        name="valorTotal"
+        p-clean
+        [p-label]="this.literals.fields.form['valorTotal']"
+        p-maxlength="10"
+        [p-readonly]="readonly"
+      > </po-number>
+    </div>
+
+  </form>
+</po-page-default>

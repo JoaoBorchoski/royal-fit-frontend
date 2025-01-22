@@ -1,3 +1,4 @@
+import { fechamentosFields } from "./fields/pt/financeiro/fechamentos"
 import { paisesFields } from "./fields/pt/comum/paises"
 import { estadosFields } from "./fields/pt/comum/estados"
 import { cidadesFields } from "./fields/pt/comum/cidades"
@@ -15,6 +16,8 @@ import { relatoriosClientesFields } from "./fields/pt/relatorios/relatorios-clie
 import { relatoriosFuncionariosFields } from "./fields/pt/relatorios/relatorios-funcionarios"
 import { balancosFields } from "./fields/pt/clientes/balancos"
 import { pagamentosFields } from "./fields/pt/clientes/pagamentos"
+import { caixasFields } from "./fields/pt/financeiro/caixas"
+import { controleDespesasFields } from "./fields/pt/financeiro/controle -despesas"
 
 export const generalPt = {
   list: {
@@ -240,5 +243,17 @@ export const generalPt = {
   clientes_pagamento: {
     title: "Pagamentos Clientes",
     fields: pagamentosFields,
+  },
+  financeiro_caixa: {
+    title: "Entradas",
+    fields: caixasFields,
+  },
+  financeiro_controleDespesa: {
+    title: "Saídas",
+    fields: controleDespesasFields,
+  },
+  financeiro_fechamento: {
+    title: "Fechamento Mensal",
+    fields: fechamentosFields,
   },
 }

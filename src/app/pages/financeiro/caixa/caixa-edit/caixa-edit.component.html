@@ -1,0 +1,93 @@
+<po-page-default [p-title]="this.literals.title" [p-actions]="pageActions">
+  <form [formGroup]="caixaForm">
+    <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <po-input
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="descricao"
+        name="descricao"
+        p-clean
+        [p-label]="this.literals.fields.form['descricao']"
+        [p-readonly]="readonly"
+        p-required
+      >
+      </po-input>
+    </div>
+
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-decimal
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="valor"
+        name="valor"
+        p-clean
+        [p-label]="this.literals.fields.form['valor']"
+        p-maxlength="10"
+        p-decimal-maxlength="2"
+        p-required
+        [p-disabled]="this.id ? true : false"
+      >
+      </po-decimal>
+    </div>
+
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-datepicker
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="data"
+        name="data"
+        p-clean
+        [p-label]="this.literals.fields.form['data']"
+        [p-readonly]="readonly"
+        p-required
+      >
+      </po-datepicker>
+    </div>
+
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-lookup
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="pedidoId"
+        name="pedidoId"
+        p-field-label="label"
+        p-field-value="value"
+        p-clean
+        [p-filter-service]="pedidoIdService"
+        [p-label]="this.literals.fields.form['pedidoId']"
+        [p-columns]="columnsFornecedor"
+        [p-disabled]="this.id ? true : false"
+      >
+      </po-lookup>
+    </div>
+
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-lookup
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+        formControlName="clienteId"
+        name="clienteId"
+        p-field-label="label"
+        p-field-value="value"
+        p-clean
+        [p-filter-service]="clienteIdService"
+        [p-label]="this.literals.fields.form['clienteId']"
+        [p-columns]="columnsFornecedor"
+        [p-disabled]="this.id ? true : false"
+      >
+      </po-lookup>
+    </div>
+
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-lookup
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="formaPagamentoId"
+        name="formaPagamentoId"
+        p-field-label="label"
+        p-field-value="value"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="formaPagamentoIdService"
+        [p-label]="this.literals.fields.form['formaPagamentoId']"
+        p-required
+        [p-columns]="columnsFornecedor"
+      >
+      </po-lookup>
+    </div>
+  </form>
+</po-page-default>

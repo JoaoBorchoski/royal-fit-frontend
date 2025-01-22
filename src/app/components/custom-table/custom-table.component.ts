@@ -114,9 +114,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       .pipe(map((res) => (this.permissions = res)))
       .subscribe({
         next: () => {
-          const routerPreferences = this.authService.routeTablePreferences(
-            this.route + this.activatedRoute.snapshot.routeConfig.path
-          )
+          const routerPreferences = this.authService.routeTablePreferences(this.route + this.activatedRoute.snapshot.routeConfig.path)
           if (routerPreferences) this.fields = routerPreferences.preferences
           else this.restoreColumn()
 
@@ -182,6 +180,8 @@ export class CustomTableComponent implements OnInit, OnDestroy {
   }
 
   getActions() {
+    // console.log(this.permissions)
+
     if (this.permissions.permitAll) {
       const newPageActions = [
         this.removedActions.new ? null : { label: this.literals.new, action: this.newItem.bind(this), icon: "fa-solid fa-plus" },
@@ -223,18 +223,10 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       ]
       this.pageActions = newPageActions.filter((pageAction) => pageAction)
       const newTableActions = [
-        this.removedActions.edit
-          ? null
-          : { label: this.literals.edit, action: this.editItem.bind(this), icon: "fa-solid fa-pen" },
-        this.removedActions.copy
-          ? null
-          : { label: this.literals.copy, action: this.copyItem.bind(this), icon: "fa-solid fa-copy" },
-        this.removedActions.view
-          ? null
-          : { label: this.literals.view, action: this.viewItem.bind(this), icon: "fa-solid fa-eye" },
-        this.removedActions.delete
-          ? null
-          : { label: this.literals.delete, action: this.excludeItem.bind(this), icon: "fa-solid fa-trash" },
+        this.removedActions.edit ? null : { label: this.literals.edit, action: this.editItem.bind(this), icon: "fa-solid fa-pen" },
+        this.removedActions.copy ? null : { label: this.literals.copy, action: this.copyItem.bind(this), icon: "fa-solid fa-copy" },
+        this.removedActions.view ? null : { label: this.literals.view, action: this.viewItem.bind(this), icon: "fa-solid fa-eye" },
+        this.removedActions.delete ? null : { label: this.literals.delete, action: this.excludeItem.bind(this), icon: "fa-solid fa-trash" },
       ]
       this.tableActions = newTableActions.filter((tableAction) => tableAction)
     } else {
