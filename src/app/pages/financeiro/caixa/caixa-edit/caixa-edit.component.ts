@@ -117,7 +117,7 @@ export class CaixaEditComponent implements OnInit, OnDestroy {
   }
 
   getCaixa(id: string) {
-    this.restService.get(`/financeiro-caixas/${id}`).subscribe({
+    this.restService.get(`/caixas/${id}`).subscribe({
       next: (result) => {
         this.caixaForm.patchValue({
           descricao: result.descricao,
@@ -136,7 +136,7 @@ export class CaixaEditComponent implements OnInit, OnDestroy {
     if (this.caixaForm.valid) {
       if (this.id && this.getPageType(this.activatedRoute.snapshot.routeConfig.path) === "edit") {
         this.subscriptions.add(
-          this.restService.put(`/financeiro-caixas/${this.id}`, data).subscribe({
+          this.restService.put(`/caixas/${this.id}`, data).subscribe({
             next: () => {
               this.poNotification.success({
                 message: this.literals.saveSuccess,
@@ -145,9 +145,9 @@ export class CaixaEditComponent implements OnInit, OnDestroy {
 
               if (willCreateAnother) {
                 this.caixaForm.reset()
-                this.router.navigate(["financeiro-caixas/new"])
+                this.router.navigate(["caixas/new"])
               } else {
-                this.router.navigate(["financeiro-caixas"])
+                this.router.navigate(["caixas"])
               }
             },
             error: (error) => console.log(error),
@@ -155,7 +155,7 @@ export class CaixaEditComponent implements OnInit, OnDestroy {
         )
       } else {
         this.subscriptions.add(
-          this.restService.post("/financeiro-caixas", data).subscribe({
+          this.restService.post("/caixas", data).subscribe({
             next: () => {
               this.poNotification.success({
                 message: this.literals.saveSuccess,
@@ -164,9 +164,9 @@ export class CaixaEditComponent implements OnInit, OnDestroy {
 
               if (willCreateAnother) {
                 this.caixaForm.reset()
-                this.router.navigate(["financeiro-caixas/new"])
+                this.router.navigate(["caixas/new"])
               } else {
-                this.router.navigate(["financeiro-caixas"])
+                this.router.navigate(["caixas"])
               }
             },
             error: (error) => console.log(error),
@@ -188,6 +188,6 @@ export class CaixaEditComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.router.navigate(["financeiro-caixas"])
+    this.router.navigate(["caixas"])
   }
 }

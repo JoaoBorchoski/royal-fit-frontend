@@ -56,8 +56,6 @@ export class CaixaListComponent implements OnInit {
   ]
 
   public removedActions: IRemovedActions = {
-    new: false,
-    edit: false,
     delete: true,
     view: true,
     copy: true,
@@ -98,7 +96,7 @@ export class CaixaListComponent implements OnInit {
   public gerarRelatorioGeral() {
     if (this.relatorioGeralForm.valid) {
       this.subscriptions.add(
-        this.restService.post("/financeiro-caixas/relatorio", this.relatorioGeralForm.value).subscribe({
+        this.restService.post("/caixas/relatorio", this.relatorioGeralForm.value).subscribe({
           next: (res: any) => {
             console.log(res)
             const datIni = this.relatorioGeralForm.value.dataInicio.toString().split("-").reverse().join("/")

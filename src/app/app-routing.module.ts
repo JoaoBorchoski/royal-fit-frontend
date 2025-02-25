@@ -120,8 +120,7 @@ const routes: Routes = [
       },
       {
         path: "relatorios-funcionarios",
-        loadChildren: () =>
-          import("./modules/relatorios/relatorio-funcionario/relatorio-funcionario.module").then((m) => m.RelatorioFuncionarioModule),
+        loadChildren: () => import("./modules/relatorios/relatorio-funcionario/relatorio-funcionario.module").then((m) => m.RelatorioFuncionarioModule),
       },
       {
         path: "balancos",
@@ -132,7 +131,7 @@ const routes: Routes = [
         loadChildren: () => import("./modules/clientes/pagamento/pagamento.module").then((m) => m.PagamentoModule),
       },
       {
-        path: "financeiro-caixas",
+        path: "caixas",
         loadChildren: () => import("./modules/financeiro/caixa/caixa.module").then((m) => m.CaixaModule),
       },
       {

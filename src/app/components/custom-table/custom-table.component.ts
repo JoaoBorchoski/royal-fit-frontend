@@ -217,9 +217,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
               disabled: this.multipleItemIsSelected.bind(this),
               icon: "fa-solid fa-trash",
             },
-        this.removedActions.refresh
-          ? null
-          : { label: this.literals.refresh, action: this.updateItems.bind(this), icon: "fa-solid fa-arrows-rotate" },
+        this.removedActions.refresh ? null : { label: this.literals.refresh, action: this.updateItems.bind(this), icon: "fa-solid fa-arrows-rotate" },
       ]
       this.pageActions = newPageActions.filter((pageAction) => pageAction)
       const newTableActions = [
@@ -233,10 +231,8 @@ export class CustomTableComponent implements OnInit, OnDestroy {
       const pageActions = []
       this.tableActions = []
       if (this.permissions.permitCreate) {
-        if (!this.removedActions.new)
-          pageActions.push({ label: this.literals.new, action: this.newItem.bind(this), icon: "fa-solid fa-plus" })
-        if (!this.removedActions.copy)
-          pageActions.push({ label: this.literals.copy, action: this.copyItem.bind(this), icon: "fa-solid fa-copy" })
+        if (!this.removedActions.new) pageActions.push({ label: this.literals.new, action: this.newItem.bind(this), icon: "fa-solid fa-plus" })
+        if (!this.removedActions.copy) pageActions.push({ label: this.literals.copy, action: this.copyItem.bind(this), icon: "fa-solid fa-copy" })
       }
 
       if (this.permissions.permitUpdate) {
@@ -247,8 +243,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
             disabled: this.singleItemIsSelected.bind(this),
             icon: "fa-solid fa-pen",
           })
-        if (!this.removedActions.edit)
-          this.tableActions.push({ label: this.literals.edit, action: this.editItem.bind(this), icon: "fa-solid fa-pen" })
+        if (!this.removedActions.edit) this.tableActions.push({ label: this.literals.edit, action: this.editItem.bind(this), icon: "fa-solid fa-pen" })
       }
 
       if (this.permissions.permitRestore) {
@@ -259,8 +254,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
             disabled: this.singleItemIsSelected.bind(this),
             icon: "fa-solid fa-eye",
           })
-        if (!this.removedActions.view)
-          this.tableActions.push({ label: this.literals.view, action: this.viewItem.bind(this), icon: "fa-solid fa-eye" })
+        if (!this.removedActions.view) this.tableActions.push({ label: this.literals.view, action: this.viewItem.bind(this), icon: "fa-solid fa-eye" })
       }
 
       if (this.permissions.permitDelete) {
@@ -271,8 +265,7 @@ export class CustomTableComponent implements OnInit, OnDestroy {
             disabled: this.multipleItemIsSelected.bind(this),
             icon: "fa-solid fa-trash",
           })
-        if (!this.removedActions.delete)
-          this.tableActions.push({ label: this.literals.delete, action: this.excludeItem.bind(this), icon: "fa-solid fa-trash" })
+        if (!this.removedActions.delete) this.tableActions.push({ label: this.literals.delete, action: this.excludeItem.bind(this), icon: "fa-solid fa-trash" })
       }
 
       if (!this.removedActions.refresh)

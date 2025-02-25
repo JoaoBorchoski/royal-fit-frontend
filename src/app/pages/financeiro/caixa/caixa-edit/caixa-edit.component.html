@@ -29,6 +29,23 @@
     </div>
 
     <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+      <po-lookup
+        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+        formControlName="formaPagamentoId"
+        name="formaPagamentoId"
+        p-field-label="label"
+        p-field-value="value"
+        p-clean
+        [p-disabled]="readonly"
+        [p-filter-service]="formaPagamentoIdService"
+        [p-label]="this.literals.fields.form['formaPagamentoId']"
+        p-required
+        [p-columns]="columnsFornecedor"
+      >
+      </po-lookup>
+    </div>
+
+    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
       <po-datepicker
         class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
         formControlName="data"
@@ -69,23 +86,6 @@
         [p-label]="this.literals.fields.form['clienteId']"
         [p-columns]="columnsFornecedor"
         [p-disabled]="this.id ? true : false"
-      >
-      </po-lookup>
-    </div>
-
-    <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
-      <po-lookup
-        class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
-        formControlName="formaPagamentoId"
-        name="formaPagamentoId"
-        p-field-label="label"
-        p-field-value="value"
-        p-clean
-        [p-disabled]="readonly"
-        [p-filter-service]="formaPagamentoIdService"
-        [p-label]="this.literals.fields.form['formaPagamentoId']"
-        p-required
-        [p-columns]="columnsFornecedor"
       >
       </po-lookup>
     </div>

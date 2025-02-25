@@ -1,8 +1,8 @@
+import { CaixaEditComponent } from "./../../../pages/financeiro/caixa/caixa-edit/caixa-edit.component"
 import { NgModule } from "@angular/core"
 import { RouterModule } from "@angular/router"
-import { CaixaListComponent } from "src/app/pages/financeiro/caixa/caixa-list/caixa-list.component"
-import { CaixaEditComponent } from "src/app/pages/financeiro/caixa/caixa-edit/caixa-edit.component"
 import { AuthGuard } from "../../../services/auth.guard"
+import { CaixaListComponent } from "../../../pages/financeiro/caixa/caixa-list/caixa-list.component"
 
 const routesCaixa = [
   {

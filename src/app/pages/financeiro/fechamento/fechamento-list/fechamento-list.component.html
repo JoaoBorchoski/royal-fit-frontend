@@ -1,5 +1,224 @@
-<app-custom-table
+<!-- <app-custom-table
   [pageTitle]="this.literals.title"
   route="fechamentos"
   [initialFields]="initialFields"
-> </app-custom-table>
+> </app-custom-table> -->
+
+<po-page-default p-title="Fechamentos">
+  <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12">
+    <form [formGroup]="fechamentoForm">
+      <po-divider class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" p-label="Fechamento 12 Meses"> </po-divider>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="caixa12meses"
+          name="caixa12meses"
+          p-clean
+          p-label="Entradas ultimos 12 Meses"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="controle_despesas12meses"
+          name="controle_despesas12meses"
+          p-clean
+          p-label="Gastos ultimos 12 Meses"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="fechamento12meses"
+          name="fechamento12meses"
+          p-clean
+          p-label="Fechamento ultimos 12 Meses"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
+        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('12meses')">
+        </po-button>
+      </div>
+
+      <po-divider class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" p-label="Fechamento 4 Semanas"> </po-divider>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="caixa4Semanas"
+          name="caixa4Semanas"
+          p-clean
+          p-label="Entradas ultimas 4 Semanas"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="controle_despesas4Semanas"
+          name="controle_despesas4Semanas"
+          p-clean
+          p-label="Gastos ultimas 4 Semanas"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="fechamento4Semanas"
+          name="fechamento4Semanas"
+          p-clean
+          p-label="Fechamento ultimas 4 Semanas"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
+        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('4semanas')">
+        </po-button>
+      </div>
+
+      <po-divider class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" p-label="Fechamento 7 Dias"> </po-divider>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="caixa7dias"
+          name="caixa7dias"
+          p-clean
+          p-label="Entradas nos ultimos 7 Dias"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="controle_despesas7dias"
+          name="controle_despesas7dias"
+          p-clean
+          p-label="Gastos nos ultimos 7 Dias"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="fechamento7dias"
+          name="fechamento7dias"
+          p-clean
+          p-label="Fechamento nos ultimos 7 Dias"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
+        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('7dias')">
+        </po-button>
+      </div>
+
+      <po-divider class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" p-label="Fechamento Diário"> </po-divider>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="caixaHoje"
+          name="caixaHoje"
+          p-clean
+          p-label="Entradas hoje"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="controle_despesasHoje"
+          name="controle_despesasHoje"
+          p-clean
+          p-label="Gastos hoje"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
+        <po-decimal
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          formControlName="fechamentoHoje"
+          name="fechamentoHoje"
+          p-clean
+          p-label="Fechamento hoje"
+          p-maxlength="10"
+          p-readonly="true"
+          p-decimal-maxlength="2"
+          p-icon="fa-solid fa-dollar-sign"
+          p-readolny="true"
+        >
+        </po-decimal>
+      </div>
+
+      <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
+        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('hoje')">
+        </po-button>
+      </div>
+    </form>
+    <!-- <po-chart p-title="Fechamento Geral" [p-options]="options" [p-categories]="categories" [p-series]="participationByCountryInWorldExports"> </po-chart> -->
+  </div>
+</po-page-default>
