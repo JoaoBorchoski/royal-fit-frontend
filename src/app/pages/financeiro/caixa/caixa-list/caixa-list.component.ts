@@ -44,22 +44,20 @@ export class CaixaListComponent implements OnInit {
 
   subscriptions = new Subscription()
 
-  readonly customPageActions = [
-    {
-      index: 2,
-      pageAction: {
-        label: "Relatório",
-        action: this.openModal.bind(this),
-        // icon: "fa-solid fa-file-import",
-      },
-    },
-  ]
+  // readonly customPageActions = [
+  //   {
+  //     index: 2,
+  //     pageAction: {
+  //       label: "Relatório",
+  //       action: this.openModal.bind(this),
+  //       // icon: "fa-solid fa-file-import",
+  //     },
+  //   },
+  // ]
 
   public removedActions: IRemovedActions = {
     delete: true,
-    view: true,
     copy: true,
-    refresh: true,
   }
 
   public primaryAction: PoModalAction = {

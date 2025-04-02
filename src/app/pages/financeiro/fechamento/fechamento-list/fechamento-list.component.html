@@ -7,7 +7,13 @@
 <po-page-default p-title="Fechamentos">
   <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12">
     <form [formGroup]="fechamentoForm">
-      <po-divider class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding" p-label="Fechamento 12 Meses"> </po-divider>
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <po-button p-kind="primary" p-label="Fechamento por Período" class="po-sm-4 po-md-4 po-lg-4 po-xl-4" (p-click)="openModal('periodo')"> </po-button>
+        <po-button p-kind="primary" p-label="Fechamento por Produto" class="po-sm-4 po-md-4 po-lg-4 po-xl-4" (p-click)="openModal('produto')"> </po-button>
+        <po-button p-kind="primary" p-label="Fechamento por Cliente" class="po-sm-4 po-md-4 po-lg-4 po-xl-4" (p-click)="openModal('cliente')"> </po-button>
+      </div>
+
+      <po-divider class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding po-mt-1" p-label="Fechamento 12 Meses"> </po-divider>
 
       <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding">
         <po-decimal
@@ -56,7 +62,7 @@
       </div>
 
       <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
-        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('12meses')">
+        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('ultimos_12_meses')">
         </po-button>
       </div>
 
@@ -109,7 +115,12 @@
       </div>
 
       <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
-        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('4semanas')">
+        <po-button
+          p-label="Download Excel"
+          p-icon="po-icon-download"
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12"
+          (p-click)="getFechamento('ultimas_4_semanas')"
+        >
         </po-button>
       </div>
 
@@ -162,7 +173,7 @@
       </div>
 
       <div class="po-sm-12 po-md-3 po-lg-3 po-xl-3 no-padding po-mt-4">
-        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('7dias')">
+        <po-button p-label="Download Excel" p-icon="po-icon-download" class="po-sm-12 po-md-12 po-lg-12 po-xl-12" (p-click)="getFechamento('ultimos_7_dias')">
         </po-button>
       </div>
 
@@ -219,6 +230,75 @@
         </po-button>
       </div>
     </form>
-    <!-- <po-chart p-title="Fechamento Geral" [p-options]="options" [p-categories]="categories" [p-series]="participationByCountryInWorldExports"> </po-chart> -->
   </div>
 </po-page-default>
+
+<po-modal #modal [p-primary-action]="getFechamentoPrimaryAction" [p-secondary-action]="getFechamentoSecondaryAction" [p-title]="this.modalTypeName">
+  <div *ngIf="this.modalType === 'periodo'">
+    <form [formGroup]="relatorioPeriodoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+        <po-datepicker
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="dataInicio"
+          name="dataInicio"
+          p-clean
+          p-label="Data Início"
+          p-required
+        >
+        </po-datepicker>
+      </div>
+
+      <div class="po-sm-12 po-md-6 po-lg-6 po-xl-6 no-padding">
+        <po-datepicker
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required no-padding"
+          formControlName="dataFim"
+          name="dataFim"
+          p-clean
+          p-label="Data Fim"
+          p-required
+        >
+        </po-datepicker>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="this.modalType === 'produto'" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <form [formGroup]="relatorioProdutoForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <po-lookup
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="produtoId"
+          name="produtoId"
+          p-field-label="label"
+          p-field-value="value"
+          p-clean
+          [p-filter-service]="produtoIdService"
+          p-label="Produtos"
+          p-required
+          [p-columns]="columnsFornecedor"
+        >
+        </po-lookup>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="this.modalType === 'cliente'" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+    <form [formGroup]="relatorioClienteForm" class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+      <div class="po-sm-12 po-md-12 po-lg-12 po-xl-12 no-padding">
+        <po-lookup
+          class="po-sm-12 po-md-12 po-lg-12 po-xl-12 po-required"
+          formControlName="clienteId"
+          name="clienteId"
+          p-field-label="label"
+          p-field-value="value"
+          p-clean
+          [p-filter-service]="clienteIdService"
+          p-label="Clientes"
+          p-required
+          [p-columns]="columnsFornecedor"
+        >
+        </po-lookup>
+      </div>
+    </form>
+  </div>
+</po-modal>

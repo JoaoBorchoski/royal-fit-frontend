@@ -1,12 +1,14 @@
 import { HttpClient } from "@angular/common/http"
-import { Component, OnInit } from "@angular/core"
+import { Component, OnInit, ViewChild } from "@angular/core"
 import { FormBuilder } from "@angular/forms"
 import { ActivatedRoute, Router } from "@angular/router"
-import { PoChartOptions, PoChartSerie, PoChartType, PoNotificationService } from "@po-ui/ng-components"
+import { PoChartOptions, PoChartSerie, PoChartType, PoLookupColumn, PoModalAction, PoModalComponent, PoNotificationService } from "@po-ui/ng-components"
 import { Subscription } from "rxjs"
 import { map } from "rxjs/operators"
+import { ExcelService } from "src/app/services/excel.service"
 import { LanguagesService } from "src/app/services/languages.service"
 import { RestService } from "src/app/services/rest.service"
+import { environment } from "src/environments/environment"
 
 @Component({
   selector: "/fechamento-list",
@@ -15,6 +17,12 @@ import { RestService } from "src/app/services/rest.service"
 export class FechamentoListComponent implements OnInit {
   public literals: any = {}
   public initialFields = []
+  public modalType: string = ""
+  public modalTypeName: string = ""
+
+  public produtoIdService = `${environment.baseUrl}/produtos/select-without-desabilitado`
+  public clienteIdService = `${environment.baseUrl}/clientes/select`
+  columnsFornecedor: Array<PoLookupColumn> = [{ property: "label", label: "Nome" }]
 
   participationByCountryInWorldExportsType: PoChartType = PoChartType.Line
   public categories: Array<string> = ["12 Meses", "4 Semenas", "7 Dias"]
@@ -25,6 +33,19 @@ export class FechamentoListComponent implements OnInit {
       gridLines: 7,
     },
   }
+
+  @ViewChild("modal", { static: true }) modal: PoModalComponent
+
+  public getFechamentoPrimaryAction: PoModalAction = {
+    label: "Gerar Relatório",
+    action: () => this.getFechamentoPersonalizado(),
+  }
+
+  public getFechamentoSecondaryAction: PoModalAction = {
+    label: "Cancelar",
+    action: this.closeModal.bind(this),
+  }
+
   public participationByCountryInWorldExports: Array<PoChartSerie> = [
     // { label: 'Brazil', data: [35, 32, 25, 29, 33, 33], color: 'color-10' },
     // { label: 'Vietnam', data: [15, 17, 23, 19, 22, 18] },
@@ -48,6 +69,19 @@ export class FechamentoListComponent implements OnInit {
     fechamentoHoje: null,
   })
 
+  public relatorioPeriodoForm = this.formBuilder.group({
+    dataInicio: null,
+    dataFim: null,
+  })
+
+  public relatorioProdutoForm = this.formBuilder.group({
+    produtoId: null,
+  })
+
+  public relatorioClienteForm = this.formBuilder.group({
+    clienteId: null,
+  })
+
   constructor(
     private formBuilder: FormBuilder,
     public httpClient: HttpClient,
@@ -55,7 +89,8 @@ export class FechamentoListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private poNotification: PoNotificationService,
-    private languagesService: LanguagesService
+    private languagesService: LanguagesService,
+    private excelService: ExcelService
   ) {}
 
   subscriptions = new Subscription()
@@ -98,21 +133,100 @@ export class FechamentoListComponent implements OnInit {
   }
 
   public getFechamento(type: string) {
+    let docTitle = ""
+
     switch (type) {
-      case "12meses":
-        console.log("12meses")
+      case "ultimos_12_meses":
+        docTitle = "Relatório de Fechamento dos Últimos 12 Meses"
         break
-      case "4semanas":
-        console.log("4semanas")
+      case "ultimas_4_semanas":
+        docTitle = "Relatório de Fechamento das Últimas 4 Semanas"
         break
-      case "7dias":
-        console.log("7dias")
+      case "ultimos_7_dias":
+        docTitle = "Relatório de Fechamento dos Últimos 7 Dias"
         break
       case "hoje":
-        console.log("hoje")
+        docTitle = "Relatório de Fechamento Diário"
         break
       default:
         break
     }
+
+    this.restService.post("/fechamentos/relatorio", { type: type }).subscribe({
+      next: (res: any) => {
+        this.excelService.createDownload(res, docTitle)
+        this.poNotification.success({
+          message: "Relatório gerado com sucesso",
+          duration: environment.poNotificationDuration,
+        })
+      },
+      error: (error) => {
+        // this.poNotification.error({
+        //   message: "Erro ao gerar relatório",
+        //   duration: environment.poNotificationDuration,
+        // })
+        console.error(error)
+      },
+    })
+  }
+
+  public openModal(type: string) {
+    switch (type) {
+      case "periodo":
+        this.modalTypeName = "Fechamento por Período"
+        break
+      case "produto":
+        this.modalTypeName = "Fechamento por Produto"
+        break
+      case "cliente":
+        this.modalTypeName = "Fechamento por Cliente"
+        break
+      default:
+        break
+    }
+
+    this.modalType = type
+    this.modal.open()
+  }
+
+  public closeModal() {
+    this.modalType = ""
+    this.modalTypeName = ""
+    this.modal.close()
+  }
+
+  public getFechamentoPersonalizado() {
+    let docTitle = ""
+    let payload = {}
+
+    switch (this.modalType) {
+      case "periodo":
+        docTitle = "Relatório de Fechamento por Período"
+        payload = this.relatorioPeriodoForm.value
+        break
+      case "produto":
+        docTitle = "Relatório de Fechamento por Produto"
+        payload = this.relatorioProdutoForm.value
+        break
+      case "cliente":
+        docTitle = "Relatório de Fechamento por Cliente"
+        payload = this.relatorioClienteForm.value
+        break
+      default:
+        break
+    }
+
+    this.restService.post("/fechamentos/relatorio", { type: this.modalType, payload: payload }).subscribe({
+      next: (res: any) => {
+        this.excelService.createDownload(res, docTitle)
+        this.poNotification.success({
+          message: "Relatório gerado com sucesso",
+          duration: environment.poNotificationDuration,
+        })
+      },
+      error: (error) => {
+        console.error(error)
+      },
+    })
   }
 }

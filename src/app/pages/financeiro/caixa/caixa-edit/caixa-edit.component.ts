@@ -119,6 +119,8 @@ export class CaixaEditComponent implements OnInit, OnDestroy {
   getCaixa(id: string) {
     this.restService.get(`/caixas/${id}`).subscribe({
       next: (result) => {
+        console.log(result)
+
         this.caixaForm.patchValue({
           descricao: result.descricao,
           valor: result.valor,
