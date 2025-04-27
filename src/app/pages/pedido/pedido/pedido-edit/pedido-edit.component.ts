@@ -365,6 +365,10 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
   }
 
   save(data, willCreateAnother?: boolean) {
+    console.log(this.pedidoForm.controls)
+    console.log(this.pedidoForm.value)
+    console.log(this.pedidoForm.errors)
+
     if (this.pedidoForm.valid) {
       if (this.pedidoItens.length === 0) {
         this.poNotification.warning({
@@ -467,7 +471,7 @@ export class PedidoEditComponent implements OnInit, OnDestroy {
 
       this.pedidoForm.patchValue({
         subTotal: novoTotal,
-        valorTotal: novoTotal - this.pedidoForm.value.desconto,
+        valorTotal: Math.round(novoTotal * 100) / 100 - Math.round(this.pedidoForm.value.desconto * 100) / 100,
       })
 
       this.pedidoItemForm.reset()
